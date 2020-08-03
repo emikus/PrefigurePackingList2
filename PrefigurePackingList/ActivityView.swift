@@ -25,7 +25,7 @@ struct ActivityView: View {
         }
         .foregroundColor(.white)
         .background(Color.black)
-            .opacity(0.8)
+        .opacity(0.8)
         .contentShape(Rectangle())
             .onTapGesture {
                 self.updateSelectedActivities(activity: self.activity)

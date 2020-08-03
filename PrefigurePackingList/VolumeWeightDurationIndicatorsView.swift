@@ -41,14 +41,15 @@ struct VolumeWeightDurationIndicatorsView: View {
                 
                 
             }
-            .opacity(0.7)
+            
             .background(Color.yellow)
             .foregroundColor(.blue)
             .font(.footnote)
             .padding()
         }
-      .background(Color.green)
-      .frame(height: 50)
+        .background(Color.green)
+        .frame(height: 50)
+        .opacity(0.8)
         
         
         
@@ -60,7 +61,7 @@ struct VolumeWeightDurationIndicatorsView_Previews: PreviewProvider {
     static var previews: some View {
         VolumeWeightDurationIndicatorsView()
         .environmentObject(Activities())
-        .environmentObject(Items(fillWithSampleData: false))
+        .environmentObject(Items(fillWithSampleData: true))
     }
 }
 
