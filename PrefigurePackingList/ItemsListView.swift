@@ -36,8 +36,10 @@ struct ItemsListView: View {
     }
 }
 
-//struct ItemsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemsView()
-//    }
-//}
+struct ItemsView_Previews: PreviewProvider {
+    static var previews: some View {
+        ItemsListView()
+        .environmentObject(Activities())
+        .environmentObject(Items(fillWithSampleData: true))
+    }
+}
