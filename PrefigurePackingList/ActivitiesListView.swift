@@ -24,7 +24,7 @@ struct ActivitiesListView: View {
                             Text("Suggested for now".uppercased())
                                 
                                 .foregroundColor(.orange)) {
-                                ForEach(activities.suggestedActivities) { suggestedActivity in
+                                    ForEach(self.activities.suggestedActivities) { suggestedActivity in
                                     ActivityView(activity: suggestedActivity)
                                 }
                                 .listRowBackground(Color.black)
@@ -46,7 +46,6 @@ struct ActivitiesListView: View {
                 }
                 .navigationBarTitle("Activities")
             }
-            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
     

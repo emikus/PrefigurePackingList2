@@ -15,6 +15,7 @@ struct ContentView: View {
     
     
     var body: some View {
+       GeometryReader { geo in
         TabView {
             ActivitiesListView()
                 .tabItem {
@@ -30,8 +31,11 @@ struct ContentView: View {
             
         }
         .edgesIgnoringSafeArea(.all)
-        .environmentObject(activities)
-        .environmentObject(items)
+        .environmentObject(self.activities)
+        .environmentObject(self.items)
+        .padding(.leading, UIDevice.current.userInterfaceIdiom == .pad && geo.size.height > geo.size.width ? 1 : 0) // hack to make first column visible in portrait and landscape orientation on iPad
+        }
+        
         
     
     }

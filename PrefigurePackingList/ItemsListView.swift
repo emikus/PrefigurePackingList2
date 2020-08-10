@@ -15,6 +15,7 @@ struct ItemsListView: View {
     var body: some View {
         
         Group {
+//             GeometryReader { geo in
             NavigationView {
                 VStack {
                     
@@ -27,14 +28,14 @@ struct ItemsListView: View {
                         Section(header:
                             Text(self.items.itemsPinned.isEmpty ? "Long press the item to add it here" : "Your favourite items")
                                 .foregroundColor(.orange)) {
-                                    ForEach(items.itemsPinned) { item in
+                                    ForEach(self.items.itemsPinned) { item in
                                         ItemView(item: item)
                                     }
                         }
                         Section(header:
                             Text("All your items")
                                 .foregroundColor(.orange)) {
-                                    ForEach(items.items) { item in
+                                    ForEach(self.items.items) { item in
                                         ItemView(item: item)
                                     }
                         }
@@ -42,10 +43,10 @@ struct ItemsListView: View {
                 }
                 .listStyle(GroupedListStyle())
                 .navigationBarTitle("Your items")
-                .navigationViewStyle(StackNavigationViewStyle())
+//            }
+//                .padding(.leading, geo.size.height > geo.size.width ? 1 : 0)
+                
             }
-            .navigationViewStyle(StackNavigationViewStyle())
-            
         }
     }
 }

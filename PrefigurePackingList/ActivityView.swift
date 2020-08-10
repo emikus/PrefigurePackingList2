@@ -57,8 +57,6 @@ struct ActivityView: View {
             selectedActivitiesItems += activity.items
         }
         
-        print(selectedActivitiesItems)
-        
         for item in items {
             if !selectedActivitiesItems.contains(item) {
                 self.items.itemsInBag.removeAll {$0 == item}
