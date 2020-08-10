@@ -12,13 +12,13 @@ struct AddEditItem: View {
     @EnvironmentObject var items: Items
     @EnvironmentObject var activities: Activities
     var item:Item?
+    @Binding var showAddEditItemView: Bool
     @State private var name:String = ""
     @State private var weight:String = ""
     @State private var volume:String = ""
     @State private var itemActivities:[Activity] = [Activity]()
     
     var body: some View {
-        
         NavigationView {
             Form {
                 Section {
@@ -42,9 +42,13 @@ struct AddEditItem: View {
                             .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? .green : .gray)
                         }
                     }
-                }            }
-            .navigationBarTitle(self.item == nil ? "Add item" : "Edit item")
-            .navigationBarItems(trailing:
+                }
+                
+            }
+            .navigationBarTitle(self.item == nil ? "Add item" : "Edit item", displayMode: .inline)
+            .navigationBarItems(
+                leading: Button(action: {self.showAddEditItemView = false}) {Text("Cancel")},
+                trailing:
                 Button(action: {
                     if self.item != nil {
                         self.item!.name = self.name
@@ -62,12 +66,15 @@ struct AddEditItem: View {
                         
                         self.addNewItemToActivities(newItem: newItem)
                     }
+                    
+                    self.showAddEditItemView = false
                 }) {
                     Text("Save")
                     Image(systemName: "square.and.arrow.down")
                 }
             )
         }
+        .navigationBarBackButtonHidden(self.item == nil ? true : false)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: {
             if self.item != nil {
@@ -111,10 +118,10 @@ struct AddEditItem: View {
     }
 }
 
-struct AddEditItem_Previews: PreviewProvider {
-    static var previews: some View {
-        AddEditItem()
-        .environmentObject(Items(fillWithSampleData: true))
-        .environmentObject(Activities())
-    }
-}
+//struct AddEditItem_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddEditItem(showAddEditItemView: false)
+//        .environmentObject(Items(fillWithSampleData: true))
+//        .environmentObject(Activities())
+//    }
+//}

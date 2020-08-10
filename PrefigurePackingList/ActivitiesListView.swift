@@ -14,7 +14,6 @@ struct ActivitiesListView: View {
 
     
     var body: some View {
-        Group {
             NavigationView {
                 VStack {
                     
@@ -26,6 +25,7 @@ struct ActivitiesListView: View {
                                 .foregroundColor(.orange)) {
                                     ForEach(self.activities.suggestedActivities) { suggestedActivity in
                                     ActivityView(activity: suggestedActivity)
+                                        .navigationBarBackButtonHidden(true)
                                 }
                                 .listRowBackground(Color.black)
                                 
@@ -46,7 +46,7 @@ struct ActivitiesListView: View {
                 }
                 .navigationBarTitle("Activities")
             }
-        }
+            .navigationViewStyle(StackNavigationViewStyle()) // makes the view cover whole width hiding additional (optional) columns
     }
     
     

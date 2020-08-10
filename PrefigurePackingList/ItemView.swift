@@ -13,6 +13,7 @@ struct ItemView: View {
     @EnvironmentObject var activities: Activities
     @State private var showingSelectedActivityItemRemovalAlert = false
     @ObservedObject var item: Item
+    @State var showAddEditItemView = false
     
     
     
@@ -69,31 +70,31 @@ struct ItemView: View {
                 self.addRemoveItemToBag()
                 }, secondaryButton: .cancel())
         }
-        .contextMenu {
-            Button(action: {
-                self.pinUnpinItem()
-            }) {
-                Text(self.items.items.contains(self.item) ? "Pin to the top" : "Unpin this item")
-                Image(systemName: self.items.items.contains(self.item) ? "pin" : "pin.slash")
-                    .font(.system(size: 16, weight: .ultraLight))
-            }
-            
-            NavigationLink(destination: AddEditItem(item: self.item)) {
-                Text("Edit \(self.item.name)")
-                Image(systemName: "square.and.pencil")
-            }
-            
-            Button(action: {
-                // enable geolocation
-                self.removeItemFromTheList()
-                self.removeItemFromBag()
-                
-            }) {
-                Text("Delete from the list")
-                Image(systemName: "trash")
-                    .font(.system(size: CGFloat(10), weight: .ultraLight))
-            }
-        }
+//        .contextMenu {
+//            Button(action: {
+//                self.pinUnpinItem()
+//            }) {
+//                Text(self.items.items.contains(self.item) ? "Pin to the top" : "Unpin this item")
+//                Image(systemName: self.items.items.contains(self.item) ? "pin" : "pin.slash")
+//                    .font(.system(size: 16, weight: .ultraLight))
+//            }
+//            
+//            NavigationLink(destination: AddEditItem(item: self.item, showAddEditItemView: self.$showAddEditItemView)) {
+//                Text("Edit \(self.item.name)")
+//                Image(systemName: "square.and.pencil")
+//            }
+//            
+//            Button(action: {
+//                // enable geolocation
+//                self.removeItemFromTheList()
+//                self.removeItemFromBag()
+//                
+//            }) {
+//                Text("Delete from the list")
+//                Image(systemName: "trash")
+//                    .font(.system(size: CGFloat(10), weight: .ultraLight))
+//            }
+//        }
     }
     
     func checkIfItemActivitiesAreSelected() -> Bool {
