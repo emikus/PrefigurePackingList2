@@ -46,6 +46,7 @@ struct ActivitiesListView: View {
                 }
                 .navigationBarTitle("Activities")
             }
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
     

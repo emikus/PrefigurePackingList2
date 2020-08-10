@@ -13,33 +13,48 @@ struct ItemsListView: View {
     @EnvironmentObject var activities: Activities
     
     var body: some View {
-      
+        
         Group {
             NavigationView {
                 VStack {
                     
                     VolumeWeightDurationIndicatorsView()
+                    NavigationLink(destination: AddEditItem()) {
+                        Image(systemName: "plus")
+                        Text("Add new item")
+                    }
                     List {
                         Section(header:
-                            Text("Add items to your bag")
+                            Text(self.items.itemsPinned.isEmpty ? "Long press the item to add it here" : "Your favourite items")
+                                .foregroundColor(.orange)) {
+                                    ForEach(items.itemsPinned) { item in
+                                        ItemView(item: item)
+                                    }
+                        }
+                        Section(header:
+                            Text("All your items")
                                 .foregroundColor(.orange)) {
                                     ForEach(items.items) { item in
                                         ItemView(item: item)
-                                }
+                                    }
                         }
                     }
-                    .listStyle(GroupedListStyle())
                 }
-                .navigationBarTitle("Items")
+                .listStyle(GroupedListStyle())
+                .navigationBarTitle("Your items")
+                .navigationViewStyle(StackNavigationViewStyle())
             }
+            .navigationViewStyle(StackNavigationViewStyle())
+            
         }
     }
 }
 
+
 struct ItemsView_Previews: PreviewProvider {
     static var previews: some View {
         ItemsListView()
-        .environmentObject(Activities())
-        .environmentObject(Items(fillWithSampleData: true))
+            .environmentObject(Activities())
+            .environmentObject(Items(fillWithSampleData: true))
     }
 }

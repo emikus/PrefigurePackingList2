@@ -9,15 +9,15 @@
 import Foundation
 
 
-class Item: Identifiable, Equatable {
+class Item: ObservableObject, Identifiable, Equatable {
     static func == (lhs: Item, rhs: Item) -> Bool {
         return lhs.id == rhs.id
     }
     
     let id = UUID()
-    var name = "Anonymous"
-    var weight: Int
-    var volume: Int
+    @Published var name = "Anonymous"
+    @Published var weight: Int
+    @Published var volume: Int
     
     var volumeWithUnit: Measurement<UnitVolume> {
         
@@ -43,6 +43,7 @@ class Item: Identifiable, Equatable {
 class Items: ObservableObject, Identifiable {
     @Published var items = [Item]()
     @Published var itemsInBag = [Item]()
+    @Published var itemsPinned = [Item]()
     var itemsActivitySymbols: [UUID:[UUID:String]] = [:]
     
     var itemsInBagWeight:Int {
