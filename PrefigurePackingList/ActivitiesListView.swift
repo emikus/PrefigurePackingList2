@@ -20,7 +20,7 @@ struct ActivitiesListView: View {
                     
                     VolumeWeightDurationIndicatorsView()
                     
-                    NavigationLink(destination: AddEditActivityView()) {
+                    NavigationLink(destination: AddEditActivityView().environmentObject(self.activities).environmentObject(self.items)) {
                         Image(systemName: "plus")
                         Text("Add new activity")
                     }

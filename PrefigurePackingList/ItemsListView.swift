@@ -18,7 +18,7 @@ struct ItemsListView: View {
             NavigationView {
                 VStack {
                     VolumeWeightDurationIndicatorsView()
-                    NavigationLink(destination: AddEditItem(showAddEditItemView: self.$showAddEditItemView),isActive : self.$showAddEditItemView) {
+                    NavigationLink(destination: AddEditItem(showAddEditItemView: self.$showAddEditItemView).environmentObject(self.activities).environmentObject(self.items),isActive : self.$showAddEditItemView) {
                         Image(systemName: "plus")
                         Text("Add new item")
                     }

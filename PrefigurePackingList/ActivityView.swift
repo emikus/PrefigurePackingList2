@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ActivityView: View {
-    var activity: Activity
+    @ObservedObject var activity: Activity
     @Binding var expandedActivityId: UUID
     @EnvironmentObject var activities: Activities
     @EnvironmentObject var items: Items
@@ -52,7 +52,7 @@ struct ActivityView: View {
                     .font(.system(size: 16, weight: .ultraLight))
             }
             
-            NavigationLink(destination: AddEditActivityView(activity: self.activity)) {
+            NavigationLink(destination: AddEditActivityView(activity: self.activity).environmentObject(self.activities).environmentObject(self.items)) {
                 Text("Edit \(activity.name)")
                 Image(systemName: "square.and.pencil")
             }
