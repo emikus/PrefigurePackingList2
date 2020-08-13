@@ -10,6 +10,7 @@
 		52102C6E24D6BA370043C1B2 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52102C6D24D6BA370043C1B2 /* SampleData.swift */; };
 		52102C7024D6C7F60043C1B2 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52102C6F24D6C7F60043C1B2 /* ItemView.swift */; };
 		5236E6F224DD98DA00F83A1A /* AddEditItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5236E6F124DD98DA00F83A1A /* AddEditItem.swift */; };
+		528CE45324E58C6500AFF54C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528CE45224E58C6500AFF54C /* Extensions.swift */; };
 		5294F69424D2E860005189F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294F69324D2E860005189F3 /* AppDelegate.swift */; };
 		5294F69624D2E860005189F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294F69524D2E860005189F3 /* SceneDelegate.swift */; };
 		5294F69924D2E860005189F3 /* PrefigurePackingList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5294F69724D2E860005189F3 /* PrefigurePackingList.xcdatamodeld */; };
@@ -24,12 +25,14 @@
 		5294F6DA24D30E4F005189F3 /* VolumeWeightDurationIndicatorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294F6D924D30E4F005189F3 /* VolumeWeightDurationIndicatorsView.swift */; };
 		5294F6DC24D33724005189F3 /* ItemsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294F6DB24D33724005189F3 /* ItemsListView.swift */; };
 		5294F6DE24D34F28005189F3 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294F6DD24D34F28005189F3 /* ActivityView.swift */; };
+		52C86E2F24E5553A00DE9EE3 /* AddEditActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C86E2E24E5553A00DE9EE3 /* AddEditActivityView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		52102C6D24D6BA370043C1B2 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		52102C6F24D6C7F60043C1B2 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 		5236E6F124DD98DA00F83A1A /* AddEditItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditItem.swift; sourceTree = "<group>"; };
+		528CE45224E58C6500AFF54C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5294F69024D2E860005189F3 /* PrefigurePackingList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrefigurePackingList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5294F69324D2E860005189F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5294F69524D2E860005189F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		5294F6D924D30E4F005189F3 /* VolumeWeightDurationIndicatorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeWeightDurationIndicatorsView.swift; sourceTree = "<group>"; };
 		5294F6DB24D33724005189F3 /* ItemsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsListView.swift; sourceTree = "<group>"; };
 		5294F6DD24D34F28005189F3 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		52C86E2E24E5553A00DE9EE3 /* AddEditActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditActivityView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,11 +88,13 @@
 				5294F69A24D2E860005189F3 /* ContentView.swift */,
 				5294F6B424D2F017005189F3 /* ActivitiesListView.swift */,
 				5294F6DD24D34F28005189F3 /* ActivityView.swift */,
+				52C86E2E24E5553A00DE9EE3 /* AddEditActivityView.swift */,
 				5294F6DB24D33724005189F3 /* ItemsListView.swift */,
 				52102C6F24D6C7F60043C1B2 /* ItemView.swift */,
 				5236E6F124DD98DA00F83A1A /* AddEditItem.swift */,
 				5294F6D924D30E4F005189F3 /* VolumeWeightDurationIndicatorsView.swift */,
 				52102C6D24D6BA370043C1B2 /* SampleData.swift */,
+				528CE45224E58C6500AFF54C /* Extensions.swift */,
 				5294F69C24D2E862005189F3 /* Assets.xcassets */,
 				5294F69324D2E860005189F3 /* AppDelegate.swift */,
 				5294F69524D2E860005189F3 /* SceneDelegate.swift */,
@@ -183,12 +189,14 @@
 				5294F6B524D2F017005189F3 /* ActivitiesListView.swift in Sources */,
 				5294F6DA24D30E4F005189F3 /* VolumeWeightDurationIndicatorsView.swift in Sources */,
 				5294F6AF24D2E89F005189F3 /* Activity.swift in Sources */,
+				52C86E2F24E5553A00DE9EE3 /* AddEditActivityView.swift in Sources */,
 				5294F69424D2E860005189F3 /* AppDelegate.swift in Sources */,
 				5294F69624D2E860005189F3 /* SceneDelegate.swift in Sources */,
 				5294F69B24D2E860005189F3 /* ContentView.swift in Sources */,
 				52102C6E24D6BA370043C1B2 /* SampleData.swift in Sources */,
 				5294F6B124D2E8B3005189F3 /* Item.swift in Sources */,
 				52102C7024D6C7F60043C1B2 /* ItemView.swift in Sources */,
+				528CE45324E58C6500AFF54C /* Extensions.swift in Sources */,
 				5236E6F224DD98DA00F83A1A /* AddEditItem.swift in Sources */,
 				5294F6DC24D33724005189F3 /* ItemsListView.swift in Sources */,
 				5294F69924D2E860005189F3 /* PrefigurePackingList.xcdatamodeld in Sources */,

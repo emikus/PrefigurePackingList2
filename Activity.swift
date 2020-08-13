@@ -9,17 +9,17 @@
 import Foundation
 
 
-class Activity: Identifiable, Equatable {
+class Activity: ObservableObject, Identifiable, Equatable {
     static func == (lhs: Activity, rhs: Activity) -> Bool {
         return lhs.id == rhs.id
     }
     
     let id = UUID()
-    var name: String
-    var symbol: String
-    var duration: Int
-    var items: [Item]
-    var category: ActivityCategory
+    @Published var name: String
+    @Published var symbol: String
+    @Published var duration: Int
+    @Published var items: [Item]
+    @Published var category: ActivityCategory
     
     
     var itemsVolume: Int {
@@ -54,9 +54,10 @@ class Activity: Identifiable, Equatable {
 }
 
 
-class Activities: ObservableObject {
+class Activities: ObservableObject, Identifiable {
     @Published var activities: [Activity]
     @Published var selectedActivities: [Activity]
+    @Published var activitiesPinned: [Activity]
     var suggestedActivities: [Activity]
     
     var selectedActivitiesDuration: Int {
@@ -72,12 +73,15 @@ class Activities: ObservableObject {
         self.activities = []
         self.suggestedActivities = []
         self.selectedActivities = []
+        self.activitiesPinned = []
         
         
             self.activities = sampleActivites
             
-            self.suggestedActivities.append(sampleActivites[0])
-            self.suggestedActivities.append(sampleActivites[5])
+//            self.suggestedActivities.append(sampleActivites[0])
+//            self.activities.remove(at: 0)
+//            self.suggestedActivities.append(sampleActivites[5])
+//            self.activities.remove(at: 4)
     }
 }
 

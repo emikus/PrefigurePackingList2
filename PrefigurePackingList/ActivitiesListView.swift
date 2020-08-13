@@ -11,6 +11,7 @@ import SwiftUI
 struct ActivitiesListView: View {
     @EnvironmentObject var activities: Activities
     @EnvironmentObject var items: Items
+    @State private var expandedActivityId: UUID = UUID()
 
     
     var body: some View {
@@ -18,14 +19,20 @@ struct ActivitiesListView: View {
                 VStack {
                     
                     VolumeWeightDurationIndicatorsView()
+                    
+                    NavigationLink(destination: AddEditActivityView()) {
+                        Image(systemName: "plus")
+                        Text("Add new activity")
+                    }
                     List {
                         Section(header:
                             Text("Suggested for now".uppercased())
                                 
                                 .foregroundColor(.orange)) {
-                                    ForEach(self.activities.suggestedActivities) { suggestedActivity in
-                                    ActivityView(activity: suggestedActivity)
+                                    ForEach(self.activities.activitiesPinned) { suggestedActivity in
+                                        ActivityView(activity: suggestedActivity, expandedActivityId: self.$expandedActivityId)
                                         .navigationBarBackButtonHidden(true)
+                                            .animation(.easeInOut(duration: 0.5))
                                 }
                                 .listRowBackground(Color.black)
                                 
@@ -35,18 +42,20 @@ struct ActivitiesListView: View {
                             Section(header:
                                 Text(category.rawValue.uppercased())
                                 ) {
-                                    ForEach(self.activities.activities.filter {$0.category == category}) { suggestedActivity in
-                                        ActivityView(activity: suggestedActivity)
+                                    ForEach(self.activities.activities.filter {$0.category == category}) { activity in
+                                        ActivityView(activity: activity, expandedActivityId: self.$expandedActivityId)
+                                            .animation(.linear(duration: 0.5))
                                     }
                                 .listRowBackground(Color.black)
                             }
                         }
                     }
                     .listStyle(GroupedListStyle())
+                    .animation(.linear(duration: 0.3))
                 }
                 .navigationBarTitle("Activities")
             }
-            .navigationViewStyle(StackNavigationViewStyle()) // makes the view cover whole width hiding additional (optional) columns
+//            .navigationViewStyle(StackNavigationViewStyle()) // makes the view cover whole width hiding additional (optional) columns
     }
     
     

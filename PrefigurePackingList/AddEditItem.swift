@@ -82,10 +82,7 @@ struct AddEditItem: View {
                 self.weight = String(self.item!.weight)
                 self.volume = String(self.item!.volume)
                 self.itemActivities = self.activities.activities.filter {$0.items.filter {$0.id == self.item?.id}.count > 0}
-            } else {
-                
             }
-            
         })
     }
     
