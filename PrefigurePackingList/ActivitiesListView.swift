@@ -26,7 +26,7 @@ struct ActivitiesListView: View {
                     }
                     List {
                         Section(header:
-                            Text("Suggested for now".uppercased())
+                            Text("Favourite activities".uppercased())
                                 
                                 .foregroundColor(.orange)) {
                                     ForEach(self.activities.activitiesPinned) { suggestedActivity in
@@ -55,7 +55,6 @@ struct ActivitiesListView: View {
                 }
                 .navigationBarTitle("Activities")
             }
-//            .navigationViewStyle(StackNavigationViewStyle()) // makes the view cover whole width hiding additional (optional) columns
     }
     
     

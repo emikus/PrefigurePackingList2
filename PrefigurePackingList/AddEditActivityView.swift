@@ -18,8 +18,8 @@ struct AddEditActivityView: View {
     @State var duration:String = ""
     @State var activityItems:[Item] = [Item]()
     @State var category: ActivityCategory = .general
-
-    
+    @State var itemsNumberDividedByThree = 0
+    @State var activitySymbolsSet: [String] = ["pencil.circle", "map", "lock", "hammer", "bitcoinsign.circle", "video", "lightbulb", "sportscourt", "tv.music.note", "book", "dollarsign.circle", "guitars"]
     
     var body: some View {
         NavigationView {
@@ -30,31 +30,53 @@ struct AddEditActivityView: View {
                     .keyboardType(UIKeyboardType.decimalPad)
                 }
                 
-                Section(header: Text("Activity's category, tap to choose.")) {
-                    List {
-                        ForEach(ActivityCategory.allCases, id: \.self) {category in
-                            
-                            Button(action:{
-                                self.category = category
-                            })
-                            {
-                            HStack {
-                                Text(category.rawValue.uppercased())
-                            }
-                            .foregroundColor(self.category == category ? .green : .gray)
-                            }
-                            
+                Section(header: Text("Activity's symbol, tap to choose.")) {
+                    Picker("Symbol", selection: self.$symbol) {
+                        ForEach(self.activitySymbolsSet, id: \.self) { symbol in
+                            Image(systemName: symbol)
+                                .foregroundColor(self.symbol == symbol ? .green : .gray)
                         }
-                    
                     }
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                }
+                
+                Section(header: Text("Activity's category, tap to choose.")) {
+                    
+                    Picker("Symbol", selection: self.$category) {
+                        ForEach(ActivityCategory.allCases, id: \.self) { category in
+                            Text(category.rawValue.uppercased())
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+//                    
+//                    
+//                    
+//                    List {
+//                        ForEach(ActivityCategory.allCases, id: \.self) {category in
+//                            
+//                            Button(action:{
+//                                self.category = category
+//                            })
+//                            {
+//                            HStack {
+//                                Text(category.rawValue.uppercased())
+//                            }
+//                            .foregroundColor(self.category == category ? .green : .gray)
+//                            }
+//                            
+//                        }
+//                    
+//                    }
                 }
                 
                 Section(header: Text("Activity's items, tap to toggle. \(String(self.activityItems.count)) chosen already.")) {
-                        ForEach (self.items.items)  { item in
-                            Button(action:{
-                                self.addRemoveActivityItem(item: item)
-                            })
-                            {
+
+                    ForEach (self.items.items)  { item in
+                        Button(action:{
+                            self.addRemoveActivityItem(item: item)
+                        })
+                        {
                             HStack {
                                 Text(item.name)
                             }
@@ -112,8 +134,6 @@ struct AddEditActivityView: View {
         })
     }
     
-//    addRemoveActivityItem
-    
     func addRemoveActivityItem(item: Item) {
         if self.activityItems.contains(item) {
             self.activityItems.removeAll {$0.id == item.id}
@@ -121,43 +141,13 @@ struct AddEditActivityView: View {
             self.activityItems.append(item)
         }
     }
-    
-    
-    
-    
-//    func addRemoveItemActivity(activity: Activity) {
-//        if self.itemActivities.contains(activity) {
-//            self.itemActivities.removeAll {$0.id == activity.id}
-//        } else {
-//            self.itemActivities.append(activity)
-//        }
-//    }
-    
-//    func updateActivityItems() {
-//        for activity in self.activities.activities {
-//            if self.itemActivities.contains(activity) {
-//                if !activity.items.contains(self.item!) {
-//                    activity.items.append(self.item!)
-//                }
-//            } else {
-//                activity.items.removeAll {$0 == self.item}
-//            }
-//        }
-//    }
-    
-//    func addNewItemToActivities(newItem: Item) {
-//        for activity in self.activities.activities {
-//            if self.itemActivities.contains(activity) {
-//                activity.items.append(newItem)
-//            }
-//        }
-//    }
 }
 
-//struct AddEditItem_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddEditItem(showAddEditItemView: false)
-//        .environmentObject(Items(fillWithSampleData: true))
-//        .environmentObject(Activities())
-//    }
-//}
+struct AddEditActivityView_Previews: PreviewProvider {
+    static var previews: some View {
+        AddEditActivityView()
+        .environmentObject(Items(fillWithSampleData: true))
+        .environmentObject(Activities())
+        .previewDevice(PreviewDevice(rawValue: "iPhone XR"))
+    }
+}
