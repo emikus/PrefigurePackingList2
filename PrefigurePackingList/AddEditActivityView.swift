@@ -12,7 +12,6 @@ struct AddEditActivityView: View {
     @EnvironmentObject var items: Items
     @EnvironmentObject var activities: Activities
     var activity:Activity?
-//    @Binding var showAddEditItemView: Bool
     @State var name:String = ""
     @State var symbol: String = ""
     @State var duration:String = ""
@@ -88,7 +87,6 @@ struct AddEditActivityView: View {
             }
             .navigationBarTitle(self.activity == nil ? "Add activity" : "Edit activity", displayMode: .inline)
             .navigationBarItems(
-//                leading: Button(action: {self.showAddEditItemView = false}) {Text("Cancel")},
                 trailing:
                 Button(action: {
                     if self.activity != nil {
@@ -98,6 +96,8 @@ struct AddEditActivityView: View {
                         self.activity!.items = self.activityItems
                         self.activity!.category = self.category
                         
+                        self.updateItemsActivitySymbols(activity: self.activity!)
+                        
                     } else {
                         let newActivity = Activity(
                             name: self.name,
@@ -106,15 +106,11 @@ struct AddEditActivityView: View {
                             items: self.activityItems,
                             category: self.category
                         )
-                                                   
                         
                         self.activities.activities.insert(newActivity, at: 0)
-//                        self.items.itemsActivitySymbols[newItem.id] = self.itemActivities.reduce(into: [UUID: String]()) { $0[$1.id] = $1.symbol }
-                        
-//                        self.addNewItemToActivities(newItem: newItem)
+                        self.updateItemsActivitySymbols(activity: newActivity)
                     }
                     
-//                    self.showAddEditItemView = false
                 }) {
                     Text("Save")
                     Image(systemName: "square.and.arrow.down")
@@ -141,6 +137,33 @@ struct AddEditActivityView: View {
             self.activityItems.append(item)
         }
     }
+    
+    func updateItemsActivitySymbols(activity: Activity) {
+
+        for var itemActivitySymbols in self.items.itemsActivitySymbols {
+
+            if activity.items.contains(where: {$0.id == itemActivitySymbols.key}) {
+
+                itemActivitySymbols.value[activity.id] = activity.symbol
+                self.items.itemsActivitySymbols[itemActivitySymbols.key]![activity.id] = activity.symbol
+                
+            } else {
+
+                if let activitySymbolIndex = itemActivitySymbols.value.index(forKey: activity.id)  {
+                
+                    self.items.itemsActivitySymbols[itemActivitySymbols.key]!.remove(at: activitySymbolIndex)
+                    
+                }
+            }
+            
+            
+            
+            
+            
+        }
+    }
+    
+    
 }
 
 struct AddEditActivityView_Previews: PreviewProvider {

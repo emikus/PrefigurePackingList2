@@ -44,7 +44,7 @@ class Items: ObservableObject, Identifiable {
     @Published var items = [Item]()
     @Published var itemsInBag = [Item]()
     @Published var itemsPinned = [Item]()
-    var itemsActivitySymbols: [UUID:[UUID:String]] = [:]
+    @Published var itemsActivitySymbols: [UUID:[UUID:String]] = [:]
     
     var itemsInBagWeight:Int {
         var itemsWeight = 0
