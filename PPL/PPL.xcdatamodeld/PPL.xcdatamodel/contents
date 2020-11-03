@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Activity" representedClassName="Activity" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isPinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="symbol" optional="YES" attributeType="String"/>
+        <relationship name="item" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="origin" inverseEntity="Item"/>
+    </entity>
+    <entity name="BagContentSet" representedClassName="BagContentSet" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="item" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item"/>
+        <relationship name="modulesSet" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ModulesSet"/>
+    </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES">
+        <attribute name="batteryConsumption" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cost" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isInBag" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isInModuleSlot" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isPinned" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="itemCategory" optional="YES" attributeType="String"/>
+        <attribute name="moduleSymbol" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="symbol" optional="YES" attributeType="String"/>
+        <attribute name="volume" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="origin" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="item" inverseEntity="Activity"/>
+    </entity>
+    <entity name="Module" representedClassName="Module" syncable="YES">
+        <attribute name="symbol" optional="YES" attributeType="String"/>
+        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item"/>
+    </entity>
+    <entity name="ModulesSet" representedClassName="ModulesSet" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="module" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Module"/>
+    </entity>
+    <elements>
+        <element name="Activity" positionX="-18" positionY="108" width="128" height="163"/>
+        <element name="BagContentSet" positionX="-9" positionY="135" width="128" height="103"/>
+        <element name="Item" positionX="-45" positionY="0" width="128" height="238"/>
+        <element name="Module" positionX="-27" positionY="117" width="128" height="73"/>
+        <element name="ModulesSet" positionX="-27" positionY="126" width="128" height="73"/>
+    </elements>
+</model>
