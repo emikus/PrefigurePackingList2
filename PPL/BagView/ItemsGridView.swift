@@ -201,14 +201,6 @@ struct ItemsGridView: View {
                                      )
                 .frame(minHeight: 140)
                 .background(Color(red: 1/255, green: 1/255, blue: 3/255))
-                .gridStyle(
-                    ModularGridStyle(
-                        columns: Tracks(integerLiteral: Int(floor(geo.size.width / CGFloat(self.itemWidth)))),
-                        rows: .fixed(100),
-                        spacing: 30
-                    )
-                )
-                
             }
             
         }

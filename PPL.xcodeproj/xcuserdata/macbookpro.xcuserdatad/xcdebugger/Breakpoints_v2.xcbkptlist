@@ -242,38 +242,6 @@
             endingLineNumber = "69"
             landmarkName = "init(_:id:item:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6043DF5F-1B7A-4E59-BC2D-77B763766CDE - c8e683f911227d94"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PPL.Grid.init&lt;A, B, C where A == SwiftUI.ForEach&lt;A1, B1, C1&gt;, A1: Swift.RandomAccessCollection, B1: Swift.Hashable, C1: SwiftUI.View&gt;(_: A1, id: Swift.KeyPath&lt;A1.Element, B1&gt;, item: (A1.Element) -&gt; C1) -&gt; PPL.Grid&lt;SwiftUI.ForEach&lt;A1, B1, C1&gt;&gt;"
-                  moduleName = "PPL"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbookpro/SwiftProjects/PPL/PPL/Grid.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "69"
-                  endingLineNumber = "69"
-                  offsetFromSymbolStart = "906">
-               </Location>
-               <Location
-                  uuid = "6043DF5F-1B7A-4E59-BC2D-77B763766CDE - e13bdabe52b7c813"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (A1.Element) -&gt; PPL.GridItemFromLibrary in PPL.Grid.init&lt;A, B, C where A == SwiftUI.ForEach&lt;A1, B1, C1&gt;, A1: Swift.RandomAccessCollection, B1: Swift.Hashable, C1: SwiftUI.View&gt;(_: A1, id: Swift.KeyPath&lt;A1.Element, B1&gt;, item: (A1.Element) -&gt; C1) -&gt; PPL.Grid&lt;SwiftUI.ForEach&lt;A1, B1, C1&gt;&gt;"
-                  moduleName = "PPL"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbookpro/SwiftProjects/PPL/PPL/Grid.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "69"
-                  endingLineNumber = "69"
-                  offsetFromSymbolStart = "193">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -290,38 +258,6 @@
             endingLineNumber = "73"
             landmarkName = "init(_:item:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "AC17B99E-467F-461D-840D-741E659250C0 - de5ac66f0a63ea31"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PPL.Grid.init&lt;A where A == SwiftUI.ForEach&lt;Swift.Range&lt;Swift.Int&gt;, Swift.Int, A1&gt;, A1: SwiftUI.View&gt;(_: Swift.Range&lt;Swift.Int&gt;, item: (Swift.Int) -&gt; A1) -&gt; PPL.Grid&lt;SwiftUI.ForEach&lt;Swift.Range&lt;Swift.Int&gt;, Swift.Int, A1&gt;&gt;"
-                  moduleName = "PPL"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbookpro/SwiftProjects/PPL/PPL/Grid.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "73"
-                  endingLineNumber = "73"
-                  offsetFromSymbolStart = "705">
-               </Location>
-               <Location
-                  uuid = "AC17B99E-467F-461D-840D-741E659250C0 - 348a08d1ff50088"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Int) -&gt; PPL.GridItemFromLibrary in PPL.Grid.init&lt;A where A == SwiftUI.ForEach&lt;Swift.Range&lt;Swift.Int&gt;, Swift.Int, A1&gt;, A1: SwiftUI.View&gt;(_: Swift.Range&lt;Swift.Int&gt;, item: (Swift.Int) -&gt; A1) -&gt; PPL.Grid&lt;SwiftUI.ForEach&lt;Swift.Range&lt;Swift.Int&gt;, Swift.Int, A1&gt;&gt;"
-                  moduleName = "PPL"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbookpro/SwiftProjects/PPL/PPL/Grid.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "73"
-                  endingLineNumber = "73"
-                  offsetFromSymbolStart = "73">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
