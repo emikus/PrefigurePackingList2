@@ -9,25 +9,16 @@ import SwiftUI
 
 struct ItemsView: View {
     @State var itemsListVisible:Bool = false
+    @State var searchBarVisible:Bool = false
+    @State var startPos : CGPoint = .zero
+   @State var isSwipping = true
     
     var body: some View {
         VStack {
-            HStack(alignment: .center) {
-                
-                Spacer()
-                    Button(action: {
-                        self.itemsListVisible.toggle()
-                    }) {
-                        Text(self.itemsListVisible == true ? "Grid view" : "List view")
-                    }
-            }
-            .padding([.top, .trailing],  5.0)
-            
             if self.itemsListVisible == true {
-                ItemsListView()
+                ItemsListView(itemsListVisible: $itemsListVisible)
             } else {
-//                Text("gryd fiu")
-                ItemsGridView()
+                ItemsGridView(itemsListVisible: $itemsListVisible)
             }
         }
             .padding(.all, 5.0)

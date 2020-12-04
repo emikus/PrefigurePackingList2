@@ -26,8 +26,6 @@ struct ActivitiesListView: View {
         var allActivitiesDuration = 0
         for activity in self.activities.filter({$0.isSelected==true}) {
             allActivitiesDuration += Int(activity.duration)
-            
-            
         }
         return allActivitiesDuration
     }
@@ -36,12 +34,14 @@ struct ActivitiesListView: View {
         var itemsInBagVolume = 0
         for item in self.items.filter({$0.isInBag==true}) {
             itemsInBagVolume += Int(item.volume)
-            
-            
         }
         
         
         return itemsInBagVolume
+    }
+    
+    init() {
+        UITableView.appearance().separatorColor = .clear
     }
 
     var body: some View {

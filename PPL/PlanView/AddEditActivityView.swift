@@ -7,7 +7,11 @@
 
 import SwiftUI
 
-
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 struct AddEditActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -21,6 +25,7 @@ struct AddEditActivityView: View {
         animation: .default)
     private var activities: FetchedResults<Activity>
     var activity:Activity?
+    @Environment(\.presentationMode) var presentationMode
     @State var name:String = ""
     @State var symbol: String = ""
     @State var duration:String = ""
@@ -29,14 +34,36 @@ struct AddEditActivityView: View {
     @State var itemsNumberDividedByThree = 0
     @State var activitySymbolsSet: [String] = ["pencil.circle", "map", "lock", "hammer", "bitcoinsign.circle", "video", "lightbulb", "sportscourt", "tv.music.note", "book", "dollarsign.circle", "guitars"]
     
+    private func endEditing() {
+            UIApplication.shared.endEditing()
+        }
+    
     var body: some View {
         NavigationView {
+            
             Form {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                    
+                })
+                {
+                    Text("Cancel")
+                }
+                .keyboardShortcut(".")
                 Section {
-                    TextField("Activity's name", text: $name)
-                    TextField("Activity's duration", text: $duration)
+                    TextField("Activity's name", text: $name, onCommit: {
+                        print("act name")
+                        UIApplication.shared.endEditing()
+                    })
+                    TextField("Activity's duration", text: $duration, onCommit: {
+                        print("duration")
+                        UIApplication.shared.endEditing()
+                    })
                     .keyboardType(UIKeyboardType.decimalPad)
                 }
+                .onTapGesture {
+                            self.endEditing()
+                        }
                 
                 Section(header: Text("Activity's symbol, tap to choose.")) {
                     Picker("Symbol", selection: self.$symbol) {
@@ -57,25 +84,6 @@ struct AddEditActivityView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-//
-//
-//
-//                    List {
-//                        ForEach(ActivityCategory.allCases, id: \.self) {category in
-//
-//                            Button(action:{
-//                                self.category = category
-//                            })
-//                            {
-//                            HStack {
-//                                Text(category.rawValue.uppercased())
-//                            }
-//                            .foregroundColor(self.category == category ? .green : .gray)
-//                            }
-//
-//                        }
-//
-//                    }
                 }
                 
                 Section(header: Text("Activity's items, tap to toggle. \(String((self.activityItems.count))) chosen already."), footer: Text("footer nice one")) {
@@ -94,8 +102,17 @@ struct AddEditActivityView: View {
                 }
                 
             }
+            
             .navigationBarTitle(self.activity == nil ? "Add activity" : "Edit activity", displayMode: .inline)
             .navigationBarItems(
+                leading: Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                    
+                })
+                {
+                    Text("Cancel")
+                }
+                .keyboardShortcut(.escape),
                 trailing:
                 Button(action: {
                     // activity edition
@@ -125,11 +142,13 @@ struct AddEditActivityView: View {
                         }
                     }
                     try? viewContext.save()
+                    self.presentationMode.wrappedValue.dismiss()
                     
                 }) {
                     Text("Save")
                     Image(systemName: "square.and.arrow.down")
                 }
+                .keyboardShortcut(.defaultAction)
             )
         }
         .navigationBarBackButtonHidden(self.activity == nil ? true : false)

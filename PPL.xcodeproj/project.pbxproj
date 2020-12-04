@@ -12,6 +12,9 @@
 		523E27E12536314B00CDCC7B /* ItemToBuyGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E27E02536314B00CDCC7B /* ItemToBuyGridView.swift */; };
 		523E27E42536318800CDCC7B /* BuyItemsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E27E32536318800CDCC7B /* BuyItemsGridView.swift */; };
 		5247A6482542184B00B229F2 /* BagContentSetsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5247A6472542184B00B229F2 /* BagContentSetsListView.swift */; };
+		525B558A256DB50600EE1F05 /* SearchNavigationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525B5589256DB50600EE1F05 /* SearchNavigationWrapper.swift */; };
+		525B558F256E8F7300EE1F05 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525B558E256E8F7300EE1F05 /* SearchBarView.swift */; };
+		52820ABD25777A89003D8B1C /* ButtonsStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52820ABC25777A89003D8B1C /* ButtonsStyling.swift */; };
 		52B0C323252F6C46006F441B /* PPLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0C322252F6C46006F441B /* PPLApp.swift */; };
 		52B0C325252F6C46006F441B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0C324252F6C46006F441B /* ContentView.swift */; };
 		52B0C327252F6C49006F441B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52B0C326252F6C49006F441B /* Assets.xcassets */; };
@@ -70,6 +73,9 @@
 		523E27E02536314B00CDCC7B /* ItemToBuyGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemToBuyGridView.swift; path = ../../../PrefigurePackingList2/PrefigurePackingList/BagView/ItemToBuyGridView.swift; sourceTree = "<group>"; };
 		523E27E32536318800CDCC7B /* BuyItemsGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BuyItemsGridView.swift; path = ../../../PrefigurePackingList2/PrefigurePackingList/BagView/BuyItemsGridView.swift; sourceTree = "<group>"; };
 		5247A6472542184B00B229F2 /* BagContentSetsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagContentSetsListView.swift; sourceTree = "<group>"; };
+		525B5589256DB50600EE1F05 /* SearchNavigationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationWrapper.swift; sourceTree = "<group>"; };
+		525B558E256E8F7300EE1F05 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
+		52820ABC25777A89003D8B1C /* ButtonsStyling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsStyling.swift; sourceTree = "<group>"; };
 		52B0C31F252F6C46006F441B /* PPL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PPL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B0C322252F6C46006F441B /* PPLApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLApp.swift; sourceTree = "<group>"; };
 		52B0C324252F6C46006F441B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -166,10 +172,12 @@
 			children = (
 				52F52A9225345E7D00541E8A /* Shared */,
 				52F52A73253354BE00541E8A /* BagView */,
-				52F52A62253234E100541E8A /* ProgressBarView.swift */,
 				52DC9E8D2530AC31007BA478 /* PlanView */,
+				525B5589256DB50600EE1F05 /* SearchNavigationWrapper.swift */,
+				525B558E256E8F7300EE1F05 /* SearchBarView.swift */,
 				52B0C322252F6C46006F441B /* PPLApp.swift */,
 				52F52A692533469800541E8A /* VolumeWeightDurationIndicatorsView.swift */,
+				52F52A62253234E100541E8A /* ProgressBarView.swift */,
 				52F52A6D2533474700541E8A /* PopupItemsList.swift */,
 				52F52A7025334EF800541E8A /* Extensions.swift */,
 				52B0C324252F6C46006F441B /* ContentView.swift */,
@@ -205,9 +213,9 @@
 		52DC9E8D2530AC31007BA478 /* PlanView */ = {
 			isa = PBXGroup;
 			children = (
+				52DC9E952530B002007BA478 /* ActivityView.swift */,
 				52DC9E8E2530AC53007BA478 /* PanelsView.swift */,
 				52DC9E922530AD18007BA478 /* PlanView.swift */,
-				52DC9E952530B002007BA478 /* ActivityView.swift */,
 				52DC9E982530C191007BA478 /* ActivitiesListView.swift */,
 				52DC9E9E2530C5F5007BA478 /* AddEditActivityView.swift */,
 			);
@@ -221,15 +229,15 @@
 				52F52A742533556500541E8A /* BagView.swift */,
 				523E27E32536318800CDCC7B /* BuyItemsGridView.swift */,
 				52F52A782533574700541E8A /* ModulesAndShelvesView.swift */,
-				5247A6472542184B00B229F2 /* BagContentSetsListView.swift */,
 				52F52A7B253358B400541E8A /* StandGraphicView.swift */,
 				52F52A8525344D8000541E8A /* ItemsView.swift */,
 				52F52A892534576E00541E8A /* ItemsListView.swift */,
 				52F52A8C253457CC00541E8A /* ItemListView.swift */,
-				52F52A8F253459CD00541E8A /* AddEditItem.swift */,
 				523E27D6253621E000CDCC7B /* ItemsGridView.swift */,
 				523E27DD253630D800CDCC7B /* ItemGridView.swift */,
+				52F52A8F253459CD00541E8A /* AddEditItem.swift */,
 				52F114A125420276009220A9 /* SaveBagContentSetView.swift */,
+				5247A6472542184B00B229F2 /* BagContentSetsListView.swift */,
 			);
 			path = BagView;
 			sourceTree = "<group>";
@@ -237,6 +245,7 @@
 		52F52A9225345E7D00541E8A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				52820ABC25777A89003D8B1C /* ButtonsStyling.swift */,
 				52F52A9325345E9C00541E8A /* DataFacade.swift */,
 				52B0C33C252F6E95006F441B /* Model */,
 			);
@@ -368,6 +377,7 @@
 				52F52A752533556500541E8A /* BagView.swift in Sources */,
 				5247A6482542184B00B229F2 /* BagContentSetsListView.swift in Sources */,
 				52F52A8A2534576E00541E8A /* ItemsListView.swift in Sources */,
+				52820ABD25777A89003D8B1C /* ButtonsStyling.swift in Sources */,
 				523E27E12536314B00CDCC7B /* ItemToBuyGridView.swift in Sources */,
 				52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */,
 				52FFC4AA2537841300164B06 /* StaggeredGridStyle.swift in Sources */,
@@ -376,6 +386,7 @@
 				52DC9E8825308F7C007BA478 /* Item+CoreDataClass.swift in Sources */,
 				52FFC4B52537841300164B06 /* ModularGridStyle.swift in Sources */,
 				52F114A225420276009220A9 /* SaveBagContentSetView.swift in Sources */,
+				525B558F256E8F7300EE1F05 /* SearchBarView.swift in Sources */,
 				52F52A7F2533597000541E8A /* ModulesGridView.swift in Sources */,
 				52F52A63253234E100541E8A /* ProgressBarView.swift in Sources */,
 				52F52A6A2533469800541E8A /* VolumeWeightDurationIndicatorsView.swift in Sources */,
@@ -393,6 +404,7 @@
 				52DC9E9C2530C217007BA478 /* ModelHardCoded.swift in Sources */,
 				52F52A90253459CD00541E8A /* AddEditItem.swift in Sources */,
 				52B0C325252F6C46006F441B /* ContentView.swift in Sources */,
+				525B558A256DB50600EE1F05 /* SearchNavigationWrapper.swift in Sources */,
 				52F1149F253F0021009220A9 /* BagContentSet+CoreDataProperties.swift in Sources */,
 				52DC9E8F2530AC53007BA478 /* PanelsView.swift in Sources */,
 				52FFC4B12537841300164B06 /* GridPreferences.swift in Sources */,

@@ -51,7 +51,7 @@ struct AddEditItem: View {
                     TextField("Item's symbol", text: $symbol)
                 }
 
-                Picker("Gender", selection: $itemCategory) {
+                Picker("Item category", selection: $itemCategory) {
                     ForEach(itemCategories, id: \.self) {itemCategory in
                     Text(itemCategory.uppercased())
                     }
@@ -78,6 +78,15 @@ struct AddEditItem: View {
                         }
                     }
                 }
+                
+//                Button(action: {
+//                    self.presentationMode.wrappedValue.dismiss()
+//
+//                })
+//                {
+//                    Text("Cancel")
+//                }
+//                .keyboardShortcut(.cancelAction)
 
             }
             .navigationBarTitle(self.item == nil ? "Add item" : "Edit item", displayMode: .inline)
@@ -88,14 +97,17 @@ struct AddEditItem: View {
                 })
                 {
                     Text("Cancel")
-
-                },
+                }
+                .keyboardShortcut("9"),
                 trailing:
                 Button(action: {
+                    
                     if self.item != nil {
                         self.item!.name = self.name
                         self.item!.weight = Int16(self.weight)!
                         self.item!.volume = Int16(self.volume)!
+                        self.item!.cost = Int16(self.cost)!
+                        self.item!.batteryConsumption = Int16(self.batteryConsumption)!
                         self.item!.symbol = self.symbol
                         self.item!.itemCategory = self.itemCategory
                         self.item!.moduleSymbol = self.moduleSymbol
@@ -124,6 +136,7 @@ struct AddEditItem: View {
                     Text("Save")
                     Image(systemName: "square.and.arrow.down")
                 }
+                .keyboardShortcut(.defaultAction)
             )
         }
         .navigationBarBackButtonHidden(self.item == nil ? true : false)
@@ -133,6 +146,8 @@ struct AddEditItem: View {
                 self.name = self.item!.name!
                 self.weight = String(self.item!.weight)
                 self.volume = String(self.item!.volume)
+                self.cost = String(self.item!.cost)
+                self.batteryConsumption = String(self.item!.batteryConsumption)
                 self.itemCategory = self.item!.itemCategory!
                 self.symbol = self.item!.symbol!
                 self.moduleSymbol = self.item!.moduleSymbol!
@@ -148,8 +163,6 @@ struct AddEditItem: View {
             self.allModulesSymbols += Array(modules.strapOneBackModulesOccupation.keys)
             self.allModulesSymbols += Array(modules.strapTwoFrontModulesOccupation.keys)
             self.allModulesSymbols += Array(modules.strapTwoBackModulesOccupation.keys)
-            
-            print(self.allModulesSymbols)
         })
     }
     

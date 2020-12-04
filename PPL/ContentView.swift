@@ -203,7 +203,7 @@ struct ContentView: View {
             newItem.id = UUID()
             newItem.name = "Item " + randomString(length: 3)
             newItem.itemCategory = itemCategories.randomElement()
-            newItem.isInBag = self.isInBag
+            newItem.isInBag = false
             self.isInBag.toggle()
             do {
                 try viewContext.save()

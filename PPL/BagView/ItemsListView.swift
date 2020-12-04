@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct ItemsListView: View {
+    @Binding var itemsListVisible: Bool
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -21,30 +22,63 @@ struct ItemsListView: View {
     private var items: FetchedResults<Item>
     @EnvironmentObject var modules: Modules
     @State var showAddEditItemView = false
+    @State var direction:String = "Search..."
+    @State var isSearchBarVisible:Bool = false
+    @State var searchText = ""
     
-    init(){
-        UITableView.appearance().backgroundColor = .clear
+    
+    func searchFilter(item: Item) -> Bool {
+        return self.searchText.count < 3 ? true : item.name!.lowercased().contains(self.searchText.lowercased())
     }
+    
+    
+//    init(){
+//        self.itemsListVisible = true
+//        UITableView.appearance().backgroundColor = .clear
+//    }
+    
     
     var body: some View {
         
         
 
             VStack {
-
+                
                 List {
-                    Section(header:
-                                Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
-                            .foregroundColor(.orange)) {
-                        ForEach(self.items.filter({$0.isPinned == true}).sorted(by: {$0.isInBag && !$1.isInBag})) { item in
-                                    ItemListView(item: item)
+                    HStack {
+                        if self.isSearchBarVisible == true {
+                            SearchBar(text: $searchText)
+                        }
+                        Spacer()
+//                        Button(action: {
+//                            self.itemsListVisible.toggle()
+//                        }) {
+                            Text(self.itemsListVisible == true ? "Grid view" : "List view")
+                                .foregroundColor(.blue)
+                                .onTapGesture {
+                                    self.itemsListVisible.toggle()
                                 }
-                                .listRowBackground(Color(red: 28/255, green: 29/255, blue: 31/255))
+//                        }
+                        
                     }
+                    .listRowBackground(Color.black)
+                    .padding(.leading, -15)
+                    
+                    if self.searchText.count < 3 {
+                        Section(header:
+                                    Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
+                                .foregroundColor(.orange)) {
+                            ForEach(self.items.filter({$0.isPinned == true}).sorted(by: {$0.isInBag && !$1.isInBag})) { item in
+                                        ItemListView(item: item)
+                                    }
+                                    .listRowBackground(Color(red: 28/255, green: 29/255, blue: 31/255))
+                        }
+                    }
+                    
                     Section(header:
                         Text("All your items")
                             .foregroundColor(.orange)) {
-                        ForEach(self.items.sorted(by: {$0.isInBag && !$1.isInBag})) { item in
+                        ForEach(self.items.sorted(by: {$0.isInBag && !$1.isInBag}).filter({searchFilter(item: $0)})) { item in
                                     ItemListView(item: item)
 
                                 }
@@ -54,11 +88,20 @@ struct ItemsListView: View {
                                 .listRowBackground(Color(red: 28/255, green: 29/255, blue: 31/255))
 
                     }
-                    .background(Color.black)
 
                 }
-                .background(Color.black)
-
+                .padding(.top, -47)
+                .simultaneousGesture(DragGesture()
+                                        .onChanged { gesture in
+                                           // onChange code
+                                            withAnimation() {
+                                                self.isSearchBarVisible = true
+                                            }
+                                        }
+                                        .onEnded {_ in 
+                                            print("ended")
+                                        }
+                                     )
             }
             .listStyle(GroupedListStyle())
         
@@ -97,8 +140,10 @@ struct ItemsListView: View {
 
 struct ItemsListView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemsListView()
+        ItemsListView(itemsListVisible: .constant(true))
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(Modules())
+
     }
 }
+

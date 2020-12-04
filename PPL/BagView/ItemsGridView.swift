@@ -10,6 +10,7 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 struct ItemsGridView: View {
+    @Binding var itemsListVisible: Bool
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
@@ -27,6 +28,9 @@ struct ItemsGridView: View {
     @State var clothesHidden: Bool = false
     @State var electricalHidden: Bool = false
     @State var referenceFoodArray: [GridItemWrapper] = []
+    @State var direction:String = "Search..."
+    @State var isSearchBarVisible:Bool = false
+    @State var searchText = ""
     let itemWidth: CGFloat = 110
     
     
@@ -45,7 +49,7 @@ struct ItemsGridView: View {
             }
         }
         
-        let allItems = itemsArray + itemsToBuyArray
+        let allItems = itemsArray.sorted(by: {$0.isInBag && !$1.isInBag}) + itemsToBuyArray
         var allItemsWrapped:[GridItemWrapper] = []
         
         for index in 0...allItems.count - 1 {
@@ -58,28 +62,47 @@ struct ItemsGridView: View {
         GridItem(.adaptive(minimum: 105, maximum: 145))
     ]
     
+    func searchFilter(item: Item) -> Bool {
+        return self.searchText.count < 3 ? true : item.name!.lowercased().contains(self.searchText.lowercased())
+    }
+    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-//
+
                 
                 
                 ScrollView {
-                    HStack {
-                        Text("FOOD")
-                        Image(systemName:self.foodHidden == true ? "chevron.down" : "chevron.up")
-                        Spacer()
-                    }
-                    .padding([.top,.leading], 15)
-                    .onTapGesture {
-                        withAnimation{
-                            self.foodHidden.toggle()
+                    ScrollViewReader { value in
+                        HStack {
+                            if self.isSearchBarVisible == true {
+                                SearchBar(text: $searchText)
+                                // .padding(.top, -30)
+                            }
+                            Spacer()
+                            Button(action: {
+                                self.itemsListVisible.toggle()
+                            }) {
+                                Text(self.itemsListVisible == true ? "Grid view" : "List view")
+                            }
+                            .padding([.trailing], 18)
                         }
-                    }
-                
-                    if self.foodHidden == false {
+                        HStack {
+                            Text("FOOD")
+                            Image(systemName:self.foodHidden == true ? "chevron.down" : "chevron.up")
+                            Spacer()
+                        }
+                        .padding([.top,.leading], 15)
+                        .onTapGesture {
+                            withAnimation{
+                                self.foodHidden.toggle()
+                            }
+                        }
+                        .id(3)
+                        
+                        if self.foodHidden == false {
                             LazyVGrid(columns: layout, spacing: 15) {
-                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "food"})).sorted(by: {$0.item.isInBag && !$1.item.isInBag})) { gridItemWrapper in
+                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "food"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
                                     
                                     if gridItemWrapper.id < self.items.filter({$0.itemCategory == "food"}).count  {
                                         ItemGridView(item: gridItemWrapper.item)
@@ -96,24 +119,23 @@ struct ItemsGridView: View {
                             }
                             .padding([.leading, .trailing], 10.0)
                             .padding(.top, 10.0)
-                    }
-                    
-                    HStack {
-                        Text("CLOTHES")
-                        Image(systemName:self.clothesHidden == true ? "chevron.down" : "chevron.up")
-                        Spacer()
-                    }
-                    .padding([.top,.leading], 15)
-                    .onTapGesture {
-                        withAnimation{
-                            self.clothesHidden.toggle()
                         }
-                    }
-
-                    if self.clothesHidden == false {
-                        if #available(iOS 14.0, *) {
+                        
+                        HStack {
+                            Text("CLOTHES")
+                            Image(systemName:self.clothesHidden == true ? "chevron.down" : "chevron.up")
+                            Spacer()
+                        }
+                        .padding([.top,.leading], 15)
+                        .onTapGesture {
+                            withAnimation{
+                                self.clothesHidden.toggle()
+                            }
+                        }
+                        
+                        if self.clothesHidden == false {
                             LazyVGrid(columns: layout, spacing: 15) {
-                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "clothes"}))) { gridItemWrapper in
+                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "clothes"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
                                     
                                     if gridItemWrapper.id < self.items.filter({$0.itemCategory == "clothes"}).count  {
                                         ItemGridView(item: gridItemWrapper.item)
@@ -130,27 +152,24 @@ struct ItemsGridView: View {
                             }
                             .padding([.leading, .trailing], 10.0)
                             .padding(.top, 10.0)
-                        } else {
-                            // Fallback on earlier versions
                         }
-                    }
-
-                    HStack {
-                        Text("ELECTRICAL")
-                        Image(systemName:self.electricalHidden == true ? "chevron.down" : "chevron.up")
-                        Spacer()
-                    }
-                    .padding([.top,.leading], 15)
-                    .onTapGesture {
-                        withAnimation{
-                            self.electricalHidden.toggle()
+                        
+                        HStack {
+                            Text("ELECTRICAL")
+                            Image(systemName:self.electricalHidden == true ? "chevron.down" : "chevron.up")
+                            Spacer()
                         }
-                    }
-
-                    if self.electricalHidden == false {
-                        if #available(iOS 14.0, *) {
+                        .padding([.top,.leading], 15)
+                        .onTapGesture {
+                            withAnimation{
+                                self.electricalHidden.toggle()
+                            }
+                        }
+                        
+                        
+                        if self.electricalHidden == false {
                             LazyVGrid(columns: layout, spacing: 15) {
-                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "electrical"}))) { gridItemWrapper in
+                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "electrical"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
                                     
                                     if gridItemWrapper.id < self.items.filter({$0.itemCategory == "electrical"}).count  {
                                         ItemGridView(item: gridItemWrapper.item)
@@ -167,11 +186,19 @@ struct ItemsGridView: View {
                             }
                             .padding([.leading, .trailing], 10.0)
                             .padding(.top, 10.0)
-                        } else {
-                            // Fallback on earlier versions
+                            
                         }
                     }
                 }
+                .simultaneousGesture(DragGesture()
+                                        .onChanged { gesture in
+                                           // onChange code
+                                            
+                                            withAnimation() {
+                                                self.isSearchBarVisible = true
+                                            }
+                                        }
+                                     )
                 .frame(minHeight: 140)
                 .background(Color(red: 1/255, green: 1/255, blue: 3/255))
                 .gridStyle(
@@ -211,7 +238,7 @@ struct ItemsGridView: View {
 struct ItemsGridView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 14.0, *) {
-            ItemsGridView()
+            ItemsGridView(itemsListVisible: .constant(true))
                 .previewDevice("iPad Pro (9.7-inch)")
                 .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
                 .environmentObject(Modules())

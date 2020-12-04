@@ -16,5 +16,30 @@ struct PPLApp: App {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
+        .commands {
+            AppCommands()
+        }
+    }
+}
+
+struct AppCommands: Commands {
+
+    func next() {}
+    func prev() {}
+
+    @CommandsBuilder var body: some Commands {
+        CommandMenu("Navigation") {
+            Button(action: {
+                next()
+            }) {
+                Text("Next")
+            }
+
+            Button(action: {
+                prev()
+            }) {
+                Text("Previous")
+            }
+        }
     }
 }

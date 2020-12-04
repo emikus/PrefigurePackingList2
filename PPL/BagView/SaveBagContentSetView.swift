@@ -31,13 +31,6 @@ struct SaveBagContentSetView: View {
     
     func saveBagContentSet() {
         
-//        print(Mirror(reflecting: self.modules).children)
-//
-//        for (index, attr) in Mirror(reflecting: self.modules).children.enumerated() {
-//            if let property_name = attr.label as String? {
-//                print(String(property_name), attr.value, attr.self, String(describing: type(of: attr.value)) == "Published<Dictionary<String, String>>")
-//            }
-//        }
         let newBagContentSet = BagContentSet(context: viewContext)
         newBagContentSet.date = Date()
         newBagContentSet.name = self.bagContentSetName
@@ -89,10 +82,7 @@ struct SaveBagContentSetView: View {
             VStack {
                 LazyVGrid(columns: layout, spacing: 15) {
                     ForEach( self.items.filter({$0.isInBag == true})) { item in
-                        
-                        
                             ItemGridView(item: item)
-                        
                     }
                 }
                 .padding([.leading, .trailing], 10.0)
@@ -108,12 +98,12 @@ struct SaveBagContentSetView: View {
                 .navigationBarItems(
                     leading: Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
-
+                        
                     })
                     {
                         Text("Cancel")
-
-                    },
+                    }
+                    .keyboardShortcut("9"),
                     trailing:
                         Button(action: {
                             self.saveBagContentSet()
@@ -122,6 +112,7 @@ struct SaveBagContentSetView: View {
                             Text("Save")
                             Image(systemName: "square.and.arrow.down")
                         }
+                    .keyboardShortcut(.defaultAction)
                     
                 )
                 
@@ -135,14 +126,6 @@ struct SaveBagContentSetView: View {
         
     }
 }
-
-//struct ModulesAndShelvesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ModulesAndShelvesView()
-//    }
-//}
-
-
 
 struct SaveBagContentSet: View {
     var body: some View {

@@ -23,19 +23,17 @@ struct BagView: View {
     @State var upperPanelHeight = 190.0
     
     var body: some View {
-        
-        VStack {
-            
-
-            ModulesAndShelvesView()
-            VolumeWeightDurationIndicatorsView()
-            .zIndex(800)
-            
-            ItemsView()
-//            .zIndex(9)
+        NavigationView {
+            Text("Bag sidebar")
+            VStack {
+                ModulesAndShelvesView()
+                VolumeWeightDurationIndicatorsView()
+                    .zIndex(800)
+                ItemsView()
+            }
+            .background(Color.black)
+            .navigationBarTitle("Pack", displayMode: .inline)
         }
-        
-        .background(Color.black)
     }
 }
 

@@ -12,12 +12,16 @@ struct PlanView: View {
     
     
     var body: some View {
-        VStack {
-            PanelsView()
-            VolumeWeightDurationIndicatorsView()
-            .zIndex(10000.00)
-            ActivitiesListView()
-            
+        NavigationView {
+            Text("Plan sidebar")
+            VStack {
+                PanelsView()
+                VolumeWeightDurationIndicatorsView()
+                    .zIndex(10000.00)
+                ActivitiesListView()
+                
+            }
+            .navigationBarTitle("Plan", displayMode: .inline)
         }
     }
 }

@@ -32,6 +32,7 @@ struct BagContentSetsListView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     @EnvironmentObject var dataFacade: DataFacade
+    @Environment(\.presentationMode) var presentationMode
 
     func getItemsFromBagContentSet(bagContentSet: BagContentSet) -> [Item] {
         let items: [Item] = bagContentSet.modulesSetArray.flatMap({
@@ -43,6 +44,7 @@ struct BagContentSetsListView: View {
     }
     
     var body: some View {
+        NavigationView {
         List {
                         ForEach(self.bagContentSets, id:\.self) { bagContentSet in
                             HStack {
@@ -82,13 +84,24 @@ struct BagContentSetsListView: View {
                                 }
                                 
                                 modules.recreateBagContentSet(modulesAndTheirItems: modulesAndTheirItems)
-                                
-                                
+                                self.presentationMode.wrappedValue.dismiss()
                             })
                         }
                         .onDelete(perform: deleteBagContentSet)
                         
                     }
+        .navigationBarTitle("Recreate bag content", displayMode: .inline)
+        .navigationBarItems(
+            leading: Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            })
+            {
+                Text("Cancel")
+            }
+            .keyboardShortcut("9")
+        )
+            
+        }
     }
     
     private func deleteBagContentSet(offsets: IndexSet) {

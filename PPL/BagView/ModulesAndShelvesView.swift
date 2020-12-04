@@ -91,32 +91,32 @@ struct ModulesAndShelvesView: View {
                                     }) {
                                         Image(systemName: "bag.badge.minus")
                                     }
-                                    .padding([.top, .trailing], 5)
-                                    
+                                    .buttonStyle(MainButtonStyle())
+                                    .keyboardShortcut("1")
                                     
                                     Button(action: {
                                         self.showAddEditItem.toggle()
                                     }) {
                                         Image(systemName: "plus")
                                     }
+                                    .buttonStyle(MainButtonStyle())
+                                    .keyboardShortcut("2")
                                     .sheet(isPresented: self.$showAddEditItem) {
                                         AddEditItem()
                                     }
-                                    .padding([.top, .trailing], 5)
                                     
                                     Button(action: {
-                                        
-//                                        self.saveBagContentSet()
                                         self.showAddBagContentSet.toggle()
                                     }) {
                                         Image(systemName: "square.and.arrow.down")
                                     }
+                                    .buttonStyle(MainButtonStyle())
+                                    .keyboardShortcut("3")
+                                    .disabled(self.items.filter({$0.isInBag == true}).count == 0)
                                     .sheet(isPresented: self.$showAddBagContentSet) {
                                         SaveBagContentSetView()
                                         .environmentObject(self.modules)
                                     }
-                                    .disabled(self.items.filter({$0.isInBag == true}).count == 0)
-                                    .padding([.top, .trailing], 5)
                                     
                                     Button(action: {
                                         
@@ -125,10 +125,11 @@ struct ModulesAndShelvesView: View {
                                     }) {
                                         Image(systemName: "list.triangle")
                                     }
+                                    .buttonStyle(MainButtonStyle())
+                                    .keyboardShortcut("4")
                                     .sheet(isPresented: self.$showBagContentSets) {
                                         BagContentSetsListView()
                                     }
-                                    .padding([.top, .trailing], 5)
                                 }
                             }
                             

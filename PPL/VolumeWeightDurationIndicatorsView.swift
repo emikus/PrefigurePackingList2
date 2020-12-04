@@ -60,7 +60,7 @@ struct VolumeWeightDurationIndicatorsView: View {
     }
     
     func getItemsInBagWeight () -> Int {
-        var itemsInBagWeight = 1
+        var itemsInBagWeight = 0
         for item in self.items.filter({$0.isInBag==true}) {
             itemsInBagWeight += Int(item.weight)
         }
@@ -69,7 +69,7 @@ struct VolumeWeightDurationIndicatorsView: View {
     }
     
     func getItemsInBagVolume () -> Int {
-        var itemsInBagVolume = 1
+        var itemsInBagVolume = 0
         for item in self.items.filter({$0.isInBag==true}) {
             itemsInBagVolume += Int(item.volume)
         }
@@ -78,7 +78,7 @@ struct VolumeWeightDurationIndicatorsView: View {
     }
     
     func getItemsInBagBatteryConsumption () -> Int {
-        var itemsInBatteryConsumption = 1
+        var itemsInBatteryConsumption = 0
         for item in self.items.filter({$0.isInBag==true}) {
             itemsInBatteryConsumption += Int(item.batteryConsumption)
         }
@@ -88,7 +88,7 @@ struct VolumeWeightDurationIndicatorsView: View {
 
     
     func getItemsInBagCost () -> Int {
-        var itemsInBagCost = 1
+        var itemsInBagCost = 0
         for item in self.items.filter({$0.isInBag==true}) {
             itemsInBagCost += Int(item.cost)
         }
@@ -275,7 +275,7 @@ struct VolumeWeightDurationIndicatorsView: View {
                             DragGesture().onEnded {_ in }
                         )
                         
-                        Text("\(self.getItemsInBagWeight()) / \(self.getItemsInBagWeight())g (\(maxItemsInBagWeight - self.getItemsInBagWeight()))")
+                        Text("\(self.getItemsInBagWeight()) / \(maxItemsInBagWeight)g (\(maxItemsInBagWeight - self.getItemsInBagWeight()))")
                             .foregroundColor(self.weightPopupVisible ? .gray : Color(red: 28/255, green: 29/255, blue: 31/255))
                             .animation(.easeInOut)
                             .font(.footnote)
