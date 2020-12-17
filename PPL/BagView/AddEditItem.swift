@@ -98,7 +98,7 @@ struct AddEditItem: View {
                 {
                     Text("Cancel")
                 }
-                .keyboardShortcut("9"),
+                .keyboardShortcut(KeyEquivalent(",")),
                 trailing:
                 Button(action: {
                     
@@ -149,7 +149,7 @@ struct AddEditItem: View {
                 self.cost = String(self.item!.cost)
                 self.batteryConsumption = String(self.item!.batteryConsumption)
                 self.itemCategory = self.item!.itemCategory!
-                self.symbol = self.item!.symbol!
+                self.symbol = self.item!.wrappedSymbol
                 self.moduleSymbol = self.item!.moduleSymbol!
                 self.isPinned = self.item!.isPinned
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}

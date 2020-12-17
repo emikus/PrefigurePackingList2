@@ -98,7 +98,7 @@ struct BagContentSetsListView: View {
             {
                 Text("Cancel")
             }
-            .keyboardShortcut("9")
+            .keyboardShortcut(KeyEquivalent("c"))
         )
             
         }

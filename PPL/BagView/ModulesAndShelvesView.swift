@@ -47,7 +47,7 @@ struct ModulesAndShelvesView: View {
                 self.isDragging = false
                 let screenHeightPixelsNumber = Double(UIScreen.main.bounds.height)
                 let fullSizeSecondPanelThreshold = (screenHeightPixelsNumber + 190) / 2
-                print("on ENDED!!!!!!!!")
+
                 if self.upperPanelHeight >= 0 && self.upperPanelHeight <= 95 {
                     self.upperPanelHeight = Double(CGFloat(0))
                 } else if self.upperPanelHeight > 95 && self.upperPanelHeight < fullSizeSecondPanelThreshold {
@@ -92,7 +92,7 @@ struct ModulesAndShelvesView: View {
                                         Image(systemName: "bag.badge.minus")
                                     }
                                     .buttonStyle(MainButtonStyle())
-                                    .keyboardShortcut("1")
+                                    .keyboardShortcut(KeyEquivalent("e"))
                                     
                                     Button(action: {
                                         self.showAddEditItem.toggle()
@@ -100,7 +100,7 @@ struct ModulesAndShelvesView: View {
                                         Image(systemName: "plus")
                                     }
                                     .buttonStyle(MainButtonStyle())
-                                    .keyboardShortcut("2")
+                                    .keyboardShortcut(KeyEquivalent("n"))
                                     .sheet(isPresented: self.$showAddEditItem) {
                                         AddEditItem()
                                     }
@@ -111,7 +111,7 @@ struct ModulesAndShelvesView: View {
                                         Image(systemName: "square.and.arrow.down")
                                     }
                                     .buttonStyle(MainButtonStyle())
-                                    .keyboardShortcut("3")
+                                    .keyboardShortcut(KeyEquivalent("s"))
                                     .disabled(self.items.filter({$0.isInBag == true}).count == 0)
                                     .sheet(isPresented: self.$showAddBagContentSet) {
                                         SaveBagContentSetView()
@@ -126,7 +126,8 @@ struct ModulesAndShelvesView: View {
                                         Image(systemName: "list.triangle")
                                     }
                                     .buttonStyle(MainButtonStyle())
-                                    .keyboardShortcut("4")
+                                    .keyboardShortcut(KeyEquivalent("l"))
+                                    .disabled(bagContentSets.count < 1)
                                     .sheet(isPresented: self.$showBagContentSets) {
                                         BagContentSetsListView()
                                     }
@@ -163,5 +164,8 @@ struct ModulesAndShelvesView: View {
 struct ModulesAndShelvesView_Previews: PreviewProvider {
     static var previews: some View {
         ModulesAndShelvesView()
+            .previewDevice("iPad Pro (9.7-inch)")
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(Modules())
     }
 }

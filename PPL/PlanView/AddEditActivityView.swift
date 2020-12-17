@@ -43,13 +43,15 @@ struct AddEditActivityView: View {
             
             Form {
                 Button(action: {
+                    print("dupa")
                     self.presentationMode.wrappedValue.dismiss()
-                    
+
                 })
                 {
                     Text("Cancel")
                 }
-                .keyboardShortcut(".")
+                .keyboardShortcut(KeyEquivalent(","))
+
                 Section {
                     TextField("Activity's name", text: $name, onCommit: {
                         print("act name")
@@ -106,13 +108,14 @@ struct AddEditActivityView: View {
             .navigationBarTitle(self.activity == nil ? "Add activity" : "Edit activity", displayMode: .inline)
             .navigationBarItems(
                 leading: Button(action: {
+                    print("dupa")
                     self.presentationMode.wrappedValue.dismiss()
                     
                 })
                 {
                     Text("Cancel")
                 }
-                .keyboardShortcut(.escape),
+                .keyboardShortcut(KeyEquivalent(",")),
                 trailing:
                 Button(action: {
                     // activity edition

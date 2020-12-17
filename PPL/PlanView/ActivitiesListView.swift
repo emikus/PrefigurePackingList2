@@ -54,6 +54,8 @@ struct ActivitiesListView: View {
                     }) {
                         Text("Add activity")
                     }
+                    .keyboardShortcut(KeyEquivalent("n"), modifiers: .command)
+
                     List {
 //                        Section(header:
 //                            Text("Favourite activities".uppercased())
@@ -111,6 +113,6 @@ struct ActivitiesList_Previews: PreviewProvider {
     static var previews: some View {
         ActivitiesListView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-        .environmentObject(Modules())
+        
     }
 }

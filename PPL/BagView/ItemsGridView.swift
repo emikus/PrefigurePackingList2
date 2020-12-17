@@ -10,7 +10,7 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 struct ItemsGridView: View {
-    @Binding var itemsListVisible: Bool
+    @AppStorage("itemsViewType") var itemsViewType: String = "grid"
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
@@ -32,6 +32,7 @@ struct ItemsGridView: View {
     @State var isSearchBarVisible:Bool = false
     @State var searchText = ""
     let itemWidth: CGFloat = 110
+    
     
     
     func getItemsToBuyArray(itemsArray: [Item]) -> [GridItemWrapper] {
@@ -81,11 +82,12 @@ struct ItemsGridView: View {
                             }
                             Spacer()
                             Button(action: {
-                                self.itemsListVisible.toggle()
+                                self.itemsViewType = "list"
                             }) {
-                                Text(self.itemsListVisible == true ? "Grid view" : "List view")
+                                Text("Grid view")
                             }
                             .padding([.trailing], 18)
+                            .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])
                         }
                         HStack {
                             Text("FOOD")
@@ -230,7 +232,7 @@ struct ItemsGridView: View {
 struct ItemsGridView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 14.0, *) {
-            ItemsGridView(itemsListVisible: .constant(true))
+            ItemsGridView()
                 .previewDevice("iPad Pro (9.7-inch)")
                 .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
                 .environmentObject(Modules())

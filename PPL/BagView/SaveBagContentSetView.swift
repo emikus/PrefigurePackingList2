@@ -106,6 +106,7 @@ struct SaveBagContentSetView: View {
                     .keyboardShortcut("9"),
                     trailing:
                         Button(action: {
+                            print("!!!!!", self.bagContentSetName)
                             self.saveBagContentSet()
                             self.presentationMode.wrappedValue.dismiss()
                         }) {
@@ -123,15 +124,13 @@ struct SaveBagContentSetView: View {
             
         }
         .background(Color.black)
+        .onAppear(perform: {
+            print("on appear", self.bagContentSetName)
+        })
         
     }
 }
 
-struct SaveBagContentSet: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
 
 struct SaveBagContentSetView_Previews: PreviewProvider {
     static var previews: some View {

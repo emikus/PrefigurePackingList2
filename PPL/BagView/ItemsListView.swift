@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct ItemsListView: View {
-    @Binding var itemsListVisible: Bool
+    @AppStorage("itemsViewType") var itemsViewType: String = "list"
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -30,14 +30,7 @@ struct ItemsListView: View {
     func searchFilter(item: Item) -> Bool {
         return self.searchText.count < 3 ? true : item.name!.lowercased().contains(self.searchText.lowercased())
     }
-    
-    
-//    init(){
-//        self.itemsListVisible = true
-//        UITableView.appearance().backgroundColor = .clear
-//    }
-    
-    
+
     var body: some View {
         
         
@@ -50,15 +43,19 @@ struct ItemsListView: View {
                             SearchBar(text: $searchText)
                         }
                         Spacer()
-//                        Button(action: {
-//                            self.itemsListVisible.toggle()
-//                        }) {
-                            Text(self.itemsListVisible == true ? "Grid view" : "List view")
-                                .foregroundColor(.blue)
-                                .onTapGesture {
-                                    self.itemsListVisible.toggle()
-                                }
-//                        }
+                        
+                        Button(action: {
+                            self.itemsViewType = "grid"
+                        }) {
+                            Text("Grid view")
+                        }
+                        .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])
+                        //                            Text(self.itemsListVisible == true ? "Grid view" : "List view")
+                        //                                .foregroundColor(.blue)
+                        //                                .onTapGesture {
+                        //                                    self.itemsListVisible.toggle()
+                        //                                }
+                        //                        }
                         
                     }
                     .listRowBackground(Color.black)
@@ -107,7 +104,6 @@ struct ItemsListView: View {
         
         
     }
-//    }
     
     private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
         print(dNdSourceView)
@@ -140,7 +136,7 @@ struct ItemsListView: View {
 
 struct ItemsListView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemsListView(itemsListVisible: .constant(true))
+        ItemsListView()
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(Modules())
 
