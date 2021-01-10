@@ -112,6 +112,9 @@ struct AddEditItem: View {
                         self.item!.itemCategory = self.itemCategory
                         self.item!.moduleSymbol = self.moduleSymbol
                         self.item!.isPinned = self.isPinned
+                        self.item!.electric = false
+                        self.item!.refillable = false
+                        self.item!.ultraviolet = false
 
                         self.dataFacade.updateItemActivities(item: self.item!, itemActivities: self.itemActivities)
                     } else {
@@ -125,6 +128,9 @@ struct AddEditItem: View {
                         newItem.symbol = self.symbol
                         newItem.itemCategory = self.itemCategory
                         newItem.moduleSymbol = self.moduleSymbol
+                        newItem.refillable = false
+                        newItem.electric = false
+                        newItem.ultraviolet = false
 
                         self.dataFacade.addNewItemToActivities(newItem: newItem, itemActivities: self.itemActivities)
                     }

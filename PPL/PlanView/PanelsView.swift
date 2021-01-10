@@ -36,16 +36,18 @@ struct PanelsView: View {
     ]
     
     let minimalPanelHeight = CGFloat(15)
+    let panelContentVisibilityMinHeight = 40
+    
     
     
     func calculatePanelsHeightForFirstPanel(translationHeight: CGFloat) {
         
         let firstPanelHeightIsBetweenLimits = self.panelsHeight[0] + translationHeight < 301 && self.panelsHeight[0] + translationHeight > 0
         
-        if firstPanelHeightIsBetweenLimits {
+        if firstPanelHeightIsBetweenLimits && self.panelsHeight.reduce(0, +) < 301 {
             self.panelsHeight[0] += translationHeight
             
-            if self.panelsHeight[1] - translationHeight > CGFloat(self.minimalPanelHeight) && self.panelsHeight[2] > 99 {
+            if self.panelsHeight[1] - translationHeight > CGFloat(self.minimalPanelHeight) && (self.panelsHeight[2] > 99 || self.panelsHeight[2] == 0)  {
                 self.panelsHeight[1] -= translationHeight
             } else {
                 self.panelsHeight[2] -= translationHeight
@@ -67,10 +69,13 @@ struct PanelsView: View {
         default:
             secondPanelHeightIsBetweenLimits = false
         }
-        
-        if secondPanelHeightIsBetweenLimits {
+        if secondPanelHeightIsBetweenLimits && self.panelsHeight.reduce(0, +) < 301 {
             self.panelsHeight[1] += translationHeight
-            self.panelsHeight[2] -= translationHeight
+            self.panelsHeight[2] = self.panelsHeight[2] >= 0 ? self.panelsHeight[2] - translationHeight : 0
+            print(self.panelsHeight[0])
+            print(self.panelsHeight[1])
+            print(self.panelsHeight[2])
+            print(self.panelsHeight.reduce(0, +))
         }
     }
     
@@ -79,7 +84,7 @@ struct PanelsView: View {
     var dragForPanelOne: some Gesture {
         DragGesture()
             .onChanged { value in
-                print(value)
+                
                 self.calculatePanelsHeightForFirstPanel(translationHeight: value.translation.height)
                 
                 self.isDragging = true
@@ -89,18 +94,51 @@ struct PanelsView: View {
                 self.isDragging = false
                 
                 if self.panelsHeight[0] <= 50 {
-                    self.panelsHeight = [self.minimalPanelHeight, 200, 100]
+                    var secondPanelHeight:Int
                     
-                } else if self.panelsHeight[0] > 50 && self.panelsHeight[0] <= 100 {
-                    self.panelsHeight = [100, 100, 100]
-                } else if self.panelsHeight[0] > 100 && self.panelsHeight[0] <= 150 {
-                    self.panelsHeight = [100, 100, 100]
-                } else if self.panelsHeight[0] > 150 && self.panelsHeight[0] <= 200 {
-                    self.panelsHeight = [200, 10, 100]
-                } else if self.panelsHeight[0] > 200 && self.panelsHeight[0] <= 250 {
-                    self.panelsHeight = [200, 10, 100]
-                } else if self.panelsHeight[0] > 250 && self.panelsHeight[0] <= 300 {
-                    self.panelsHeight = [300, 10, 10]
+                    switch self.panelsHeight[2] {
+                    case 0:
+                        secondPanelHeight = 285
+                    case 100:
+                        secondPanelHeight = 185
+                    case 185:
+                        secondPanelHeight = 100
+                    default:
+                        secondPanelHeight = Int(self.minimalPanelHeight)
+                    }
+                    
+                    
+                    
+                    self.panelsHeight = [
+                        self.minimalPanelHeight,
+                        CGFloat(secondPanelHeight),
+                        self.panelsHeight[2] > 200 ? 270 : self.panelsHeight[2]
+                    ]
+                    
+                } else if self.panelsHeight[0] > 50 && self.panelsHeight[0] <= 150 {
+                    self.panelsHeight = [
+                        100,
+                        self.panelsHeight[2] > 100 ? self.minimalPanelHeight : 200 - self.panelsHeight[2],
+                        self.panelsHeight[2] > 101 ? 185 : self.panelsHeight[2]
+                    ]
+                }  else if self.panelsHeight[0] > 150 && self.panelsHeight[0] <= 185 {
+                    self.panelsHeight = [
+                        self.panelsHeight[2] == 0 ? 200 : 185,
+                        self.panelsHeight[2] == 0 ? 100 : self.minimalPanelHeight,
+                        self.panelsHeight[2]
+                    ]
+                } else if self.panelsHeight[0] >= 185 && self.panelsHeight[0] <= 250 {
+                    self.panelsHeight = [
+                        self.panelsHeight[2] == 0 ? 200 : 185,
+                        self.panelsHeight[2] == 0 ? 100 : self.minimalPanelHeight,
+                        self.panelsHeight[2] == 0 ? 0 : 100
+                    ]
+                } else if self.panelsHeight[0] > 250 && self.panelsHeight[0] <= 400 {
+                    self.panelsHeight = [
+                        285,
+                        self.minimalPanelHeight,
+                        0
+                    ]
                 }
             }
     }
@@ -125,16 +163,55 @@ struct PanelsView: View {
                 
                 
                 if self.panelsHeight[1] <= 50 {
-                    self.panelsHeight = [firstPanelHeight, self.minimalPanelHeight, 300 - firstPanelHeight - 10]
+                    
+                    
+                    
+                    self.panelsHeight = [
+                        firstPanelHeight == 200 ? 185 : firstPanelHeight,
+                        self.minimalPanelHeight,
+                        firstPanelHeight == 200 ? 100 : 300 - firstPanelHeight - self.minimalPanelHeight
+                    ]
                 } else if self.panelsHeight[1] > 50 && self.panelsHeight[1] <= 150 {
-                    self.panelsHeight = [firstPanelHeight, 100, 200 - firstPanelHeight]
+                    
+                    
+                    
+                    self.panelsHeight = [
+                        firstPanelHeight,
+                        100,
+                        200 - firstPanelHeight
+                    ]
                     
                 } else if self.panelsHeight[1] > 150 && self.panelsHeight[1] <= 250 {
-                    self.panelsHeight = [firstPanelHeight, 200, 100 - firstPanelHeight]
+                    var secondPanelHeight:Int
+                    
+                    if firstPanelHeight == 15 && self.panelsHeight[2] == 0 {
+                        secondPanelHeight = 285
+                    } else if firstPanelHeight == 100 && self.panelsHeight[2] < 50 {
+                        secondPanelHeight = 200
+
+                    } else {
+                        secondPanelHeight = 185
+                    }
+                    
+                    
+                    
+                    
+                    
+                    self.panelsHeight = [
+                        firstPanelHeight,
+                        CGFloat(secondPanelHeight),
+                        firstPanelHeight == 15 ? 100 : 0
+                    ]
                     
                 } else if self.panelsHeight[1] > 250 && self.panelsHeight[1] <= 300 {
-                    self.panelsHeight = [firstPanelHeight, 300, self.minimalPanelHeight]
+                    self.panelsHeight = [
+                        firstPanelHeight,
+                        285,
+                        0
+                    ]
                 }
+                
+                
             }
     }
     
@@ -147,14 +224,18 @@ struct PanelsView: View {
                 HStack {
                     VStack {
                         if Int(self.panelsHeight[0]) > 15 {
-                        Text("I'm panel ONE")
+                            
+                        Text(String(Int(self.panelsHeight[0])))
                             .foregroundColor(.red)
                             .font(panelsHeight[0] == 10 ? .system(size: 1) : .body)
+                            .opacity(Int(self.panelsHeight[0]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[0]) / 40)
                             Spacer()
+
                         }
                         PanelHandleView(panelHeight: $panelsHeight[0])
                         .gesture(self.dragForPanelOne)
                     }
+                    
                 }
 //                .padding(.bottom, 5)
                 .frame(width: CGFloat(1100), height: CGFloat(self.panelsHeight[0]))
@@ -164,15 +245,21 @@ struct PanelsView: View {
                 HStack {
                     VStack {
                         if Int(self.panelsHeight[1]) > 15 {
-                        Text("And I'mmmmmmm panel TWO")
+                                Text(String(Int(self.panelsHeight[1])))
+                                Text(String(Int(self.panelsHeight[1])))
+                                Text(String(Int(self.panelsHeight[1])))
+                            Text(String(Int(self.panelsHeight[1])))
                             .foregroundColor(.yellow)
                             .font(panelsHeight[1] == 10 ? .system(size: 1) : .body)
+                            .opacity(Int(self.panelsHeight[1]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[1]) / 40)
                             
                         Spacer()
+                            
                         }
                         PanelHandleView(panelHeight: $panelsHeight[1])
                         .gesture(self.dragForPanelTwo)
                     }
+                    .opacity(Int(self.panelsHeight[1]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[0]) / 20)
                 }
                 .frame(width: CGFloat(1100), height: CGFloat( self.panelsHeight[1]))
                 .border(Color.gray, width: 1)
@@ -181,9 +268,11 @@ struct PanelsView: View {
                 HStack {
                     VStack {
                         if Int(self.panelsHeight[2]) > 15 {
-                            Text("Here we are - panel THREE")
-                                .foregroundColor(.yellow)
+                            Text(String(Int(self.panelsHeight[2])))
+                                .foregroundColor(.orange)
+                                .opacity(Int(self.panelsHeight[2]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[2]) / 40)
                             Spacer()
+//
                         }
                     }
                 }
@@ -193,10 +282,12 @@ struct PanelsView: View {
                 
                 
             }
+            .frame(width: 1100, height: 300, alignment: .center)
+            .border(Color.white)
         }
         .animation(self.isDragging ? .none : .easeInOut)
         .onAppear(perform: {
-            print(self.panelsHeight)
+            
             self.panelsHeight[0] = CGFloat(self.panelOneHeight)
             self.panelsHeight[1] = CGFloat(self.panelTwoHeight)
             self.panelsHeight[2] = CGFloat(self.panelThreeHeight)
