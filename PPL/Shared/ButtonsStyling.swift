@@ -56,3 +56,23 @@ struct MainButtonStyle: ButtonStyle {
         Content(configuration: configuration)
     }
 }
+
+struct KeyboardShortcutsListStyle: ButtonStyle {
+    struct Content: View {
+        @Environment(\.isEnabled) var isEnabled
+        let configuration: Configuration
+        var label: some View {
+            configuration.label
+//                .frame(maxWidth: .infinity)
+                .padding(5)
+        }
+        var body: some View {
+            Group {
+                label
+            }
+        }
+    }
+    func makeBody(configuration: Self.Configuration) -> some View {
+        Content(configuration: configuration)
+    }
+}

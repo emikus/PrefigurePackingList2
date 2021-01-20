@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ActivitiesListView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -87,6 +88,7 @@ struct ActivitiesListView: View {
                 }
                 .sheet(isPresented: self.$showAddEditActivityView) {
                     AddEditActivityView()
+                        .environment(\.managedObjectContext, self.viewContext)
                                 
                 }
                 

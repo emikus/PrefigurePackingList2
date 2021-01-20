@@ -84,7 +84,7 @@ struct ItemsGridView: View {
                             Button(action: {
                                 self.itemsViewType = "list"
                             }) {
-                                Text("Grid view")
+                                Text("List view")
                             }
                             .padding([.trailing], 18)
                             .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])

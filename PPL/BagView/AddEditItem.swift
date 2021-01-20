@@ -98,7 +98,7 @@ struct AddEditItem: View {
                 {
                     Text("Cancel")
                 }
-                .keyboardShortcut(KeyEquivalent(",")),
+                .keyboardShortcut(KeyEquivalent("k")),
                 trailing:
                 Button(action: {
                     

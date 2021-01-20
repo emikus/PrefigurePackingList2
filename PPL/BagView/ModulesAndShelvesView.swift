@@ -33,6 +33,7 @@ struct ModulesAndShelvesView: View {
     @State var showAddBagContentSet = false
     @State var showBagContentSets = false
     
+    
     var drag: some Gesture {
         DragGesture()
             .onChanged { value in
@@ -103,6 +104,7 @@ struct ModulesAndShelvesView: View {
                                     .keyboardShortcut(KeyEquivalent("n"))
                                     .sheet(isPresented: self.$showAddEditItem) {
                                         AddEditItem()
+                                            .environment(\.managedObjectContext, self.viewContext)
                                     }
                                     
                                     Button(action: {
@@ -131,7 +133,11 @@ struct ModulesAndShelvesView: View {
                                     .sheet(isPresented: self.$showBagContentSets) {
                                         BagContentSetsListView()
                                     }
+                                    
+                                    
+                                    
                                 }
+                                
                             }
                             
                             Spacer()
