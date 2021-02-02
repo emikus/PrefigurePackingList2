@@ -20,10 +20,11 @@ struct ItemToBuyGridView: View {
                     Text("             $ 49.99")
                         .font(.caption)
             }
+            .foregroundColor(fontSecondaryColour)
             .opacity(0.5)
             .frame(width: 100, height: 100)
             .padding([.top,.bottom], 10.0)
-            .background(Color(red: 51/255, green: 51/255, blue: 51/255))
+            .background(fontMainColour.opacity(0.2))
             .cornerRadius(10)
             .contentShape(Rectangle())
         }

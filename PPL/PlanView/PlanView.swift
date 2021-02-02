@@ -21,6 +21,10 @@ struct PlanView: View {
                 ActivitiesListView()
                 
             }
+//             .preferredColorScheme(.dark)
+//            .onAppear(perform: {
+//                changeColorTheme(theme: themes[0].themeColours)
+//            })
             .navigationBarTitle("Plan", displayMode: .inline)
         }
     }

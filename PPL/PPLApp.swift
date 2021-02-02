@@ -9,16 +9,26 @@ import SwiftUI
 
 @main
 struct PPLApp: App {
+    @AppStorage("themeName") var themeName: String?
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
         WindowGroup {
+            
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .onAppear {
+                    print("dupa blada!!!", themeName)
+                    changeColorTheme(theme: themes.first(where: {$0.name == themeName})!.themeColours)
+                }
+                .colorScheme(themeName == "Light mode" ? .light : .dark)
+                .environment(\.colorScheme, themeName == "Light mode" ? .light : .dark)
+                // .preferredColorScheme(.light)
         }
         .commands {
             AppCommands()
         }
+        
     }
 }
 

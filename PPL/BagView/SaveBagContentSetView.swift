@@ -78,7 +78,7 @@ struct SaveBagContentSetView: View {
     ]
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             VStack {
                 LazyVGrid(columns: layout, spacing: 15) {
                     ForEach( self.items.filter({$0.isInBag == true})) { item in
@@ -93,7 +93,7 @@ struct SaveBagContentSetView: View {
                         TextField("Bag configuration name", text: $bagContentSetName)
                     }
                 }
-                .background(Color.black)
+                .background(bgMainColour)
                 .navigationBarTitle("Save bag configuration", displayMode: .inline)
                 .navigationBarItems(
                     leading: Button(action: {
@@ -119,14 +119,9 @@ struct SaveBagContentSetView: View {
                 
                 
             }
-            .background(Color.black)
-            
-            
-        }
-        .background(Color.black)
-        .onAppear(perform: {
-            print("on appear", self.bagContentSetName)
-        })
+            .onAppear(perform: {
+                print("on appear", self.bagContentSetName)
+            })
         
     }
 }

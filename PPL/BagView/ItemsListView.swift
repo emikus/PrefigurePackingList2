@@ -50,43 +50,61 @@ struct ItemsListView: View {
                             Text("Grid view")
                         }
                         .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])
-                        //                            Text(self.itemsListVisible == true ? "Grid view" : "List view")
-                        //                                .foregroundColor(.blue)
-                        //                                .onTapGesture {
-                        //                                    self.itemsListVisible.toggle()
-                        //                                }
-                        //                        }
+                     
                         
                     }
-                    .listRowBackground(Color.black)
+                    .listRowBackground(bgMainColour)
                     .padding(.leading, -15)
                     
                     if self.searchText.count < 3 {
-                        Section(header:
+                        Section(header: HStack{
                                     Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
-                                .foregroundColor(.orange)) {
+                                .foregroundColor(listHeaderColour)
+                                .padding()
+
+                                Spacer()
+                        }
+                        .background(bgMainColour)
+                        .listRowInsets(EdgeInsets(
+                                top: 0,
+                                leading: 0,
+                                bottom: 0,
+                                trailing: 0))) {
                             ForEach(self.items.filter({$0.isPinned == true}).sorted(by: {$0.isInBag && !$1.isInBag})) { item in
                                         ItemListView(item: item)
                                     }
-                                    .listRowBackground(Color(red: 28/255, green: 29/255, blue: 31/255))
+                                    .listRowBackground(bgSecondaryColour)
                         }
                     }
                     
-                    Section(header:
+                    Section(header: HStack {
                         Text("All your items")
-                            .foregroundColor(.orange)) {
+                        .foregroundColor(listHeaderColour)
+                        .padding()
+
+                        Spacer()
+                    }
+                    .background(bgMainColour)
+                    .listRowInsets(EdgeInsets(
+                            top: 0,
+                            leading: 0,
+                            bottom: 0,
+                            trailing: 0))
+                    
+                    ) {
                         ForEach(self.items.sorted(by: {$0.isInBag && !$1.isInBag}).filter({searchFilter(item: $0)})) { item in
                                     ItemListView(item: item)
 
                                 }
 
                                 .onInsert(of: ["ppl.item"], perform: onInsert)
-                                .background(Color.black)
-                                .listRowBackground(Color(red: 28/255, green: 29/255, blue: 31/255))
+                        .listRowBackground(bgSecondaryColour)
+
 
                     }
 
                 }
+//                .preferredColorScheme(.light)
                 .padding(.top, -47)
                 .simultaneousGesture(DragGesture()
                                         .onChanged { gesture in
@@ -99,10 +117,10 @@ struct ItemsListView: View {
                                             print("ended")
                                         }
                                      )
+                .background(Color.yellow)
             }
             .listStyle(GroupedListStyle())
-        
-        
+            .background(Color.yellow)
     }
     
     private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {

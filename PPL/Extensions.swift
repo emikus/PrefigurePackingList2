@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 extension View {
 
       func flipRotate(_ degrees : Double) -> some View {
@@ -26,6 +25,8 @@ extension String {
         self = self.capitalizingFirstLetter()
     }
 }
+
+
 
 
 

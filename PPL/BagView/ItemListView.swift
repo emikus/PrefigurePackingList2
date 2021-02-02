@@ -30,11 +30,11 @@ struct ItemListView: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(item.symbol ?? "symbol itema")
+            Text(item.symbol ?? ":)")
                 .font(.largeTitle)
             VStack(alignment: .leading) {
                 Text(item.wrappedName)
-                    .foregroundColor(.white)
+                    .foregroundColor(fontMainColour)
 
             }
             .frame(width: 120, alignment: .leading)
@@ -48,13 +48,13 @@ struct ItemListView: View {
 
                 Text("Weight: \(item.weight)g" )
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(fontSecondaryColour)
                 Text("Volume: \(self.item.volume)㎤")
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(fontSecondaryColour)
                 Text("Battery: \(self.item.batteryConsumption)%")
                 .font(.caption)
-                .foregroundColor(.gray)
+                .foregroundColor(fontSecondaryColour)
             }
             .frame(width: 120, alignment: .leading)
             .alert(isPresented: $showingExceedingVolumeAlert) {
@@ -64,7 +64,7 @@ struct ItemListView: View {
             VStack(alignment: .leading) {
                 Text("Available slot:")
                 .font(.caption)
-                .foregroundColor(.gray)
+                .foregroundColor(fontSecondaryColour)
                 Text(item.moduleSymbol ?? "item module symbol")
                     .frame(width: 20)
                     .opacity(self.modules.freeModulesSlots[item.moduleSymbol ?? ""] != nil ? 1 : 0.1)
@@ -80,12 +80,12 @@ struct ItemListView: View {
             VStack(alignment: .leading) {
                 Text("Activities:")
                 .font(.caption)
-                .foregroundColor(.gray)
+                .foregroundColor(fontSecondaryColour)
                 HStack {
                     ForEach (activities.filter({$0.itemArray.contains(item)}), id: \.self)  { itemActivity in
 //
                         Image(systemName: itemActivity.symbol!)
-                            .foregroundColor( itemActivity.isSelected ? .green : .gray)
+                            .foregroundColor( itemActivity.isSelected ? elementActiveColour : fontSecondaryColour)
                 }
                 }
             }
@@ -100,9 +100,10 @@ struct ItemListView: View {
             Spacer()
 
             Image(systemName: "bag")
-                .foregroundColor(self.items.filter({$0.isInBag == true}).contains(item) ? /*@START_MENU_TOKEN@*/.green/*@END_MENU_TOKEN@*/ : .white)
+                .foregroundColor(self.items.filter({$0.isInBag == true}).contains(item) ? elementActiveColour : fontMainColour)
         }
-            .background(Color(red: 28/255, green: 29/255, blue: 31/255))
+//        .preferredColorScheme(.light)
+        .background(bgSecondaryColour)
         .contentShape(Rectangle())
         .onTapGesture {
             let addingItemWillExceedWeight = Int(self.item.weight) + self.dataFacade.getItemsInBagWeight(itemsInBag: self.items.filter({$0.isInBag==true})) > maxItemsInBagWeight
@@ -165,14 +166,15 @@ struct ItemListView: View {
     }
 }
 
-//struct ItemListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemListView()
-//    }
-//}
 
 struct ItemListView_Previews: PreviewProvider {
+    
+    
     static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+        let item = Item(context: PersistenceController.preview.container.viewContext)
+        
+        ItemListView(item: item)
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(Modules())
     }
 }

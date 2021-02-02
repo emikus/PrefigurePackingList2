@@ -17,18 +17,19 @@ struct PersistenceController {
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
+//        for i in 0..<10 {
+//            let newItem = Item(context: viewContext)
+//            newItem.name = "Dupa"
+//            newItem.itemCategory = ((i%2) != 0) ? "food" : "clothes"
+//        }
         for i in 0..<10 {
             let newItem = Item(context: viewContext)
-            newItem.name = "Dupa"
-            newItem.itemCategory = ((i%2) != 0) ? "food" : "clothes"
-        }
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.name = "Dupa"
+            newItem.name = "Testowy item"
             newItem.cost = 34
             newItem.weight = 456
             newItem.volume = 531
             newItem.symbol = ":)"
+            newItem.itemCategory = ((i%2) != 0) ? "food" : "clothes"
             newItem.moduleSymbol = "🚢"
         }
         for i in 0..<5 {
@@ -39,6 +40,29 @@ struct PersistenceController {
             newActivity.category = ((i%2) != 0) ? "general" : "specific"
             newActivity.symbol = ":)"
         }
+        
+        // test bag content set
+        let newBagContentSet = BagContentSet(context: viewContext)
+        newBagContentSet.date = Date()
+        newBagContentSet.name = "set testowy"
+        // test bag content set END
+        
+        
+        // test module
+        let newItem = Item(context: viewContext)
+        newItem.name = "Testowy item"
+        newItem.cost = 34
+        newItem.weight = 456
+        newItem.volume = 531
+        newItem.symbol = ":)"
+        newItem.itemCategory = "clothes"
+        newItem.moduleSymbol = "🚢"
+        
+        
+        let newModule = Module(context: viewContext)
+        newModule.item = newItem
+        // test module END
+        
         do {
             try viewContext.save()
         } catch {

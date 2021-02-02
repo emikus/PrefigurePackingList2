@@ -48,7 +48,7 @@ struct ActivityView: View {
                 .font(.caption)
                 Spacer()
                 Image(systemName: "checkmark.circle")
-                    .foregroundColor(self.activity.isSelected ? .green : .gray)
+                    .foregroundColor(self.activity.isSelected ? elementActiveColour : fontSecondaryColour)
             }
             
             if (activity.id == expandedActivityId) {
@@ -64,8 +64,8 @@ struct ActivityView: View {
             }
             
         }
-        .foregroundColor(.white)
-        .background(Color.black)
+        .foregroundColor(fontMainColour)
+         .background(bgMainColour)
         .opacity(0.8)
         .contentShape(Rectangle())
         .contextMenu {
@@ -110,7 +110,11 @@ struct ActivityView: View {
 }
 
 struct ActivityView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        ActivityView(activity: sampleActivity(), expandedActivityId: .constant(UUID()))
+        let activity = Activity(context: PersistenceController.preview.container.viewContext)
+        
+        ActivityView(activity: activity, expandedActivityId: .constant(UUID()))
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

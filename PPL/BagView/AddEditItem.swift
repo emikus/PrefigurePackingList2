@@ -74,7 +74,7 @@ struct AddEditItem: View {
                                 Text(activity.wrappedName)
 
                             }
-                            .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? .green : .gray)
+                            .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? elementActiveColour : fontSecondaryColour)
                         }
                     }
                 }
@@ -147,6 +147,7 @@ struct AddEditItem: View {
         }
         .navigationBarBackButtonHidden(self.item == nil ? true : false)
         .navigationViewStyle(StackNavigationViewStyle())
+//        // .preferredColorScheme(.light)
         .onAppear(perform: {
             if self.item != nil {
                 self.name = self.item!.name!
@@ -156,7 +157,7 @@ struct AddEditItem: View {
                 self.batteryConsumption = String(self.item!.batteryConsumption)
                 self.itemCategory = self.item!.itemCategory!
                 self.symbol = self.item!.wrappedSymbol
-                self.moduleSymbol = self.item!.moduleSymbol!
+                self.moduleSymbol = self.item!.moduleSymbol ?? ""
                 self.isPinned = self.item!.isPinned
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}
             }
@@ -170,6 +171,10 @@ struct AddEditItem: View {
             self.allModulesSymbols += Array(modules.strapTwoFrontModulesOccupation.keys)
             self.allModulesSymbols += Array(modules.strapTwoBackModulesOccupation.keys)
         })
+                .preferredColorScheme(.dark)
+//                .onAppear(perform: {
+//                    changeColorTheme(theme: themes[0].themeColours)
+//                })
     }
     
     func addRemoveItemActivity(activity: Activity) {

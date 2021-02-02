@@ -42,15 +42,6 @@ struct AddEditActivityView: View {
         NavigationView {
             
             Form {
-                Button(action: {
-                    print("dupa")
-                    self.presentationMode.wrappedValue.dismiss()
-
-                })
-                {
-                    Text("Cancel")
-                }
-                .keyboardShortcut(KeyEquivalent(","))
 
                 Section {
                     TextField("Activity's name", text: $name, onCommit: {
@@ -71,7 +62,7 @@ struct AddEditActivityView: View {
                     Picker("Symbol", selection: self.$symbol) {
                         ForEach(self.activitySymbolsSet, id: \.self) { symbol in
                             Image(systemName: symbol)
-                                .foregroundColor(self.symbol == symbol ? .green : .gray)
+                                .foregroundColor(self.symbol == symbol ? elementActiveColour : fontSecondaryColour)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
@@ -98,7 +89,7 @@ struct AddEditActivityView: View {
                             HStack {
                                 Text(item.wrappedName)
                             }
-                            .foregroundColor(self.activityItems.contains{$0.id==item.id} ? .green : .gray)
+                            .foregroundColor(self.activityItems.contains{$0.id==item.id} ? elementActiveColour : fontSecondaryColour)
                         }
                     }
                 }

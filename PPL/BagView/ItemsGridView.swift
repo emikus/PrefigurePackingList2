@@ -94,6 +94,7 @@ struct ItemsGridView: View {
                             Image(systemName:self.foodHidden == true ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
+                        .foregroundColor(fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
@@ -128,6 +129,7 @@ struct ItemsGridView: View {
                             Image(systemName:self.clothesHidden == true ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
+                        .foregroundColor(fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
@@ -161,6 +163,7 @@ struct ItemsGridView: View {
                             Image(systemName:self.electricalHidden == true ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
+                        .foregroundColor(fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
@@ -202,7 +205,7 @@ struct ItemsGridView: View {
                                         }
                                      )
                 .frame(minHeight: 140)
-                .background(Color(red: 1/255, green: 1/255, blue: 3/255))
+                .background(bgMainColour)
             }
             
         }

@@ -23,7 +23,7 @@ struct ItemsView: View {
             }
         }
             .padding(.all, 5.0)
-        .background(Color.black)
+        .background(bgMainColour)
             
             
     }

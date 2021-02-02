@@ -18,15 +18,15 @@ public class Activity: NSManagedObject {
 extension Activity {
     
     public var wrappedName:String {
-        return name ?? "Unknown name"
+        return name ?? ""
     }
     
     public var wrappedCategory:String {
-        return category ?? "Unknown category"
+        return category ?? ""
     }
     
     public var wrappedSymbol:String {
-        return symbol ?? "Unknown symbol"
+        return symbol ?? ""
     }
     
     public var wrappedDuration:Int16 {

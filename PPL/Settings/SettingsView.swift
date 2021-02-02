@@ -1,23 +1,24 @@
 //
-//  KeyboardShortcutsView.swift
+//  SettingsView.swift
 //  PPL
 //
-//  Created by Michal Jendrzejewski on 10/01/2021.
+//  Created by Michal Jendrzejewski on 23/01/2021.
 //
 
 import SwiftUI
 
-struct KeyboardShortcutsView: View {
+//var a:String = "a"
+
+struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var selectedViewName = "⦿ General"
+    
+    @AppStorage("themeName") var themeName: String?
+    
+    @State var selectedViewName = "App themes"
     var viewsNames:[String] = [
-        "⦿ General",
-        "⭕️ Aim",
-        "🟥 Plan",
-        "➕ Middle view",
-        "🗄 Pack",
-        "🎒 Buy"
+        "App themes"
     ]
+    
     
     func selectNextView() {
         let selectedViewIndex:Int = self.viewsNames.firstIndex(of: self.selectedViewName)!
@@ -53,6 +54,8 @@ struct KeyboardShortcutsView: View {
                             self.selectedViewName = name
                         }) {
                             Text(name)
+                                .foregroundColor(fontMainColour)
+                        
                         }
                         .buttonStyle(KeyboardShortcutsListStyle())
                         .frame(width: geometry.size.width / 5, height: 34, alignment: .leading)
@@ -60,10 +63,6 @@ struct KeyboardShortcutsView: View {
                         .cornerRadius(3)
                     }
                     
-                    
-                    
-                    
-
                     Divider()
                     HStack {
                     Text("Next")
@@ -72,7 +71,7 @@ struct KeyboardShortcutsView: View {
                         Spacer()
                         Text("⌥ ⌘ N")
                             .padding(4)
-                            .background(fontSecondaryColour.opacity(0.5))
+                             .background(fontSecondaryColour.opacity(0.5))
                             .cornerRadius(3)
                             
                     }
@@ -110,6 +109,8 @@ struct KeyboardShortcutsView: View {
                     .keyboardShortcut(KeyEquivalent("p"), modifiers: [.command, .option])
                     
                         
+                    Text(self.themeName ?? "light")
+                        .foregroundColor(bgMainColour)
                     
                     
                     
@@ -121,7 +122,7 @@ struct KeyboardShortcutsView: View {
                 VStack(alignment: .leading) {
                     HStack {
                         
-                        Text("Keyboard Shortcuts")
+                        Text("Settings")
                             .font(.caption)
                             .foregroundColor(fontSecondaryColour)
                         Spacer()
@@ -135,29 +136,24 @@ struct KeyboardShortcutsView: View {
                     .padding(.bottom, 5)
                     
                     Text(self.selectedViewName)
+                        .foregroundColor(fontMainColour)
                         .font(.title)
                         .padding(.bottom, 25)
                     
-                    ForEach(Array(keyboardShortcutsList[self.selectedViewName]!), id: \.key) { key, value in
-                        HStack {
-                            Text(key)
-                            Spacer()
-                            Text(value)
-                                .padding(8)
-                                .background(fontSecondaryColour.opacity(0.5))
-                                .cornerRadius(3)
-                                
-                        }
-                        .padding(8)
-                    }
+                    ThemesView()
+                    
                     Spacer()
                     
                 }
                 .padding(.trailing, 20)
+                // .preferredColorScheme(.light)
                 
             }
 //            .padding(.bottom, 20)
         }
+        .background(bgMainColour)
+        .preferredColorScheme(.light)
+        
 
         
 //    }
@@ -165,9 +161,8 @@ struct KeyboardShortcutsView: View {
     }
 }
 
-struct KeyboardShortcutsView_Previews: PreviewProvider {
+struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        KeyboardShortcutsView()
-//            .previewLayout(.fixed(width: 2688, height: 1242))
+        SettingsView()
     }
 }

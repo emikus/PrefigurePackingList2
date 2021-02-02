@@ -53,6 +53,9 @@
 		C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */; };
 		C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */; };
 		C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */; };
+		C761464B25BC9A3F00FC71AE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464A25BC9A3F00FC71AE /* SettingsView.swift */; };
+		C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464E25BF482F00FC71AE /* ThemesView.swift */; };
+		C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761465225BF85A300FC71AE /* ThemesColours.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +107,9 @@
 		C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemToBuyGridView.swift; sourceTree = "<group>"; };
 		C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsView.swift; sourceTree = "<group>"; };
 		C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcut.swift; sourceTree = "<group>"; };
+		C761464A25BC9A3F00FC71AE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C761464E25BF482F00FC71AE /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
+		C761465225BF85A300FC71AE /* ThemesColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesColours.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +152,7 @@
 		52B0C321252F6C46006F441B /* PPL */ = {
 			isa = PBXGroup;
 			children = (
+				C761464925BC9A1900FC71AE /* Settings */,
 				C74518F625AB635700A9DB03 /* KeyboardShortcutsView */,
 				52F52A9225345E7D00541E8A /* Shared */,
 				52F52A73253354BE00541E8A /* BagView */,
@@ -163,6 +170,7 @@
 				52B0C330252F6C49006F441B /* Info.plist */,
 				52B0C32D252F6C49006F441B /* PPL.xcdatamodeld */,
 				52B0C328252F6C49006F441B /* Preview Content */,
+				C761465225BF85A300FC71AE /* ThemesColours.swift */,
 			);
 			path = PPL;
 			sourceTree = "<group>";
@@ -233,6 +241,15 @@
 				C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */,
 			);
 			path = KeyboardShortcutsView;
+			sourceTree = "<group>";
+		};
+		C761464925BC9A1900FC71AE /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C761464A25BC9A3F00FC71AE /* SettingsView.swift */,
+				C761464E25BF482F00FC71AE /* ThemesView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,8 +334,10 @@
 				52F1149A253EFCE1009220A9 /* ModulesSet+CoreDataProperties.swift in Sources */,
 				52DC9E8925308F7C007BA478 /* Item+CoreDataProperties.swift in Sources */,
 				52F52A752533556500541E8A /* BagView.swift in Sources */,
+				C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */,
 				5247A6482542184B00B229F2 /* BagContentSetsListView.swift in Sources */,
 				52F52A8A2534576E00541E8A /* ItemsListView.swift in Sources */,
+				C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */,
 				52820ABD25777A89003D8B1C /* ButtonsStyling.swift in Sources */,
 				52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */,
 				52DC9E8825308F7C007BA478 /* Item+CoreDataClass.swift in Sources */,
@@ -338,6 +357,7 @@
 				52DC9E8A25308F7C007BA478 /* Activity+CoreDataClass.swift in Sources */,
 				52DC9E992530C191007BA478 /* ActivitiesListView.swift in Sources */,
 				52F11499253EFCE1009220A9 /* ModulesSet+CoreDataClass.swift in Sources */,
+				C761464B25BC9A3F00FC71AE /* SettingsView.swift in Sources */,
 				52DC9E9C2530C217007BA478 /* ModelHardCoded.swift in Sources */,
 				52F52A90253459CD00541E8A /* AddEditItem.swift in Sources */,
 				52B0C325252F6C46006F441B /* ContentView.swift in Sources */,

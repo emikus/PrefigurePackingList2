@@ -22,7 +22,7 @@ struct SearchBar: View {
                 .overlay(
                     HStack {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
+                            .foregroundColor(fontSecondaryColour)
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 8)
                  
@@ -32,7 +32,7 @@ struct SearchBar: View {
                                 self.text = ""
                             }) {
                                 Image(systemName: "multiply.circle.fill")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(fontSecondaryColour)
                                     .padding(.trailing, 8)
                             }
                         }

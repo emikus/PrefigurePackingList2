@@ -76,11 +76,11 @@ struct ModulesGridView: View {
                                 
                                 Circle()
                                     .frame(width: 10)
-                                    .foregroundColor(self.modulesSet[moduleSymbol] == "" ? Color.green : Color.red)
+                                    .foregroundColor(self.modulesSet[moduleSymbol] == "" ? elementActiveColour : alertColour)
                                     .offset(x: -geometry.size.width/CGFloat(self.numberOfColumns)/2 + 10 , y: -geometry.size.height/CGFloat(self.numberOfRows)/2 + 12)
                             }
                             .frame(width: geometry.size.width/CGFloat(self.numberOfColumns) - 2, height: geometry.size.height/CGFloat(self.numberOfRows + 0) - 6)
-                                .background(self.modulesSet[moduleSymbol] != "" && self.modulesSet[moduleSymbol] == self.modules.highlightedModule ? Color.orange : Color(red: 28/255, green: 29/255, blue: 31/255))
+                                .background(self.modulesSet[moduleSymbol] != "" && self.modulesSet[moduleSymbol] == self.modules.highlightedModule ? Color.orange : bgSecondaryColour)
                                 .cornerRadius(10)
                             
                             
@@ -88,7 +88,7 @@ struct ModulesGridView: View {
                     }
                 }
             }
-            .foregroundColor(.white)
+            .foregroundColor(fontMainColour)
         }
     }
 }

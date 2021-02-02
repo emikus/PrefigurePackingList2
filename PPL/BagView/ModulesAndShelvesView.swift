@@ -91,6 +91,7 @@ struct ModulesAndShelvesView: View {
                                         
                                     }) {
                                         Image(systemName: "bag.badge.minus")
+                                            
                                     }
                                     .buttonStyle(MainButtonStyle())
                                     .keyboardShortcut(KeyEquivalent("e"))
@@ -126,6 +127,7 @@ struct ModulesAndShelvesView: View {
                                         self.showBagContentSets.toggle()
                                     }) {
                                         Image(systemName: "list.triangle")
+                                          
                                     }
                                     .buttonStyle(MainButtonStyle())
                                     .keyboardShortcut(KeyEquivalent("l"))
@@ -156,14 +158,13 @@ struct ModulesAndShelvesView: View {
             Image(systemName: "minus")
                 .padding()
                 .font(.system(size: 40, weight: .semibold))
-                .foregroundColor(.gray)
+                .foregroundColor(fontSecondaryColour)
                 .contentShape(Rectangle())
                 .gesture(self.drag)
         }
         .frame(height: CGFloat(self.upperPanelHeight + 35))
-        .background(Color(red: 20/255, green: 20/255, blue: 20/255))
+        .background(bgSecondaryColour.opacity(0.7))
         .animation(self.isDragging ? .none : .easeInOut)
-        
     }
 }
 

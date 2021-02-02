@@ -56,7 +56,7 @@ struct BagView: View {
                 }
                 .opacity(0)
             }
-            .background(Color.black)
+            .background(bgMainColour)
             .navigationBarTitle("Pack", displayMode: .inline)
         }
     }

@@ -14,7 +14,7 @@ struct PanelHandleView: View {
         ZStack {
         Image(systemName: "minus")
             .font(.system(size: 40, weight: .semibold))
-            .foregroundColor(.gray)
+            .foregroundColor(fontSecondaryColour)
             .offset(y: self.panelHeight > 15 ? -5 : 0)
         }
     }
@@ -239,8 +239,8 @@ struct PanelsView: View {
                 }
 //                .padding(.bottom, 5)
                 .frame(width: CGFloat(1100), height: CGFloat(self.panelsHeight[0]))
-                .border(Color.gray, width: 1)
-                .background(Color(red: 28/255, green: 29/255, blue: 31/255))
+                .border(fontMainColour, width: 1)
+                .background(fontMainColour.opacity(0.5))
                 
                 HStack {
                     VStack {
@@ -262,14 +262,14 @@ struct PanelsView: View {
                     .opacity(Int(self.panelsHeight[1]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[0]) / 20)
                 }
                 .frame(width: CGFloat(1100), height: CGFloat( self.panelsHeight[1]))
-                .border(Color.gray, width: 1)
-                .background(Color(red: 48/255, green: 49/255, blue: 51/255))
+                .border(fontSecondaryColour, width: 1)
+                .background(fontMainColour.opacity(0.3))
                 
                 HStack {
                     VStack {
                         if Int(self.panelsHeight[2]) > 15 {
                             Text(String(Int(self.panelsHeight[2])))
-                                .foregroundColor(.orange)
+                                .foregroundColor(listHeaderColour)
                                 .opacity(Int(self.panelsHeight[2]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[2]) / 40)
                             Spacer()
 //
@@ -277,13 +277,13 @@ struct PanelsView: View {
                     }
                 }
                 .frame(width: CGFloat(1100), height: CGFloat(self.panelsHeight[2]))
-                .border(Color.gray, width: 1)
-                .background(Color(red: 68/255, green: 69/255, blue: 71/255))
+                .border(fontSecondaryColour, width: 1)
+                .background(fontMainColour.opacity(0.1))
                 
                 
             }
             .frame(width: 1100, height: 300, alignment: .center)
-            .border(Color.white)
+            .border(fontMainColour)
         }
         .animation(self.isDragging ? .none : .easeInOut)
         .onAppear(perform: {
@@ -297,6 +297,7 @@ struct PanelsView: View {
             self.panelTwoHeight = Int(self.panelsHeight[1])
             self.panelThreeHeight = Int(self.panelsHeight[2])
         })
+        
     }
 }
 

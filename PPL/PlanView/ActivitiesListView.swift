@@ -71,15 +71,43 @@ struct ActivitiesListView: View {
 //                                
 //                        }
                         
+//                        Section(header: HStack{
+//                                    Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
+//                                .foregroundColor(listHeaderColour)
+//                                .padding()
+//
+//                                Spacer()
+//                        }
+//                        .background(bgMainColour)
+//                        .listRowInsets(EdgeInsets(
+//                                top: 0,
+//                                leading: 0,
+//                                bottom: 0,
+//                                trailing: 0))) {
+                        
+                        
+                        
+                        
                         ForEach(activitiesCategories, id: \.self) {category in
-                            Section(header:
+                            Section(header: HStack {
                                 Text(category.uppercased())
+                                .foregroundColor(listHeaderColour)
+                                .padding()
+                                
+                                Spacer()
+                            }
+                            .background(bgMainColour)
+                            .listRowInsets(EdgeInsets(
+                            top: 0,
+                            leading: 0,
+                            bottom: 0,
+                            trailing: 0))
                                 ) {
                                     ForEach(self.activities.filter {$0.category == category}) { activity in
                                         ActivityView(activity: activity, expandedActivityId: self.$expandedActivityId)
                                             .animation(.linear(duration: 0.5))
                                     }
-                                .listRowBackground(Color.black)
+                                .listRowBackground(bgMainColour)
                             }
                         }
                     }
@@ -91,15 +119,6 @@ struct ActivitiesListView: View {
                         .environment(\.managedObjectContext, self.viewContext)
                                 
                 }
-                
-                //debug only
-                
-                
-                
-                
-                //debug only END
-                
-                
             }
             .onAppear {
                 self.getActivitiesDuration()

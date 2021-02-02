@@ -229,7 +229,7 @@ struct VolumeWeightDurationIndicatorsView: View {
                         
                         Text("\(self.getItemsInBagVolume()) / \(maxItemsInBagVolume)㎤ (\(maxItemsInBagVolume - self.getItemsInBagVolume()))")
                             .font(.footnote)
-                            .foregroundColor(self.volumePopupVisible ? .gray : Color(red: 28/255, green: 29/255, blue: 31/255))
+                            .foregroundColor(self.volumePopupVisible ? fontSecondaryColour : Color(red: 28/255, green: 29/255, blue: 31/255))
                             .animation(.easeInOut)
                     }
                     .frame(width: geometry.size.width / 5, height: self.viewHeight)
@@ -276,7 +276,7 @@ struct VolumeWeightDurationIndicatorsView: View {
                         )
                         
                         Text("\(self.getItemsInBagWeight()) / \(maxItemsInBagWeight)g (\(maxItemsInBagWeight - self.getItemsInBagWeight()))")
-                            .foregroundColor(self.weightPopupVisible ? .gray : Color(red: 28/255, green: 29/255, blue: 31/255))
+                            .foregroundColor(self.weightPopupVisible ? fontSecondaryColour : Color(red: 28/255, green: 29/255, blue: 31/255))
                             .animation(.easeInOut)
                             .font(.footnote)
                     }
@@ -313,7 +313,7 @@ struct VolumeWeightDurationIndicatorsView: View {
                         )
                         
                         Text("\(self.getItemsInBagBatteryConsumption())%")
-                            .foregroundColor(self.batteryConsumptionPopupVisible ? .gray : Color(red: 208/255, green: 207/255, blue: 207/255))
+                            .foregroundColor(self.batteryConsumptionPopupVisible ? fontSecondaryColour : Color(red: 208/255, green: 207/255, blue: 207/255))
                             .animation(.easeInOut)
                     }
                     .frame(width: geometry.size.width / 5, height: self.viewHeight)
@@ -325,21 +325,25 @@ struct VolumeWeightDurationIndicatorsView: View {
                         PopupItemsList(statusName: "battery", popupVisibility: self.$batteryConsumptionPopupVisible)
                     }
                 }
-                .background(Color(red: 28/255, green: 29/255, blue: 31/255))
-                .foregroundColor(.gray)
+                .background(bgSecondaryColour)
+                .foregroundColor(fontSecondaryColour)
                 .font(.footnote)
                 
                 .frame(width: geometry.size.width)
                 .padding()
                 
             }
-            .background(Color(red: 28/255, green: 29/255, blue: 31/255))
+            .background(bgSecondaryColour)
             .frame(width: geometry.size.width, height: 50)
             //        .opacity(0.8)
             
             
             
         }
+//        .preferredColorScheme(.dark)
+//        .onAppear(perform: {
+//            changeColorTheme(theme: themes[0].themeColours)
+//        })
         .frame(height: 55)
         
         

@@ -38,16 +38,15 @@ struct MainButtonStyle: ButtonStyle {
             Group {
                 if configuration.isPressed {
                     label
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(buttonMainColour)
                         .opacity(0.5)
                 } else if isEnabled {
                     label
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(buttonMainColour)
                         .opacity(1)
                 } else {
                     label
-                        .foregroundColor(Color.gray)
-                        .opacity(0.5)
+                        .foregroundColor(buttonInactiveColour)
                 }
             }
         }
