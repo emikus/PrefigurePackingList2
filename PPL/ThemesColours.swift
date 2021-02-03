@@ -21,10 +21,6 @@ class SelectedThemeColors: ObservableObject {
     @Published var listHeaderColour = Color.orange
     
     func changeColorTheme(theme: ThemeColours) -> Void {
-        print("dupa")
-        themes.forEach {theme in
-            print(theme.name)
-        }
         bgMainColour = theme.bgMainColour
         bgSecondaryColour = theme.bgSecondaryColour
         fontMainColour = theme.fontMainColour
@@ -36,6 +32,26 @@ class SelectedThemeColors: ObservableObject {
         buttonInactiveBgColour = theme.buttonInactiveBgColour
         listHeaderColour = theme.listHeaderColour
     }
+}
+
+struct Theme: Identifiable {
+    let id = UUID()
+    let name: String
+    let themeColours: ThemeColours
+}
+
+
+struct ThemeColours {
+    let bgMainColour: Color
+    let bgSecondaryColour: Color
+    let fontMainColour: Color
+    let fontSecondaryColour: Color
+    let elementActiveColour: Color
+    let buttonMainColour: Color
+    let buttonBgColour: Color
+    let buttonInactiveColour: Color
+    let buttonInactiveBgColour: Color
+    let listHeaderColour: Color
 }
 
 let themes: [Theme] = [
@@ -110,22 +126,4 @@ func getRandomColor() -> Color {
 
 
 
-struct Theme: Identifiable {
-    let id = UUID()
-    let name: String
-    let themeColours: ThemeColours
-}
 
-
-struct ThemeColours {
-    let bgMainColour: Color
-    let bgSecondaryColour: Color
-    let fontMainColour: Color
-    let fontSecondaryColour: Color
-    let elementActiveColour: Color
-    let buttonMainColour: Color
-    let buttonBgColour: Color
-    let buttonInactiveColour: Color
-    let buttonInactiveBgColour: Color
-    let listHeaderColour: Color
-}

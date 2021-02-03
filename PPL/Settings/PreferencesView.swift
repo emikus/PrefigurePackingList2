@@ -9,36 +9,38 @@ import SwiftUI
 
 //var a:String = "a"
 
-struct SettingsView: View {
+struct PreferencesView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @AppStorage("themeName") var themeName: String?
     
     @State var selectedViewName = "App themes"
     var viewsNames:[String] = [
-        "App themes"
+        "App themes",
+        "Sample preferences view",
+        "Sample preferences view 2"
     ]
     
     
     func selectNextView() {
-        let selectedViewIndex:Int = self.viewsNames.firstIndex(of: self.selectedViewName)!
-        let isLastItemSelected:Bool = selectedViewIndex + 1 == self.viewsNames.count ? true : false
+        let selectedViewIndex:Int = preferencesSubviews.firstIndex(where: { $0.name == self.selectedViewName})!
+        let isLastItemSelected:Bool = selectedViewIndex + 1 == preferencesSubviews.count ? true : false
         
         if isLastItemSelected == true {
-            self.selectedViewName = self.viewsNames[0]
+            self.selectedViewName = preferencesSubviews[0].name
         } else {
-            self.selectedViewName = self.viewsNames[selectedViewIndex + 1]
+            self.selectedViewName = preferencesSubviews[selectedViewIndex + 1].name
         }
     }
     
     func selectPreviousView() {
-        let selectedViewIndex:Int = self.viewsNames.firstIndex(of: self.selectedViewName)!
+        let selectedViewIndex:Int = preferencesSubviews.firstIndex(where: { $0.name == self.selectedViewName})!
         let isFirstItemSelected:Bool = selectedViewIndex == 0 ? true : false
         
         if isFirstItemSelected == true {
-            self.selectedViewName = self.viewsNames[self.viewsNames.count - 1]
+            self.selectedViewName = preferencesSubviews[self.viewsNames.count - 1].name
         } else {
-            self.selectedViewName = self.viewsNames[selectedViewIndex - 1]
+            self.selectedViewName = preferencesSubviews[selectedViewIndex - 1].name
         }
     }
     
@@ -49,17 +51,17 @@ struct SettingsView: View {
                 VStack(alignment: .leading) {
                     
                     
-                    ForEach(Array(self.viewsNames), id: \.self) { name in
+                    ForEach(preferencesSubviews) { subview in
                         Button(action: {
-                            self.selectedViewName = name
+                            self.selectedViewName = subview.name
                         }) {
-                            Text(name)
+                            Text(subview.name)
                                 .foregroundColor(selectedThemeColors.fontMainColour)
                         
                         }
                         .buttonStyle(KeyboardShortcutsListStyle())
                         .frame(width: geometry.size.width / 5, height: 34, alignment: .leading)
-                        .background(self.selectedViewName == name ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.fontSecondaryColour.opacity(0))
+                        .background(self.selectedViewName == subview.name ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.fontSecondaryColour.opacity(0))
                         .cornerRadius(3)
                     }
                     
@@ -140,7 +142,8 @@ struct SettingsView: View {
                         .font(.title)
                         .padding(.bottom, 25)
                     
-                    ThemesView()
+                    preferencesSubviews.first(where: {$0.name == self.selectedViewName})?.view
+                   
                     
                     Spacer()
                     
@@ -161,9 +164,9 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
+struct PreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        PreferencesView()
             .environmentObject(SelectedThemeColors())
     }
 }

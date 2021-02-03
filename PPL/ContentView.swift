@@ -31,7 +31,7 @@ struct ContentView: View {
     var body: some View {
     GeometryReader { geo in
      TabView {
-        SettingsView()
+        PreferencesView()
              .tabItem {
                  Image(systemName: "plus")
                  Text("⭕️ Aim")
@@ -185,7 +185,7 @@ struct ContentView: View {
             Text("🎒 Buy")
         }
         
-        SettingsView()
+        PreferencesView()
             .tabItem {
                 Image(systemName: "settings")
                 Text("⚙️ Preferences")
