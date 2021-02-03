@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ItemToBuyGridView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     
     var body: some View {
             VStack(alignment: .leading) {
@@ -20,11 +21,11 @@ struct ItemToBuyGridView: View {
                     Text("             $ 49.99")
                         .font(.caption)
             }
-            .foregroundColor(fontSecondaryColour)
+            .foregroundColor(selectedThemeColors.fontSecondaryColour)
             .opacity(0.5)
             .frame(width: 100, height: 100)
             .padding([.top,.bottom], 10.0)
-            .background(fontMainColour.opacity(0.2))
+            .background(selectedThemeColors.fontMainColour.opacity(0.2))
             .cornerRadius(10)
             .contentShape(Rectangle())
         }

@@ -8,35 +8,37 @@
 import Foundation
 import SwiftUI
 
-//var bgMainColour: Color = Color.black
-//var bgSecondaryColour: Color = Color(red: 28/255, green: 29/255, blue: 31/255)
-//var fontMainColour: Color = Color.white
-//var fontSecondaryColour: Color = Color.gray
-//var elementActiveColour: Color = Color.green
-//var buttonMainColour: Color = Color.blue
-//var buttonBgColour: Color = Color.green
-//var buttonInactiveColour: Color = Color.gray
-//var buttonInactiveBgColour: Color = Color.green.opacity(0.5)
-//var listHeaderColour: Color = Color.orange
-var alertColour: Color = Color.red
+class SelectedThemeColors: ObservableObject {
+    @Published var bgMainColour = Color.white
+    @Published var bgSecondaryColour = Color(red: 227/255, green: 226/255, blue: 224/255)
+    @Published var fontMainColour = Color(red: 30/255, green: 30/255, blue: 30/255)
+    @Published var fontSecondaryColour = Color.gray
+    @Published var elementActiveColour = Color.green
+    @Published var buttonMainColour = Color.blue
+    @Published var buttonBgColour = Color.green
+    @Published var buttonInactiveColour = Color.gray
+    @Published var buttonInactiveBgColour = Color.green.opacity(0.5)
+    @Published var listHeaderColour = Color.orange
+    
+    func changeColorTheme(theme: ThemeColours) -> Void {
+        print("dupa")
+        themes.forEach {theme in
+            print(theme.name)
+        }
+        bgMainColour = theme.bgMainColour
+        bgSecondaryColour = theme.bgSecondaryColour
+        fontMainColour = theme.fontMainColour
+        fontSecondaryColour = theme.fontSecondaryColour
+        elementActiveColour = theme.elementActiveColour
+        buttonMainColour = theme.buttonMainColour
+        buttonBgColour = theme.buttonBgColour
+        buttonInactiveColour = theme.buttonInactiveColour
+        buttonInactiveBgColour = theme.buttonInactiveBgColour
+        listHeaderColour = theme.listHeaderColour
+    }
+}
 
-var bgMainColour = Color.white
-var bgSecondaryColour = Color(red: 227/255, green: 226/255, blue: 224/255)
-var fontMainColour = Color(red: 30/255, green: 30/255, blue: 30/255)
-var fontSecondaryColour = Color.gray
-var elementActiveColour = Color.green
-var buttonMainColour = Color.blue
-var buttonBgColour = Color.green
-var buttonInactiveColour = Color.gray
-var buttonInactiveBgColour = Color.green.opacity(0.5)
-var listHeaderColour = Color.orange
-
-
-//var bgMainColour: Color = .black
-//var bgMainColour: Color = .black
-
-
-let themes: Array = [
+let themes: [Theme] = [
     Theme(
         name: "Dark mode",
         themeColours: ThemeColours(
@@ -78,23 +80,44 @@ let themes: Array = [
             buttonInactiveColour: Color.gray,
             buttonInactiveBgColour: Color.green.opacity(0.5),
             listHeaderColour: Color.purple)
+    ),
+    Theme(
+        name: "Random colors",
+        themeColours: ThemeColours(
+            bgMainColour: getRandomColor(),
+            bgSecondaryColour: getRandomColor(),
+            fontMainColour: getRandomColor(),
+            fontSecondaryColour: getRandomColor(),
+            elementActiveColour: getRandomColor(),
+            buttonMainColour: getRandomColor(),
+            buttonBgColour: getRandomColor(),
+            buttonInactiveColour: getRandomColor(),
+            buttonInactiveBgColour: getRandomColor(),
+            listHeaderColour: getRandomColor())
     )
 ]
 
-
-
-
-struct Theme: Hashable {
-    static func == (lhs: Theme, rhs: Theme) -> Bool {
-        return lhs.name > rhs.name
-    }
+func getRandomColor() -> Color {
+     //Generate between 0 to 1
+    let red:Double = .random(in: 0...255)/255
+     let green:Double = .random(in: 0...255)/255
+     let blue:Double = .random(in: 0...255)/255
     
+    let generatedColor = Color(red: red, green: green, blue: blue)
+     return generatedColor
+}
+
+
+
+
+struct Theme: Identifiable {
+    let id = UUID()
     let name: String
     let themeColours: ThemeColours
 }
 
 
-struct ThemeColours: Hashable {
+struct ThemeColours {
     let bgMainColour: Color
     let bgSecondaryColour: Color
     let fontMainColour: Color
@@ -105,18 +128,4 @@ struct ThemeColours: Hashable {
     let buttonInactiveColour: Color
     let buttonInactiveBgColour: Color
     let listHeaderColour: Color
-}
-
-
-func changeColorTheme(theme: ThemeColours) -> Void {
-    bgMainColour = theme.bgMainColour
-    bgSecondaryColour = theme.bgSecondaryColour
-    fontMainColour = theme.fontMainColour
-    fontSecondaryColour = theme.fontSecondaryColour
-    elementActiveColour = theme.elementActiveColour
-    buttonMainColour = theme.buttonMainColour
-    buttonBgColour = theme.buttonBgColour
-    buttonInactiveColour = theme.buttonInactiveColour
-    buttonInactiveBgColour = theme.buttonInactiveBgColour
-    listHeaderColour = theme.listHeaderColour
 }

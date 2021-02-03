@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SaveBagContentSetView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -93,7 +94,7 @@ struct SaveBagContentSetView: View {
                         TextField("Bag configuration name", text: $bagContentSetName)
                     }
                 }
-                .background(bgMainColour)
+                .background(selectedThemeColors.bgMainColour)
                 .navigationBarTitle("Save bag configuration", displayMode: .inline)
                 .navigationBarItems(
                     leading: Button(action: {

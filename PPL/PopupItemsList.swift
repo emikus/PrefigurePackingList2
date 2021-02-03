@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PopupItemsList: View {
     @EnvironmentObject var modules: Modules
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -127,8 +128,8 @@ struct PopupItemsList: View {
                 HStack(alignment: .center, spacing: 5) {
                     
                     TextField("Update max \(statusName)", text: self.getMaxValueVariable(statusName: statusName))
-                        .foregroundColor(fontSecondaryColour)
-                        .background(bgMainColour)
+                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                        .background(selectedThemeColors.bgMainColour)
                         .cornerRadius(3)
                     .keyboardType(UIKeyboardType.decimalPad)
                     .padding([.leading, .trailing], 5)
@@ -141,8 +142,8 @@ struct PopupItemsList: View {
                         .padding(5)
                             
                     }
-                    .foregroundColor(fontMainColour)
-                    .background(elementActiveColour)
+                    .foregroundColor(selectedThemeColors.fontMainColour)
+                    .background(selectedThemeColors.elementActiveColour)
                     .cornerRadius(3)
                 }
                 .padding([.leading, .trailing], 5)
@@ -166,8 +167,8 @@ struct PopupItemsList: View {
                 Text("Wanna buy some extra fancy stuff?")
                     .padding(5)
                 }
-                .foregroundColor(fontMainColour)
-                .background(elementActiveColour)
+                .foregroundColor(selectedThemeColors.fontMainColour)
+                .background(selectedThemeColors.elementActiveColour)
                 .cornerRadius(3)
                 .padding(8)
             }

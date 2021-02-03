@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct BuyItemsGridView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State var showAddEditItemView: Bool = false
     
     var body: some View {
@@ -18,7 +19,7 @@ struct BuyItemsGridView: View {
             .opacity(0.5)
             .frame(width: 100, height: 100)
             .padding([.top,.bottom], 10.0)
-            .background(fontMainColour.opacity(0.2))
+            .background(selectedThemeColors.fontMainColour.opacity(0.2))
             .cornerRadius(10)
             .contentShape(Rectangle())
             .onTapGesture {
@@ -26,6 +27,7 @@ struct BuyItemsGridView: View {
             }
         .sheet(isPresented: self.$showAddEditItemView) {
             AddEditItem()
+            .environmentObject(self.selectedThemeColors)
         }
     }
 }

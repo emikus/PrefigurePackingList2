@@ -11,7 +11,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @AppStorage("themeName") var themeName: String?
     
     @State var selectedViewName = "App themes"
@@ -54,12 +54,12 @@ struct SettingsView: View {
                             self.selectedViewName = name
                         }) {
                             Text(name)
-                                .foregroundColor(fontMainColour)
+                                .foregroundColor(selectedThemeColors.fontMainColour)
                         
                         }
                         .buttonStyle(KeyboardShortcutsListStyle())
                         .frame(width: geometry.size.width / 5, height: 34, alignment: .leading)
-                        .background(self.selectedViewName == name ? fontSecondaryColour : fontSecondaryColour.opacity(0))
+                        .background(self.selectedViewName == name ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.fontSecondaryColour.opacity(0))
                         .cornerRadius(3)
                     }
                     
@@ -67,11 +67,11 @@ struct SettingsView: View {
                     HStack {
                     Text("Next")
                         .font(.footnote)
-                        .foregroundColor(fontSecondaryColour)
+                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
                         Spacer()
                         Text("⌥ ⌘ N")
                             .padding(4)
-                             .background(fontSecondaryColour.opacity(0.5))
+                             .background(selectedThemeColors.fontSecondaryColour.opacity(0.5))
                             .cornerRadius(3)
                             
                     }
@@ -80,11 +80,11 @@ struct SettingsView: View {
                     HStack {
                     Text("Previous")
                         .font(.footnote)
-                        .foregroundColor(fontSecondaryColour)
+                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
                         Spacer()
                         Text("⌥ ⌘ P")
                             .padding(4)
-                            .background(fontSecondaryColour.opacity(0.5))
+                            .background(selectedThemeColors.fontSecondaryColour.opacity(0.5))
                             .cornerRadius(3)
                             
                             
@@ -110,7 +110,7 @@ struct SettingsView: View {
                     
                         
                     Text(self.themeName ?? "light")
-                        .foregroundColor(bgMainColour)
+                        .foregroundColor(selectedThemeColors.bgMainColour)
                     
                     
                     
@@ -122,9 +122,9 @@ struct SettingsView: View {
                 VStack(alignment: .leading) {
                     HStack {
                         
-                        Text("Settings")
+                        Text("Preferences")
                             .font(.caption)
-                            .foregroundColor(fontSecondaryColour)
+                            .foregroundColor(selectedThemeColors.fontSecondaryColour)
                         Spacer()
                         
                         Button(action: {
@@ -136,7 +136,7 @@ struct SettingsView: View {
                     .padding(.bottom, 5)
                     
                     Text(self.selectedViewName)
-                        .foregroundColor(fontMainColour)
+                        .foregroundColor(selectedThemeColors.fontMainColour)
                         .font(.title)
                         .padding(.bottom, 25)
                     
@@ -151,7 +151,7 @@ struct SettingsView: View {
             }
 //            .padding(.bottom, 20)
         }
-        .background(bgMainColour)
+        .background(selectedThemeColors.bgMainColour)
         .preferredColorScheme(.light)
         
 
@@ -164,5 +164,6 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
+            .environmentObject(SelectedThemeColors())
     }
 }

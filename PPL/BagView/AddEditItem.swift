@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddEditItem: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -74,7 +75,7 @@ struct AddEditItem: View {
                                 Text(activity.wrappedName)
 
                             }
-                            .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? elementActiveColour : fontSecondaryColour)
+                            .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                         }
                     }
                 }

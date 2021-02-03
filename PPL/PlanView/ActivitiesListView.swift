@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ActivitiesListView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -91,12 +92,12 @@ struct ActivitiesListView: View {
                         ForEach(activitiesCategories, id: \.self) {category in
                             Section(header: HStack {
                                 Text(category.uppercased())
-                                .foregroundColor(listHeaderColour)
+                                .foregroundColor(selectedThemeColors.listHeaderColour)
                                 .padding()
                                 
                                 Spacer()
                             }
-                            .background(bgMainColour)
+                            .background(selectedThemeColors.bgMainColour)
                             .listRowInsets(EdgeInsets(
                             top: 0,
                             leading: 0,
@@ -107,7 +108,7 @@ struct ActivitiesListView: View {
                                         ActivityView(activity: activity, expandedActivityId: self.$expandedActivityId)
                                             .animation(.linear(duration: 0.5))
                                     }
-                                .listRowBackground(bgMainColour)
+                                .listRowBackground(selectedThemeColors.bgMainColour)
                             }
                         }
                     }

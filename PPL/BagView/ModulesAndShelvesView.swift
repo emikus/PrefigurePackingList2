@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ModulesAndShelvesView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -119,6 +120,7 @@ struct ModulesAndShelvesView: View {
                                     .sheet(isPresented: self.$showAddBagContentSet) {
                                         SaveBagContentSetView()
                                         .environmentObject(self.modules)
+                                        .environmentObject(self.selectedThemeColors)
                                     }
                                     
                                     Button(action: {
@@ -158,12 +160,12 @@ struct ModulesAndShelvesView: View {
             Image(systemName: "minus")
                 .padding()
                 .font(.system(size: 40, weight: .semibold))
-                .foregroundColor(fontSecondaryColour)
+                .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 .contentShape(Rectangle())
                 .gesture(self.drag)
         }
         .frame(height: CGFloat(self.upperPanelHeight + 35))
-        .background(bgSecondaryColour.opacity(0.7))
+        .background(selectedThemeColors.bgSecondaryColour.opacity(0.7))
         .animation(self.isDragging ? .none : .easeInOut)
     }
 }

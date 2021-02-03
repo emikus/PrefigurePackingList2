@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ItemsView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @AppStorage("itemsViewType") var itemsViewType: String = "grid"
     @State var itemsListVisible:Bool = false
     @State var searchBarVisible:Bool = false
@@ -23,7 +24,7 @@ struct ItemsView: View {
             }
         }
             .padding(.all, 5.0)
-        .background(bgMainColour)
+        .background(selectedThemeColors.bgMainColour)
             
             
     }

@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @ObservedObject var modules = Modules()
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     var dataFacade = DataFacade()
     
         @Environment(\.managedObjectContext) private var viewContext

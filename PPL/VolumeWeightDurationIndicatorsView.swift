@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct VolumeWeightDurationIndicatorsView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -229,10 +230,10 @@ struct VolumeWeightDurationIndicatorsView: View {
                         
                         Text("\(self.getItemsInBagVolume()) / \(maxItemsInBagVolume)㎤ (\(maxItemsInBagVolume - self.getItemsInBagVolume()))")
                             .font(.footnote)
-                            .foregroundColor(self.volumePopupVisible ? fontSecondaryColour : Color(red: 28/255, green: 29/255, blue: 31/255))
+                            .foregroundColor(self.volumePopupVisible ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.bgSecondaryColour)
                             .animation(.easeInOut)
                     }
-                    .frame(width: geometry.size.width / 5, height: self.viewHeight)
+                    .frame(width: geometry.size.width / 4, height: self.viewHeight)
                     .popup(
                         isPresented: self.$volumePopupVisible,
                         type: .toast,
@@ -276,11 +277,11 @@ struct VolumeWeightDurationIndicatorsView: View {
                         )
                         
                         Text("\(self.getItemsInBagWeight()) / \(maxItemsInBagWeight)g (\(maxItemsInBagWeight - self.getItemsInBagWeight()))")
-                            .foregroundColor(self.weightPopupVisible ? fontSecondaryColour : Color(red: 28/255, green: 29/255, blue: 31/255))
+                            .foregroundColor(self.weightPopupVisible ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.bgSecondaryColour)
                             .animation(.easeInOut)
                             .font(.footnote)
                     }
-                    .frame(width: geometry.size.width / 5, height: self.viewHeight)
+                    .frame(width: geometry.size.width / 4, height: self.viewHeight)
                     .popup(
                         isPresented: self.$weightPopupVisible,
                         type: .toast,
@@ -313,10 +314,10 @@ struct VolumeWeightDurationIndicatorsView: View {
                         )
                         
                         Text("\(self.getItemsInBagBatteryConsumption())%")
-                            .foregroundColor(self.batteryConsumptionPopupVisible ? fontSecondaryColour : Color(red: 208/255, green: 207/255, blue: 207/255))
+                            .foregroundColor(self.batteryConsumptionPopupVisible ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.bgSecondaryColour)
                             .animation(.easeInOut)
                     }
-                    .frame(width: geometry.size.width / 5, height: self.viewHeight)
+                    .frame(width: geometry.size.width / 4, height: self.viewHeight)
                     .popup(
                         isPresented: self.$batteryConsumptionPopupVisible,
                         type: .toast,
@@ -325,15 +326,15 @@ struct VolumeWeightDurationIndicatorsView: View {
                         PopupItemsList(statusName: "battery", popupVisibility: self.$batteryConsumptionPopupVisible)
                     }
                 }
-                .background(bgSecondaryColour)
-                .foregroundColor(fontSecondaryColour)
+                .background(selectedThemeColors.bgSecondaryColour)
+                .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 .font(.footnote)
                 
                 .frame(width: geometry.size.width)
                 .padding()
                 
             }
-            .background(bgSecondaryColour)
+            .background(selectedThemeColors.bgSecondaryColour)
             .frame(width: geometry.size.width, height: 50)
             //        .opacity(0.8)
             
@@ -354,5 +355,6 @@ struct VolumeWeightDurationIndicatorsView: View {
 struct VolumeWeightDurationIndicatorsView_Previews: PreviewProvider {
     static var previews: some View {
         VolumeWeightDurationIndicatorsView()
+            .environmentObject(SelectedThemeColors())
     }
 }

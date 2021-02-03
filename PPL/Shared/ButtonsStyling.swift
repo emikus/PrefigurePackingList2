@@ -30,6 +30,7 @@ import SwiftUI
 struct MainButtonStyle: ButtonStyle {
     struct Content: View {
         @Environment(\.isEnabled) var isEnabled
+        @EnvironmentObject var selectedThemeColors: SelectedThemeColors
         let configuration: Configuration
         var label: some View {
             configuration.label.frame(maxWidth: .infinity).padding([.top, .trailing], 5)
@@ -38,15 +39,15 @@ struct MainButtonStyle: ButtonStyle {
             Group {
                 if configuration.isPressed {
                     label
-                        .foregroundColor(buttonMainColour)
+                        .foregroundColor(selectedThemeColors.buttonMainColour)
                         .opacity(0.5)
                 } else if isEnabled {
                     label
-                        .foregroundColor(buttonMainColour)
+                        .foregroundColor(selectedThemeColors.buttonMainColour)
                         .opacity(1)
                 } else {
                     label
-                        .foregroundColor(buttonInactiveColour)
+                        .foregroundColor(selectedThemeColors.buttonInactiveColour)
                 }
             }
         }

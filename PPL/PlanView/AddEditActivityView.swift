@@ -15,6 +15,7 @@ extension UIApplication {
 
 struct AddEditActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.name, ascending: true)],
         animation: .default)
@@ -62,7 +63,7 @@ struct AddEditActivityView: View {
                     Picker("Symbol", selection: self.$symbol) {
                         ForEach(self.activitySymbolsSet, id: \.self) { symbol in
                             Image(systemName: symbol)
-                                .foregroundColor(self.symbol == symbol ? elementActiveColour : fontSecondaryColour)
+                                .foregroundColor(self.symbol == symbol ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
@@ -89,7 +90,7 @@ struct AddEditActivityView: View {
                             HStack {
                                 Text(item.wrappedName)
                             }
-                            .foregroundColor(self.activityItems.contains{$0.id==item.id} ? elementActiveColour : fontSecondaryColour)
+                            .foregroundColor(self.activityItems.contains{$0.id==item.id} ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                         }
                     }
                 }

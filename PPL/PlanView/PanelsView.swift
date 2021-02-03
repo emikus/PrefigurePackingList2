@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct PanelHandleView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @Binding var panelHeight:CGFloat
     
     var body: some View {
         ZStack {
         Image(systemName: "minus")
             .font(.system(size: 40, weight: .semibold))
-            .foregroundColor(fontSecondaryColour)
+            .foregroundColor(selectedThemeColors.fontSecondaryColour)
             .offset(y: self.panelHeight > 15 ? -5 : 0)
         }
     }
 }
 
 struct PanelsView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @AppStorage("panelOneHeight") var panelOneHeight: Int = 100
     @AppStorage("panelTwoHeight") var panelTwoHeight: Int = 100
     @AppStorage("panelThreeHeight") var panelThreeHeight: Int = 100
@@ -239,8 +241,8 @@ struct PanelsView: View {
                 }
 //                .padding(.bottom, 5)
                 .frame(width: CGFloat(1100), height: CGFloat(self.panelsHeight[0]))
-                .border(fontMainColour, width: 1)
-                .background(fontMainColour.opacity(0.5))
+                .border(selectedThemeColors.fontMainColour, width: 1)
+                .background(selectedThemeColors.fontMainColour.opacity(0.5))
                 
                 HStack {
                     VStack {
@@ -262,14 +264,14 @@ struct PanelsView: View {
                     .opacity(Int(self.panelsHeight[1]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[0]) / 20)
                 }
                 .frame(width: CGFloat(1100), height: CGFloat( self.panelsHeight[1]))
-                .border(fontSecondaryColour, width: 1)
-                .background(fontMainColour.opacity(0.3))
+                .border(selectedThemeColors.fontSecondaryColour, width: 1)
+                .background(selectedThemeColors.fontMainColour.opacity(0.3))
                 
                 HStack {
                     VStack {
                         if Int(self.panelsHeight[2]) > 15 {
                             Text(String(Int(self.panelsHeight[2])))
-                                .foregroundColor(listHeaderColour)
+                                .foregroundColor(selectedThemeColors.listHeaderColour)
                                 .opacity(Int(self.panelsHeight[2]) > self.panelContentVisibilityMinHeight ? 1.0 : 0.0 + Double(self.panelsHeight[2]) / 40)
                             Spacer()
 //
@@ -277,13 +279,13 @@ struct PanelsView: View {
                     }
                 }
                 .frame(width: CGFloat(1100), height: CGFloat(self.panelsHeight[2]))
-                .border(fontSecondaryColour, width: 1)
-                .background(fontMainColour.opacity(0.1))
+                .border(selectedThemeColors.fontSecondaryColour, width: 1)
+                .background(selectedThemeColors.fontMainColour.opacity(0.1))
                 
                 
             }
             .frame(width: 1100, height: 300, alignment: .center)
-            .border(fontMainColour)
+            .border(selectedThemeColors.fontMainColour)
         }
         .animation(self.isDragging ? .none : .easeInOut)
         .onAppear(perform: {

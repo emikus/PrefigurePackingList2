@@ -21,6 +21,7 @@ func sampleActivity() -> Activity {
 struct ActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var dataFacade: DataFacade
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -48,7 +49,7 @@ struct ActivityView: View {
                 .font(.caption)
                 Spacer()
                 Image(systemName: "checkmark.circle")
-                    .foregroundColor(self.activity.isSelected ? elementActiveColour : fontSecondaryColour)
+                    .foregroundColor(self.activity.isSelected ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
             }
             
             if (activity.id == expandedActivityId) {
@@ -64,8 +65,8 @@ struct ActivityView: View {
             }
             
         }
-        .foregroundColor(fontMainColour)
-         .background(bgMainColour)
+        .foregroundColor(selectedThemeColors.fontMainColour)
+         .background(selectedThemeColors.bgMainColour)
         .opacity(0.8)
         .contentShape(Rectangle())
         .contextMenu {

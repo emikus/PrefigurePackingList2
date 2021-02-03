@@ -20,6 +20,7 @@ struct ItemListView: View {
     private var items: FetchedResults<Item>
     @EnvironmentObject var modules: Modules
     @EnvironmentObject var dataFacade: DataFacade
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @Environment(\.managedObjectContext) private var viewContext
     @State private var showingSelectedActivityItemRemovalAlert = false
     @State private var showingExceedingWeightAlert = false
@@ -34,7 +35,7 @@ struct ItemListView: View {
                 .font(.largeTitle)
             VStack(alignment: .leading) {
                 Text(item.wrappedName)
-                    .foregroundColor(fontMainColour)
+                    .foregroundColor(selectedThemeColors.fontMainColour)
 
             }
             .frame(width: 120, alignment: .leading)
@@ -48,13 +49,13 @@ struct ItemListView: View {
 
                 Text("Weight: \(item.weight)g" )
                     .font(.caption)
-                    .foregroundColor(fontSecondaryColour)
+                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 Text("Volume: \(self.item.volume)㎤")
                     .font(.caption)
-                    .foregroundColor(fontSecondaryColour)
+                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 Text("Battery: \(self.item.batteryConsumption)%")
                 .font(.caption)
-                .foregroundColor(fontSecondaryColour)
+                .foregroundColor(selectedThemeColors.fontSecondaryColour)
             }
             .frame(width: 120, alignment: .leading)
             .alert(isPresented: $showingExceedingVolumeAlert) {
@@ -64,7 +65,7 @@ struct ItemListView: View {
             VStack(alignment: .leading) {
                 Text("Available slot:")
                 .font(.caption)
-                .foregroundColor(fontSecondaryColour)
+                .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 Text(item.moduleSymbol ?? "item module symbol")
                     .frame(width: 20)
                     .opacity(self.modules.freeModulesSlots[item.moduleSymbol ?? ""] != nil ? 1 : 0.1)
@@ -80,12 +81,12 @@ struct ItemListView: View {
             VStack(alignment: .leading) {
                 Text("Activities:")
                 .font(.caption)
-                .foregroundColor(fontSecondaryColour)
+                .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 HStack {
                     ForEach (activities.filter({$0.itemArray.contains(item)}), id: \.self)  { itemActivity in
 //
                         Image(systemName: itemActivity.symbol!)
-                            .foregroundColor( itemActivity.isSelected ? elementActiveColour : fontSecondaryColour)
+                            .foregroundColor( itemActivity.isSelected ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                 }
                 }
             }
@@ -100,10 +101,10 @@ struct ItemListView: View {
             Spacer()
 
             Image(systemName: "bag")
-                .foregroundColor(self.items.filter({$0.isInBag == true}).contains(item) ? elementActiveColour : fontMainColour)
+                .foregroundColor(self.items.filter({$0.isInBag == true}).contains(item) ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontMainColour)
         }
 //        .preferredColorScheme(.light)
-        .background(bgSecondaryColour)
+        .background(selectedThemeColors.bgSecondaryColour)
         .contentShape(Rectangle())
         .onTapGesture {
             let addingItemWillExceedWeight = Int(self.item.weight) + self.dataFacade.getItemsInBagWeight(itemsInBag: self.items.filter({$0.isInBag==true})) > maxItemsInBagWeight

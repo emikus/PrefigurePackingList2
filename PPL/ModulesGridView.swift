@@ -13,6 +13,7 @@ struct ModulesGridView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     @EnvironmentObject var modules: Modules
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     
     @State var isDragging = false
     @GestureState var dragAmount = CGSize.zero
@@ -76,11 +77,11 @@ struct ModulesGridView: View {
                                 
                                 Circle()
                                     .frame(width: 10)
-                                    .foregroundColor(self.modulesSet[moduleSymbol] == "" ? elementActiveColour : alertColour)
+                                    .foregroundColor(self.modulesSet[moduleSymbol] == "" ? .green : .red)
                                     .offset(x: -geometry.size.width/CGFloat(self.numberOfColumns)/2 + 10 , y: -geometry.size.height/CGFloat(self.numberOfRows)/2 + 12)
                             }
                             .frame(width: geometry.size.width/CGFloat(self.numberOfColumns) - 2, height: geometry.size.height/CGFloat(self.numberOfRows + 0) - 6)
-                                .background(self.modulesSet[moduleSymbol] != "" && self.modulesSet[moduleSymbol] == self.modules.highlightedModule ? Color.orange : bgSecondaryColour)
+                                .background(self.modulesSet[moduleSymbol] != "" && self.modulesSet[moduleSymbol] == self.modules.highlightedModule ? Color.orange : selectedThemeColors.bgSecondaryColour)
                                 .cornerRadius(10)
                             
                             
@@ -88,7 +89,7 @@ struct ModulesGridView: View {
                     }
                 }
             }
-            .foregroundColor(fontMainColour)
+            .foregroundColor(selectedThemeColors.fontMainColour)
         }
     }
 }

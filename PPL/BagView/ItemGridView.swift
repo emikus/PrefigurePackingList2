@@ -22,6 +22,7 @@ struct ItemGridView: View {
     private var items: FetchedResults<Item>
     @EnvironmentObject var modules: Modules
     @EnvironmentObject var dataFacade: DataFacade
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State private var showingSelectedActivityItemRemovalAlert = false
     @State private var showingExceedingWeightAlert = false
     @State private var showingExceedingVolumeAlert = false
@@ -43,7 +44,7 @@ struct ItemGridView: View {
                 }
                 Spacer()
                 Image(systemName: "bag")
-                    .foregroundColor(self.item.isInBag ? /*@START_MENU_TOKEN@*/elementActiveColour/*@END_MENU_TOKEN@*/ : Color(red: 100/255, green: 100/255, blue: 100/255))
+                    .foregroundColor(self.item.isInBag ? /*@START_MENU_TOKEN@*/selectedThemeColors.elementActiveColour/*@END_MENU_TOKEN@*/ : Color(red: 100/255, green: 100/255, blue: 100/255))
                 .offset(x: 0, y: -2)
             }
             .padding(.trailing, 5.0)
@@ -53,7 +54,7 @@ struct ItemGridView: View {
                 
                 Text(item.wrappedName)
                     .font(.headline)
-                    .foregroundColor(fontMainColour)
+                    .foregroundColor(selectedThemeColors.fontMainColour)
                 
                 
                 
@@ -62,7 +63,7 @@ struct ItemGridView: View {
                     .foregroundColor(Color(red: 138/255, green: 139/255, blue: 141/255))
                 Text("Volume: \(self.item.volume) ㎤")
                     .font(.caption)
-                    .foregroundColor(fontSecondaryColour)
+                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
             }
             .alert(isPresented: $showingExceedingVolumeAlert) {
                 Alert(title: Text("You will not be able to zip your bag, sorry :)"), message: Text("Remove sth wisely before adding this item"), primaryButton: .default(Text("Send me a bigger bag :)")), secondaryButton: .cancel())
@@ -75,7 +76,7 @@ struct ItemGridView: View {
                     ForEach (activities.filter({$0.itemArray.contains(item)}), id: \.self)  { itemActivity in
 //
                         Image(systemName: itemActivity.symbol!)
-                            .foregroundColor( itemActivity.isSelected ? elementActiveColour : fontSecondaryColour)
+                            .foregroundColor( itemActivity.isSelected ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                 }
                 }                .padding(.bottom, 10.0)
                     
@@ -94,7 +95,7 @@ struct ItemGridView: View {
 //        .opacity(1)
         .padding([.top], 10.0)
         .padding([.leading], 3.0)
-        .background(bgSecondaryColour)
+        .background(selectedThemeColors.bgSecondaryColour)
 //        .border(self.items.itemsInBag.contains(item) ? Color/*@START_MENU_TOKEN@*/.green/*@END_MENU_TOKEN@*/ : Color.red, width: 1)
         .cornerRadius(10)
         .contentShape(Rectangle())

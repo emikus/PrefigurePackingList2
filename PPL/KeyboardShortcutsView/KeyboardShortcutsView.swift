@@ -9,6 +9,7 @@ import SwiftUI
 
 struct KeyboardShortcutsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State var selectedViewName = "⦿ General"
     var viewsNames:[String] = [
         "⦿ General",
@@ -56,7 +57,7 @@ struct KeyboardShortcutsView: View {
                         }
                         .buttonStyle(KeyboardShortcutsListStyle())
                         .frame(width: geometry.size.width / 5, height: 34, alignment: .leading)
-                        .background(self.selectedViewName == name ? fontSecondaryColour : fontSecondaryColour.opacity(0))
+                        .background(self.selectedViewName == name ? selectedThemeColors.fontSecondaryColour : selectedThemeColors.fontSecondaryColour.opacity(0))
                         .cornerRadius(3)
                     }
                     
@@ -68,11 +69,11 @@ struct KeyboardShortcutsView: View {
                     HStack {
                     Text("Next")
                         .font(.footnote)
-                        .foregroundColor(fontSecondaryColour)
+                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
                         Spacer()
                         Text("⌥ ⌘ N")
                             .padding(4)
-                            .background(fontSecondaryColour.opacity(0.5))
+                            .background(selectedThemeColors.fontSecondaryColour.opacity(0.5))
                             .cornerRadius(3)
                             
                     }
@@ -81,11 +82,11 @@ struct KeyboardShortcutsView: View {
                     HStack {
                     Text("Previous")
                         .font(.footnote)
-                        .foregroundColor(fontSecondaryColour)
+                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
                         Spacer()
                         Text("⌥ ⌘ P")
                             .padding(4)
-                            .background(fontSecondaryColour.opacity(0.5))
+                            .background(selectedThemeColors.fontSecondaryColour.opacity(0.5))
                             .cornerRadius(3)
                             
                             
@@ -123,7 +124,7 @@ struct KeyboardShortcutsView: View {
                         
                         Text("Keyboard Shortcuts")
                             .font(.caption)
-                            .foregroundColor(fontSecondaryColour)
+                            .foregroundColor(selectedThemeColors.fontSecondaryColour)
                         Spacer()
                         
                         Button(action: {
@@ -144,7 +145,7 @@ struct KeyboardShortcutsView: View {
                             Spacer()
                             Text(value)
                                 .padding(8)
-                                .background(fontSecondaryColour.opacity(0.5))
+                                .background(selectedThemeColors.fontSecondaryColour.opacity(0.5))
                                 .cornerRadius(3)
                                 
                         }

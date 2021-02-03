@@ -21,6 +21,7 @@ struct ItemsListView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     @EnvironmentObject var modules: Modules
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State var showAddEditItemView = false
     @State var direction:String = "Search..."
     @State var isSearchBarVisible:Bool = false
@@ -53,18 +54,18 @@ struct ItemsListView: View {
                      
                         
                     }
-                    .listRowBackground(bgMainColour)
+                    .listRowBackground(selectedThemeColors.bgMainColour)
                     .padding(.leading, -15)
                     
                     if self.searchText.count < 3 {
                         Section(header: HStack{
                                     Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
-                                .foregroundColor(listHeaderColour)
+                                .foregroundColor(selectedThemeColors.listHeaderColour)
                                 .padding()
 
                                 Spacer()
                         }
-                        .background(bgMainColour)
+                        .background(selectedThemeColors.bgMainColour)
                         .listRowInsets(EdgeInsets(
                                 top: 0,
                                 leading: 0,
@@ -73,18 +74,18 @@ struct ItemsListView: View {
                             ForEach(self.items.filter({$0.isPinned == true}).sorted(by: {$0.isInBag && !$1.isInBag})) { item in
                                         ItemListView(item: item)
                                     }
-                                    .listRowBackground(bgSecondaryColour)
+                                    .listRowBackground(selectedThemeColors.bgSecondaryColour)
                         }
                     }
                     
                     Section(header: HStack {
                         Text("All your items")
-                        .foregroundColor(listHeaderColour)
+                        .foregroundColor(selectedThemeColors.listHeaderColour)
                         .padding()
 
                         Spacer()
                     }
-                    .background(bgMainColour)
+                    .background(selectedThemeColors.bgMainColour)
                     .listRowInsets(EdgeInsets(
                             top: 0,
                             leading: 0,
@@ -98,7 +99,7 @@ struct ItemsListView: View {
                                 }
 
                                 .onInsert(of: ["ppl.item"], perform: onInsert)
-                        .listRowBackground(bgSecondaryColour)
+                        .listRowBackground(selectedThemeColors.bgSecondaryColour)
 
 
                     }

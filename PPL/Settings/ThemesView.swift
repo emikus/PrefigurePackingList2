@@ -8,50 +8,59 @@
 import SwiftUI
 
 struct ThemesView: View {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @AppStorage("themeName") var themeName: String?
     
     
     var body: some View {
         VStack(alignment: .leading) {
             
-            Button(action: {
-                self.themeName = themes[0].name
-                changeColorTheme(theme: themes[0].themeColours)
-            }) {
-                Text(themes[0].name)
-                    .foregroundColor(themes[0].themeColours.fontMainColour)
+            ForEach(themes) { theme in
+                HStack {
+                    Button(action: {
+                        selectedThemeColors.changeColorTheme(theme: theme.themeColours)
+                        self.themeName = theme.name
+                    }) {
+                        Text(theme.name)
+                        .foregroundColor(theme.themeColours.fontMainColour)
+                    }
+                    .padding(15)
+                    .frame(width: 150, alignment: .leading)
+                    .background(theme.themeColours.bgSecondaryColour)
+                    .cornerRadius(10)
+                    theme.themeColours.bgMainColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(5)
+                    theme.themeColours.bgSecondaryColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(10)
+                    theme.themeColours.buttonBgColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(5)
+                    theme.themeColours.buttonInactiveBgColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(10)
+                    theme.themeColours.buttonInactiveColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(5)
+                    theme.themeColours.elementActiveColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(10)
+                    theme.themeColours.fontMainColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(5)
+                    theme.themeColours.fontSecondaryColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(10)
+                    theme.themeColours.listHeaderColour
+                        .frame(width: 50, height: 50, alignment: .center)
+                        .cornerRadius(5)
+                }
             }
-            .padding(15)
-            .frame(width: 140, alignment: .leading)
-            .background(themes[0].themeColours.bgSecondaryColour)
-            .cornerRadius(10)
-//            Text(a)
             
-            Button(action: {
-                self.themeName = themes[1].name
-                changeColorTheme(theme: themes[1].themeColours)
-            }) {
-                Text(themes[1].name)
-                    .foregroundColor(themes[1].themeColours.fontMainColour)
-            }
-            .padding(15)
-            .frame(width: 140, alignment: .leading)
-            .foregroundColor(fontMainColour)
-            .background(themes[1].themeColours.bgSecondaryColour)
-            .cornerRadius(10)
             
-            Button(action: {
-                self.themeName = themes[2].name
-                changeColorTheme(theme: themes[2].themeColours)
-            }) {
-                Text(themes[2].name)
-                    .foregroundColor(themes[2].themeColours.fontSecondaryColour)
-            }
-            .padding(15)
-            .frame(width: 140, alignment: .leading)
-            .foregroundColor(fontMainColour)
-            .background(themes[2].themeColours.bgSecondaryColour)
-            .cornerRadius(10)
+            
+            
             
             
         }
@@ -61,5 +70,6 @@ struct ThemesView: View {
 struct Themes_Previews: PreviewProvider {
     static var previews: some View {
         ThemesView()
+        .environmentObject(SelectedThemeColors())
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct BagView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var modules: Modules
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -56,7 +57,7 @@ struct BagView: View {
                 }
                 .opacity(0)
             }
-            .background(bgMainColour)
+            .background(selectedThemeColors.bgMainColour)
             .navigationBarTitle("Pack", displayMode: .inline)
         }
     }

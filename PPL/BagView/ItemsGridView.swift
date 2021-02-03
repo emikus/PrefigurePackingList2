@@ -12,6 +12,7 @@ import SwiftUI
 struct ItemsGridView: View {
     @AppStorage("itemsViewType") var itemsViewType: String = "grid"
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -94,7 +95,7 @@ struct ItemsGridView: View {
                             Image(systemName:self.foodHidden == true ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
-                        .foregroundColor(fontMainColour)
+                        .foregroundColor(selectedThemeColors.fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
@@ -129,7 +130,7 @@ struct ItemsGridView: View {
                             Image(systemName:self.clothesHidden == true ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
-                        .foregroundColor(fontMainColour)
+                        .foregroundColor(selectedThemeColors.fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
@@ -163,7 +164,7 @@ struct ItemsGridView: View {
                             Image(systemName:self.electricalHidden == true ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
-                        .foregroundColor(fontMainColour)
+                        .foregroundColor(selectedThemeColors.fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
@@ -205,7 +206,7 @@ struct ItemsGridView: View {
                                         }
                                      )
                 .frame(minHeight: 140)
-                .background(bgMainColour)
+                .background(selectedThemeColors.bgMainColour)
             }
             
         }
