@@ -16,7 +16,7 @@ struct PreferencesView: View {
     
     @State var selectedViewName = "App themes"
     var viewsNames:[String] = [
-        "App themes",
+        "App themes 预言",
         "Sample preferences view",
         "Sample preferences view 2"
     ]

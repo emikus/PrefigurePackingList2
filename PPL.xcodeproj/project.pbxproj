@@ -52,11 +52,13 @@
 		C710332025CB2FA900A068C9 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710331F25CB2FA900A068C9 /* Preferences.swift */; };
 		C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */; };
 		C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */; };
+		C72CC87425DC75A00072D573 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = C72CC7ED25DC4A350072D573 /* Icon */; };
 		C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */; };
 		C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */; };
 		C761464B25BC9A3F00FC71AE /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464A25BC9A3F00FC71AE /* PreferencesView.swift */; };
 		C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464E25BF482F00FC71AE /* ThemesView.swift */; };
 		C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761465225BF85A300FC71AE /* ThemesColours.swift */; };
+		C7D6EE4525DC8026002D1B8C /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6EE4425DC8026002D1B8C /* Icons.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,11 +109,13 @@
 		C710331F25CB2FA900A068C9 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemsGridView.swift; sourceTree = "<group>"; };
 		C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemToBuyGridView.swift; sourceTree = "<group>"; };
+		C72CC7ED25DC4A350072D573 /* Icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icon; sourceTree = "<group>"; };
 		C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsView.swift; sourceTree = "<group>"; };
 		C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcut.swift; sourceTree = "<group>"; };
 		C761464A25BC9A3F00FC71AE /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		C761464E25BF482F00FC71AE /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
 		C761465225BF85A300FC71AE /* ThemesColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesColours.swift; sourceTree = "<group>"; };
+		C7D6EE4425DC8026002D1B8C /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +158,7 @@
 		52B0C321252F6C46006F441B /* PPL */ = {
 			isa = PBXGroup;
 			children = (
+				C72CC7ED25DC4A350072D573 /* Icon */,
 				C761464925BC9A1900FC71AE /* Settings */,
 				C74518F625AB635700A9DB03 /* KeyboardShortcutsView */,
 				52F52A9225345E7D00541E8A /* Shared */,
@@ -248,11 +253,20 @@
 		C761464925BC9A1900FC71AE /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				C7D6EE4325DC8006002D1B8C /* Appearance */,
 				C761464A25BC9A3F00FC71AE /* PreferencesView.swift */,
 				C710331F25CB2FA900A068C9 /* Preferences.swift */,
-				C761464E25BF482F00FC71AE /* ThemesView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		C7D6EE4325DC8006002D1B8C /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				C7D6EE4425DC8026002D1B8C /* Icons.swift */,
+				C761464E25BF482F00FC71AE /* ThemesView.swift */,
+			);
+			path = Appearance;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,6 +276,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 52B0C333252F6C49006F441B /* Build configuration list for PBXNativeTarget "PPL" */;
 			buildPhases = (
+				C719F50125DAC348005766D0 /* ShellScript */,
 				52B0C31B252F6C46006F441B /* Sources */,
 				52B0C31C252F6C46006F441B /* Frameworks */,
 				52B0C31D252F6C46006F441B /* Resources */,
@@ -318,10 +333,33 @@
 			files = (
 				52B0C32A252F6C49006F441B /* Preview Assets.xcassets in Resources */,
 				52B0C327252F6C49006F441B /* Assets.xcassets in Resources */,
+				C72CC87425DC75A00072D573 /* Icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C719F50125DAC348005766D0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/$(PRODUCT_NAME)/Icon/Icon.swift",
+				"$(PROJECT_DIR)/$(PRODUCT_NAME)/ThemesColours.swift",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\n[[ \"$ENABLE_PREVIEWS\" = \"NO\" ]] || exit 0\n[[ \"$MAC_OS_X_VERSION_MAJOR\" -ge \"101500\" ]] || exit 0\n\nTMPFILE=`mktemp /tmp/SwiftUIcon.swift.XXXXXX` || exit 1\ntrap \"rm -f $TMPFILE\" EXIT\n\nif [ -z \"$SCRIPT_INPUT_FILE_0\" ]\nthen\n    echo \"error: You must specify your Icon.swift as the first Input File in the Build Phase.\"\n    exit 1\nfi\n\ncat ${PROJECT_DIR}/${PRODUCT_NAME}/ThemesColours.swift ${SCRIPT_INPUT_FILE_0%/*}/*.swift > $TMPFILE\n\ncat $TMPFILE\n\necho \"dupaaaaaaa\"\necho \"dupaaaaaaa2222222\"\n\n\n\ncp ${PROJECT_DIR}/${PRODUCT_NAME}/Icon/dogschildren.png ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\n\n\nxcrun -sdk macosx swift $TMPFILE\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		52B0C31B252F6C46006F441B /* Sources */ = {
@@ -346,6 +384,7 @@
 				52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */,
 				52DC9E8825308F7C007BA478 /* Item+CoreDataClass.swift in Sources */,
 				C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */,
+				C7D6EE4525DC8026002D1B8C /* Icons.swift in Sources */,
 				52F114A225420276009220A9 /* SaveBagContentSetView.swift in Sources */,
 				525B558F256E8F7300EE1F05 /* SearchBarView.swift in Sources */,
 				52F52A7F2533597000541E8A /* ModulesGridView.swift in Sources */,

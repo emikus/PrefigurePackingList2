@@ -10,8 +10,9 @@ import SwiftUI
 @main
 struct PPLApp: App {
     
-    @AppStorage("themeName") var themeName: String?
+    @AppStorage("themeName") var themeName: String = "Dark mode"
     @ObservedObject var selectedThemeColors = SelectedThemeColors()
+    @ObservedObject var iconSettings = IconNames()
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
@@ -27,6 +28,7 @@ struct PPLApp: App {
                 .environment(\.colorScheme, themeName == "Light mode" ? .light : .dark)
                 // .preferredColorScheme(.light)
                 .environmentObject(self.selectedThemeColors)
+                .environmentObject(self.iconSettings)
         }
         
     }

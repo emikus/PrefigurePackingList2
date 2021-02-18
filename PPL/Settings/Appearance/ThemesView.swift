@@ -7,17 +7,32 @@
 
 import SwiftUI
 
-struct ThemesView: View {
+struct ThemesView:  View {
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
+    @EnvironmentObject var iconSettings: IconNames
     @AppStorage("themeName") var themeName: String?
     
     
     var body: some View {
         VStack(alignment: .leading) {
-            
+//            Icon()
+            Image("dogschildren")
+                .resizable()
+                .scaledToFit()
             ForEach(themes) { theme in
                 HStack {
                     Button(action: {
+//                        print(self.iconSettings.iconNames)
+//                        print(self.iconSettings.iconNames[1], "dogschildren")
+//                        generateAppIcon()
+                        let index = (themes.firstIndex(where: {$0.name == theme.name})! % 2 == 0) ? 0 : 1
+                        UIApplication.shared.setAlternateIconName(self.iconSettings.iconNames[index]){ error in
+                                                        if let error = error {
+                                                            print(error.localizedDescription)
+                                                        } else {
+                                                            print("Success!")
+                                                        }
+                                                    }
                         selectedThemeColors.changeColorTheme(theme: theme.themeColours)
                         self.themeName = theme.name
                     }) {

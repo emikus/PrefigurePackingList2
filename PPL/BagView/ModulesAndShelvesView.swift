@@ -107,6 +107,7 @@ struct ModulesAndShelvesView: View {
                                     .sheet(isPresented: self.$showAddEditItem) {
                                         AddEditItem()
                                             .environment(\.managedObjectContext, self.viewContext)
+                                            .environmentObject(self.selectedThemeColors)
                                     }
                                     
                                     Button(action: {
@@ -119,6 +120,7 @@ struct ModulesAndShelvesView: View {
                                     .disabled(self.items.filter({$0.isInBag == true}).count == 0)
                                     .sheet(isPresented: self.$showAddBagContentSet) {
                                         SaveBagContentSetView()
+                                        .environment(\.managedObjectContext, self.viewContext)
                                         .environmentObject(self.modules)
                                         .environmentObject(self.selectedThemeColors)
                                     }

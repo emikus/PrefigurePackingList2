@@ -19,6 +19,7 @@ let preferencesSubviews:[PreferencesSubview] = [
     PreferencesSubview(name: "App themes", view: AnyView(ThemesView())),
     PreferencesSubview(name: "Pref 2", view: AnyView(AddEditItem())),
     PreferencesSubview(name: "Pref 3", view: AnyView(AddEditActivityView())),
+    PreferencesSubview(name: "New pref name", view: AnyView(AddEditActivityView()))
 ]
 
 

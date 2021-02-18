@@ -11,6 +11,7 @@ import CoreData
 struct ContentView: View {
     @ObservedObject var modules = Modules()
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
+    
     var dataFacade = DataFacade()
     
         @Environment(\.managedObjectContext) private var viewContext
@@ -59,127 +60,7 @@ struct ContentView: View {
         
         
          
-        VStack {
-            Button(action: {
-                items[Int.random(in: 0...items.count - 1)].name = "dupa"
-                do {
-                    try viewContext.save()
-                } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    let nsError = error as NSError
-                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                }
-            }) {
-                Label("Rename Item", systemImage: "plus")
-            }
-            Button(action: addItem) {
-                Label("Add Item", systemImage: "plus")
-            }
-
-            Button(action: {items[0].isInBag.toggle()}) {
-                Label("Add remove to items bag", systemImage: "plus")
-            }
-
-            Button(action: {bag.insert(items[0], at: 0)}) {
-                Label("Add remove to items bag array", systemImage: "plus")
-            }
-
-        HStack {
-            List {
-                ForEach(items) { item in
-                    VStack {
-                        Text("\(item.wrappedName), \(item.cost), \(item.id!)")
-                        Text(item.isInBag ? "In bag" : "not in bag")
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-
-
-            List {
-                ForEach(items.filter({$0.isInBag == true})) { item in
-                    VStack {
-                        Text("\(item.wrappedName), \(item.cost), \(item.id!)")
-                        Text(item.isInBag ? "In bag" : "not in bag")
-                    }
-                }
-
-            }
-
-            List {
-                ForEach(bag) { item in
-                    VStack {
-                        Text("\(item.wrappedName), \(item.cost), \(item.id!)")
-                        Text(item.isInBag ? "In bag" : "not in bag")
-                    }
-                }
-                .onDelete(perform: deleteItems)
-
-            }
-        }
-            VStack {
-                Button(action: {
-                    let activity = Activity(context: viewContext)
-                    activity.id = UUID()
-                    activity.name = randomString(length: 3)
-                    activity.duration = Int16(75)
-                    activity.category = "food"
-
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        // Replace this implementation with code to handle the error appropriately.
-                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                        let nsError = error as NSError
-                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                    }
-                }) {
-                    Label("Add activity", systemImage: "plus")
-                }
-
-
-            HStack {
-                List {
-                    ForEach(activities) { activity in
-                        HStack {
-                            Text("\(activity.name!), \(activity.duration)")
-                            Text(String(activity.itemArray.count))
-                            HStack {
-                                ForEach(activity.itemArray, id: \.self) { item in
-                                    Text(item.wrappedName)
-                                }
-
-                            }
-                        }
-                        .onTapGesture {
-                            if (activity.itemArray.contains(items[0])) {
-                             activity.addToItem(items[1])
-
-                            } else {
-                                activity.addToItem(items[0])
-                            }
-
-                            do {
-                                try viewContext.save()
-                            } catch {
-                                // Replace this implementation with code to handle the error appropriately.
-                                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                                let nsError = error as NSError
-                                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                            }
-                        }
-                    }
-                    .onDelete(perform: deleteActivity)
-
-                }
-
-
-
-            }
-            }
-            
-        }
+        
         .tabItem {
             Image(systemName: "plus")
             Text("🎒 Buy")
@@ -187,7 +68,7 @@ struct ContentView: View {
         
         PreferencesView()
             .tabItem {
-                Image(systemName: "settings")
+                Image(systemName: "plus")
                 Text("⚙️ Preferences")
             }
         
@@ -198,6 +79,8 @@ struct ContentView: View {
     }
     
     func randomString(length: Int) -> String {
+        
+        UIApplication.shared.alternateIconName
       let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
       return String((0..<length).map{ _ in letters.randomElement()! })
     }
