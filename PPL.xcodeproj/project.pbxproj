@@ -58,7 +58,10 @@
 		C761464B25BC9A3F00FC71AE /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464A25BC9A3F00FC71AE /* PreferencesView.swift */; };
 		C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464E25BF482F00FC71AE /* ThemesView.swift */; };
 		C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761465225BF85A300FC71AE /* ThemesColours.swift */; };
-		C7D6EE4525DC8026002D1B8C /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D6EE4425DC8026002D1B8C /* Icons.swift */; };
+		C76E835725E5554000FD4124 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835625E5554000FD4124 /* Icons.swift */; };
+		C76E835E25E67FD400FD4124 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835D25E67FD400FD4124 /* Icon.swift */; };
+		C76E835F25E67FD400FD4124 /* Icon+PreviewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */; };
+		C76E836025E67FD400FD4124 /* IconGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835B25E67FD300FD4124 /* IconGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -115,7 +118,10 @@
 		C761464A25BC9A3F00FC71AE /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		C761464E25BF482F00FC71AE /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
 		C761465225BF85A300FC71AE /* ThemesColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesColours.swift; sourceTree = "<group>"; };
-		C7D6EE4425DC8026002D1B8C /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
+		C76E835625E5554000FD4124 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
+		C76E835B25E67FD300FD4124 /* IconGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerator.swift; sourceTree = "<group>"; };
+		C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Icon+PreviewHelpers.swift"; sourceTree = "<group>"; };
+		C76E835D25E67FD400FD4124 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,7 +269,10 @@
 		C7D6EE4325DC8006002D1B8C /* Appearance */ = {
 			isa = PBXGroup;
 			children = (
-				C7D6EE4425DC8026002D1B8C /* Icons.swift */,
+				C76E835625E5554000FD4124 /* Icons.swift */,
+				C76E835D25E67FD400FD4124 /* Icon.swift */,
+				C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */,
+				C76E835B25E67FD300FD4124 /* IconGenerator.swift */,
 				C761464E25BF482F00FC71AE /* ThemesView.swift */,
 			);
 			path = Appearance;
@@ -356,8 +365,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\n[[ \"$ENABLE_PREVIEWS\" = \"NO\" ]] || exit 0\n[[ \"$MAC_OS_X_VERSION_MAJOR\" -ge \"101500\" ]] || exit 0\n\nTMPFILE=`mktemp /tmp/SwiftUIcon.swift.XXXXXX` || exit 1\ntrap \"rm -f $TMPFILE\" EXIT\n\nif [ -z \"$SCRIPT_INPUT_FILE_0\" ]\nthen\n    echo \"error: You must specify your Icon.swift as the first Input File in the Build Phase.\"\n    exit 1\nfi\n\ncat ${PROJECT_DIR}/${PRODUCT_NAME}/ThemesColours.swift ${SCRIPT_INPUT_FILE_0%/*}/*.swift > $TMPFILE\n\ncat $TMPFILE\n\necho \"dupaaaaaaa\"\necho \"dupaaaaaaa2222222\"\n\n\n\ncp ${PROJECT_DIR}/${PRODUCT_NAME}/Icon/dogschildren.png ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\n\n\nxcrun -sdk macosx swift $TMPFILE\n";
+			shellPath = /opt/homebrew/bin/bash;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\n[[ \"$ENABLE_PREVIEWS\" = \"NO\" ]] || exit 0\n[[ \"$MAC_OS_X_VERSION_MAJOR\" -ge \"101500\" ]] || exit 0\n\nTMPFILE=`mktemp /tmp/SwiftUIcon.swift.XXXXXX` || exit 1\ntrap \"rm -f $TMPFILE\" EXIT\n\nif [ -z \"$SCRIPT_INPUT_FILE_0\" ]\nthen\n    echo \"error: You must specify your Icon.swift as the first Input File in the Build Phase.\"\n    exit 1\nfi\n\ncat ${PROJECT_DIR}/${PRODUCT_NAME}/ThemesColours.swift ${PROJECT_DIR}/${PRODUCT_NAME}/Settings/Appearance/Icon.swift ${PROJECT_DIR}/${PRODUCT_NAME}/Settings/Appearance/Icon+PreviewHelpers.swift ${PROJECT_DIR}/${PRODUCT_NAME}/Settings/Appearance/IconGenerator.swift ${SCRIPT_INPUT_FILE_0%/*}/*.swift > $TMPFILE\n\n#cat $TMPFILE\n\ncp ${PROJECT_DIR}/${PRODUCT_NAME}/Icon/dogschildren.png ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\n\n\nxcrun -sdk macosx swift $TMPFILE\n\ncp ${PROJECT_DIR}/${PRODUCT_NAME}/Icon/AppIcon.appiconset/* ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\n\n#ls ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\n\n\n#create an array with generated\ncd ${PROJECT_DIR}/${PRODUCT_NAME}/Icon/AppIcon.appiconset/\n\n\n\n\nreadarray -d '' themesNames < <(find . -maxdepth 1 -type f ! -name \"*-*\" -print0)\n\n\n\n\nfor i in ${!themesNames[@]}; do\n    themesNames[i]=\"${themesNames[i]//\".png\"/\"\"}\"\n    themesNames[i]=\"${themesNames[i]//\"./\"/\"\"}\"\ndone\n\necho \"------------------\"\necho ${themesNames[1]}\necho \"------------------\"\n\nfor i in \"${themesNames[@]}\"\ndo\n    echo $i\n    \n    /usr/libexec/PlistBuddy -c \"Add :CFBundleIcons~ipad:CFBundleAlternateIcons:'$i':CFBundleIconFiles array\" ${PROJECT_DIR}/${PRODUCT_NAME}/info.plist\n    \n    /usr/libexec/PlistBuddy -c \"Add :CFBundleIcons~ipad:CFBundleAlternateIcons:'$i':CFBundleIconFiles:0 String '$i'\" ${PROJECT_DIR}/${PRODUCT_NAME}/info.plist\n    \ndone\n\n\n#echo \"Add :CFBundleIcons~ipad:CFBundleAlternateIcons:${themesNames[0]} dict\"\n\n#remove generated icons so that in case of theme removal we have a fresh set of icons\nrm -r ${PROJECT_DIR}/${PRODUCT_NAME}/Icon/AppIcon.appiconset/\n\n#/usr/libexec/PlistBuddy -c \"Delete :CFBundleIcons~ipad\"\n\n\n\n#/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons~ipad:CFBundleAlternateIcons:'Test dwa':CFBundleIconFiles array\" ${PROJECT_DIR}/${PRODUCT_NAME}/info.plist\n\n#/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons~ipad:CFBundleAlternateIcons:'Test dwa':CFBundleIconFiles:0 string DUPA\" ${PROJECT_DIR}/${PRODUCT_NAME}/info.plist\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -371,6 +380,7 @@
 				52DC9E962530B002007BA478 /* ActivityView.swift in Sources */,
 				52F52A792533574700541E8A /* ModulesAndShelvesView.swift in Sources */,
 				52DC9E9F2530C5F5007BA478 /* AddEditActivityView.swift in Sources */,
+				C76E835725E5554000FD4124 /* Icons.swift in Sources */,
 				523E27D7253621E000CDCC7B /* ItemsGridView.swift in Sources */,
 				52F1149A253EFCE1009220A9 /* ModulesSet+CoreDataProperties.swift in Sources */,
 				52DC9E8925308F7C007BA478 /* Item+CoreDataProperties.swift in Sources */,
@@ -378,15 +388,16 @@
 				C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */,
 				5247A6482542184B00B229F2 /* BagContentSetsListView.swift in Sources */,
 				52F52A8A2534576E00541E8A /* ItemsListView.swift in Sources */,
+				C76E835F25E67FD400FD4124 /* Icon+PreviewHelpers.swift in Sources */,
 				C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */,
 				52820ABD25777A89003D8B1C /* ButtonsStyling.swift in Sources */,
 				C710332025CB2FA900A068C9 /* Preferences.swift in Sources */,
 				52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */,
 				52DC9E8825308F7C007BA478 /* Item+CoreDataClass.swift in Sources */,
 				C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */,
-				C7D6EE4525DC8026002D1B8C /* Icons.swift in Sources */,
 				52F114A225420276009220A9 /* SaveBagContentSetView.swift in Sources */,
 				525B558F256E8F7300EE1F05 /* SearchBarView.swift in Sources */,
+				C76E836025E67FD400FD4124 /* IconGenerator.swift in Sources */,
 				52F52A7F2533597000541E8A /* ModulesGridView.swift in Sources */,
 				52F52A63253234E100541E8A /* ProgressBarView.swift in Sources */,
 				52F52A6A2533469800541E8A /* VolumeWeightDurationIndicatorsView.swift in Sources */,
@@ -394,6 +405,7 @@
 				52FFC4B82539AB2000164B06 /* GridItemWrapper.swift in Sources */,
 				52B0C32F252F6C49006F441B /* PPL.xcdatamodeld in Sources */,
 				52B0C32C252F6C49006F441B /* Persistence.swift in Sources */,
+				C76E835E25E67FD400FD4124 /* Icon.swift in Sources */,
 				52F52A8D253457CC00541E8A /* ItemListView.swift in Sources */,
 				52F11498253EFCE1009220A9 /* Module+CoreDataProperties.swift in Sources */,
 				52DC9E8B25308F7C007BA478 /* Activity+CoreDataProperties.swift in Sources */,

@@ -2,43 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleIcons~ipad</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>AppIcon</string>
-			</array>
-			<key>UIPrerenderedIcon</key>
-			<false/>
-		</dict>
-		<key>CFBundleAlternateIcons</key>
-		<dict>
-			<key>dogschildren</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>dogschildren</string>
-				</array>
-			</dict>
-		</dict>
-	</dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
 	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconName</key>
-			<string>AppIcon</string>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>AppIcon</string>
-			</array>
-			<key>UIPrerenderedIcon</key>
-			<false/>
-		</dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
 			<key>Dupa</key>
@@ -49,11 +18,102 @@
 				</array>
 			</dict>
 		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
 	</dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Calm 预言</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Calm 预言</string>
+					<string>Calm 预言</string>
+					<string>Calm 预言</string>
+					<string>Calm 预言</string>
+				</array>
+			</dict>
+			<key>Dark mode</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Dark mode</string>
+					<string>Dark mode</string>
+					<string>Dark mode</string>
+					<string>Dark mode</string>
+				</array>
+			</dict>
+			<key>Disco mode</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Disco mode</string>
+					<string>Disco mode</string>
+					<string>Disco mode</string>
+					<string>Disco mode</string>
+				</array>
+			</dict>
+			<key>Light mode</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Light mode</string>
+					<string>Light mode</string>
+					<string>Light mode</string>
+					<string>Light mode</string>
+				</array>
+			</dict>
+			<key>Monias choice</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Monias choice</string>
+					<string>Monias choice</string>
+					<string>Monias choice</string>
+					<string>Monias choice</string>
+				</array>
+			</dict>
+			<key>Random colors</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Random colors</string>
+					<string>Random colors</string>
+					<string>Random colors</string>
+					<string>Random colors</string>
+				</array>
+			</dict>
+			<key>dogschildren</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>dogschildren</string>
+				</array>
+			</dict>
+		</dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon</string>
+			</array>
+			<key>CFBundleIconName</key>
+			<string>AppIcon</string>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+	</dict>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

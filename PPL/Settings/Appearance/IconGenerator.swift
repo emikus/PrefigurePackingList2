@@ -157,10 +157,10 @@ struct IconSet<Content: View>: Encodable {
         
 
         // encode the manifest
-        let manifest = try JSONEncoder().encode(self)
+//        let manifest = try JSONEncoder().encode(self)
 
         // write the manifest to the `Contents.json` files
-        try manifest.write(to: iconSetUrl.appendingPathComponent("Contents.json"))
+//        try manifest.write(to: iconSetUrl.appendingPathComponent("Contents.json"))
     }
 }
 

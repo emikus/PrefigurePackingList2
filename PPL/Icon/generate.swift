@@ -27,10 +27,9 @@ if deviceFamily.contains("2") {
 
 idioms.insert(.marketing)
 
-print(themes[0].name)
 
 for theme in themes {
-    let set = IconSet(idioms: idioms, view: Icon(), name: theme.name)
+    let set = IconSet(idioms: idioms, view: Icon(themeColours: theme.themeColours), name: theme.name)
     try! set.write(
         to: URL(fileURLWithPath: projectPath)
             .appendingPathComponent(project)

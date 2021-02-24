@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct Icon : View {
+    
+    var themeColours:ThemeColours
 
     var body: some View {
         /// Note: All of these assume a canvas size of 1024.
         let spacing: CGFloat = 80
-        let radius: CGFloat = 135
-        let pillLength: CGFloat = 350
+        let radius: CGFloat = 32
+        let pillLength: CGFloat = 250
         let pillRotation: Angle = .degrees(30)
         let circleOffsetX: CGFloat = 50
         let circleOffsetY: CGFloat = 20
 
-        let velosBackground = Color(red: 90/256, green: 80/256, blue: 5/256)
-        let velosPrimary = Color.white
-        let velosSecondary = Color(red: 0/256, green: 208/256, blue: 55/256)
+        let velosBackground = themeColours.bgMainColour //Color(red: 90/256, green: 80/256, blue: 5/256)
+        let velosPrimary = themeColours.fontMainColour
+        let velosSecondary = themeColours.fontSecondaryColour //Color(red: 0/256, green: 208/256, blue: 55/256)
 
         return IconStack { canvas in
             velosBackground
@@ -60,11 +62,11 @@ struct Icon : View {
 struct Icon_Previews : PreviewProvider {
     static var previews: some View {
         Group {
-            Icon()
+            Icon(themeColours: themes[0].themeColours)
                 .previewIcon()
                 .previewLayout(.sizeThatFits)
 
-            Icon()
+            Icon(themeColours: themes[0].themeColours)
                 .previewHomescreen()
                 .background(
                     LinearGradient(

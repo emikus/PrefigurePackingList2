@@ -16,23 +16,16 @@ struct ThemesView:  View {
     var body: some View {
         VStack(alignment: .leading) {
 //            Icon()
-            Image("dogschildren")
-                .resizable()
-                .scaledToFit()
+//           Image("dogschildren")
+//                .resizable()
+//                .scaledToFit()
+            
+            
+            
             ForEach(themes) { theme in
                 HStack {
                     Button(action: {
-//                        print(self.iconSettings.iconNames)
-//                        print(self.iconSettings.iconNames[1], "dogschildren")
-//                        generateAppIcon()
-                        let index = (themes.firstIndex(where: {$0.name == theme.name})! % 2 == 0) ? 0 : 1
-                        UIApplication.shared.setAlternateIconName(self.iconSettings.iconNames[index]){ error in
-                                                        if let error = error {
-                                                            print(error.localizedDescription)
-                                                        } else {
-                                                            print("Success!")
-                                                        }
-                                                    }
+                        
                         selectedThemeColors.changeColorTheme(theme: theme.themeColours)
                         self.themeName = theme.name
                     }) {
@@ -72,8 +65,32 @@ struct ThemesView:  View {
                         .cornerRadius(5)
                 }
             }
-            
-            
+            Spacer()
+            HStack {
+                
+                
+                
+                ForEach(themes) { theme in
+                    Button(action: {
+                        //                        print(self.iconSettings.iconNames)
+                        //                        print(self.iconSettings.iconNames[1], "dogschildren")
+                        //                        generateAppIcon()
+                        
+                        UIApplication.shared.setAlternateIconName(theme.name){ error in
+                            if let error = error {
+                                print(error.localizedDescription)
+                            } else {
+                                print("Success!")
+                            }
+                        }
+                    }) {
+                        Text(String(theme.name ?? "nil"))
+                        Icon(themeColours: theme.themeColours)
+                    }
+                    
+                    
+                }
+            }
             
             
             

@@ -113,6 +113,21 @@ let themes: [Theme] = [
         )
     ),
     Theme(
+        name: "Monias choice",
+        themeColours: ThemeColours(
+            bgMainColour: Color(hex: "#ada49f"),
+            bgSecondaryColour: Color(hex: "#ff00cc"),
+            fontMainColour: Color(hex: "#0f4476"),
+            fontSecondaryColour: Color(hex: "#666b3a"),
+            elementActiveColour: Color.green,
+            buttonMainColour: Color(hex: "#adab76"),
+            buttonBgColour: Color(hex: "#fd9a7e"),
+            buttonInactiveColour: Color.gray,
+            buttonInactiveBgColour: Color(hex: "#dc6d02"),
+            listHeaderColour: Color(hex: "#dc6d02")
+        )
+    ),
+    Theme(
         name: "Random colors",
         themeColours: ThemeColours(
             bgMainColour: getRandomColor(),
