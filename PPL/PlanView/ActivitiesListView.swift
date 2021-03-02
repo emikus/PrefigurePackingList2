@@ -135,6 +135,7 @@ struct ActivitiesList_Previews: PreviewProvider {
     static var previews: some View {
         ActivitiesListView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(SelectedThemeColors())
         
     }
 }

@@ -115,7 +115,7 @@ let themes: [Theme] = [
     Theme(
         name: "Monias choice",
         themeColours: ThemeColours(
-            bgMainColour: Color(hex: "#ada49f"),
+            bgMainColour: Color.purple,
             bgSecondaryColour: Color(hex: "#ff00cc"),
             fontMainColour: Color(hex: "#0f4476"),
             fontSecondaryColour: Color(hex: "#666b3a"),

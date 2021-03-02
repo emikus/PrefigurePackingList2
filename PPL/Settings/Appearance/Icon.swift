@@ -13,43 +13,46 @@ struct Icon : View {
 
     var body: some View {
         /// Note: All of these assume a canvas size of 1024.
-        let spacing: CGFloat = 80
-        let radius: CGFloat = 32
-        let pillLength: CGFloat = 250
+        let spacing: CGFloat = 90
+        let radius: CGFloat = 132
+        let pillLength: CGFloat = 450
         let pillRotation: Angle = .degrees(30)
         let circleOffsetX: CGFloat = 50
         let circleOffsetY: CGFloat = 20
 
-        let velosBackground = themeColours.bgMainColour //Color(red: 90/256, green: 80/256, blue: 5/256)
-        let velosPrimary = themeColours.fontMainColour
-        let velosSecondary = themeColours.fontSecondaryColour //Color(red: 0/256, green: 208/256, blue: 55/256)
+        let PPLBgMainColour = themeColours.bgMainColour //Color(red: 90/256, green: 80/256, blue: 5/256)
+        let PPLBgSecondaryColour = themeColours.bgSecondaryColour //Color(red: 90/256, green: 80/256, blue: 5/256)
+        let PPLFontMainColour = themeColours.fontMainColour
+        let PPLFontSecondaryColour = themeColours.fontSecondaryColour //Color(red: 0/256, green: 208/256, blue: 55/256)
+        let PPLButtonMainColour = themeColours.buttonMainColour
+        let PPLElementActiveColour = themeColours.elementActiveColour
 
         return IconStack { canvas in
-            velosBackground
+            PPLBgMainColour
                 .edgesIgnoringSafeArea(.all)
 
             HStack(alignment: .center, spacing: canvas[spacing]) {
                 HStack(alignment: .top, spacing: canvas[spacing]) {
                     Circle()
-                        .fill(velosPrimary)
+                        .fill(PPLFontMainColour)
                         .frame(width: canvas[radius], height: canvas[radius])
                         .offset(x: canvas[circleOffsetX], y: canvas[circleOffsetY])
                     RoundedRectangle(cornerRadius: canvas[radius])
-                        .fill(velosPrimary)
+                        .fill(PPLBgSecondaryColour)
                         .frame(width: canvas[radius], height: canvas[pillLength])
                         .rotationEffect(pillRotation)
                 }
                 HStack(alignment: .bottom, spacing: canvas[spacing]) {
                     RoundedRectangle(cornerRadius: canvas[radius])
-                        .fill(velosSecondary)
+                        .fill(PPLFontSecondaryColour)
                         .frame(width: canvas[radius], height: canvas[pillLength])
                         .rotationEffect(pillRotation)
                     RoundedRectangle(cornerRadius: canvas[radius])
-                        .fill(velosSecondary)
+                        .fill(PPLButtonMainColour)
                         .frame(width: canvas[radius], height: canvas[pillLength])
                         .rotationEffect(pillRotation)
                     Circle()
-                        .fill(velosSecondary)
+                        .fill(PPLElementActiveColour)
                         .frame(width: canvas[radius], height: canvas[radius])
                         .offset(x: -canvas[circleOffsetX], y: -canvas[circleOffsetY])
                 }

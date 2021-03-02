@@ -33,6 +33,7 @@ struct ItemsGridView: View {
     @State var isSearchBarVisible:Bool = false
     @State var searchText = ""
     let itemWidth: CGFloat = 110
+    @Binding var scrollToCategoryName: String
     
     
     
@@ -75,7 +76,7 @@ struct ItemsGridView: View {
                 
                 
                 ScrollView {
-                    ScrollViewReader { value in
+                    ScrollViewReader { scrollView in
                         HStack {
                             if self.isSearchBarVisible == true {
                                 SearchBar(text: $searchText)
@@ -102,7 +103,7 @@ struct ItemsGridView: View {
                                 self.foodHidden.toggle()
                             }
                         }
-                        .id(3)
+                        .id("food")
                         
                         if self.foodHidden == false {
                             LazyVGrid(columns: layout, spacing: 15) {
@@ -137,6 +138,7 @@ struct ItemsGridView: View {
                                 self.clothesHidden.toggle()
                             }
                         }
+                        .id("clothes")
                         
                         if self.clothesHidden == false {
                             LazyVGrid(columns: layout, spacing: 15) {
@@ -171,6 +173,13 @@ struct ItemsGridView: View {
                                 self.electricalHidden.toggle()
                             }
                         }
+                        .id("electrical")
+                        .onChange(of: scrollToCategoryName) { newValue in
+                                        print("ItemsGridView: Name changed to \(scrollToCategoryName)!")
+                            withAnimation{
+                                scrollView.scrollTo(scrollToCategoryName, anchor: .top)
+                            }
+                                    }
                         
                         
                         if self.electricalHidden == false {
@@ -194,6 +203,7 @@ struct ItemsGridView: View {
                             .padding(.top, 10.0)
                             
                         }
+                        
                     }
                 }
                 .simultaneousGesture(DragGesture()
@@ -236,10 +246,11 @@ struct ItemsGridView: View {
 struct ItemsGridView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 14.0, *) {
-            ItemsGridView()
+            ItemsGridView(scrollToCategoryName: .constant(""))
                 .previewDevice("iPad Pro (9.7-inch)")
                 .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
                 .environmentObject(Modules())
+                .environmentObject(SelectedThemeColors())
         } else {
             // Fallback on earlier versions
         }

@@ -14,17 +14,21 @@ struct ItemsView: View {
     @State var searchBarVisible:Bool = false
     @State var startPos : CGPoint = .zero
     @State var isSwipping = true
+    @Binding var scrollToCategoryName: String
     
     var body: some View {
         VStack {
             if self.itemsViewType == "list" {
                 ItemsListView()
             } else {
-                ItemsGridView()
+                ItemsGridView(scrollToCategoryName: $scrollToCategoryName)
             }
         }
-            .padding(.all, 5.0)
+        .padding(.all, 5.0)
         .background(selectedThemeColors.bgMainColour)
+        .onChange(of: scrollToCategoryName) { newValue in
+                        print("ItemsView Name changed to \(scrollToCategoryName)!")
+                    }
             
             
     }
@@ -32,6 +36,7 @@ struct ItemsView: View {
 
 struct ItemsView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemsView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ItemsView(scrollToCategoryName: .constant(""))
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

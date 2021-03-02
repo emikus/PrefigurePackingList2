@@ -59,14 +59,12 @@ struct ActivityView: View {
                         .font(.footnote)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 25.0)
-                        
                     }
                 }
             }
-            
         }
         .foregroundColor(selectedThemeColors.fontMainColour)
-         .background(selectedThemeColors.bgMainColour)
+        .background(selectedThemeColors.bgMainColour)
         .opacity(0.8)
         .contentShape(Rectangle())
         .contextMenu {
@@ -77,7 +75,6 @@ struct ActivityView: View {
                 Image(systemName: self.activity.isPinned ? "pin.slash" : "pin")
                     .font(.system(size: 16, weight: .ultraLight))
             }
-
             
             Button(action: {
                 self.showAddEditActivityView.toggle()
@@ -105,9 +102,7 @@ struct ActivityView: View {
             AddEditActivityView(activity: self.activity)
                         
         }
-        
     }
-    
 }
 
 struct ActivityView_Previews: PreviewProvider {

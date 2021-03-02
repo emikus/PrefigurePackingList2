@@ -11,6 +11,12 @@ struct ThemesView:  View {
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @EnvironmentObject var iconSettings: IconNames
     @AppStorage("themeName") var themeName: String?
+    @State var alternateIconName:String = ""
+    @State var appIconByUser: Bool = false
+    
+    let layout = [
+        GridItem(.adaptive(minimum: 105, maximum: 105))
+    ]
     
     
     var body: some View {
@@ -28,6 +34,16 @@ struct ThemesView:  View {
                         
                         selectedThemeColors.changeColorTheme(theme: theme.themeColours)
                         self.themeName = theme.name
+                        
+                        if (self.appIconByUser == false) {
+                            UIApplication.shared.setAlternateIconName(theme.name){ error in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                            
+                            alternateIconName = UIApplication.shared.alternateIconName ?? "nil"
+                        }
                     }) {
                         Text(theme.name)
                         .foregroundColor(theme.themeColours.fontMainColour)
@@ -65,36 +81,38 @@ struct ThemesView:  View {
                         .cornerRadius(5)
                 }
             }
-            Spacer()
-            HStack {
-                
-                
-                
-                ForEach(themes) { theme in
-                    Button(action: {
-                        //                        print(self.iconSettings.iconNames)
-                        //                        print(self.iconSettings.iconNames[1], "dogschildren")
-                        //                        generateAppIcon()
-                        
-                        UIApplication.shared.setAlternateIconName(theme.name){ error in
-                            if let error = error {
-                                print(error.localizedDescription)
-                            } else {
-                                print("Success!")
+            Divider()
+            Toggle(
+                "I want to be as unique and special as 95% of my generation and choose the icon myself"
+                , isOn: $appIconByUser.animation(.spring()))
+            
+              
+            if (appIconByUser == true) {
+                Text("Choose app's icon because your distinctive and special soul and mind really deserve it!!!")
+                Text(UIApplication.shared.alternateIconName ?? "nil")
+                LazyVGrid(columns: layout, spacing: 5) {
+                    ForEach(themes) { theme in
+                        Button(action: {
+                            UIApplication.shared.setAlternateIconName(theme.name){ error in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                }
+                                alternateIconName = UIApplication.shared.alternateIconName ?? "nil"
                             }
+                        }) {
+                            
+                            Icon(themeColours: theme.themeColours)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(theme.themeColours.fontMainColour, lineWidth: theme.name == alternateIconName
+ ? 10 : 0)
+                                ).clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                                
                         }
-                    }) {
-                        Text(String(theme.name ?? "nil"))
-                        Icon(themeColours: theme.themeColours)
                     }
-                    
-                    
                 }
+                .transition(.slide)
             }
-            
-            
-            
-            
         }
     }
 }

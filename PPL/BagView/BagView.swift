@@ -33,17 +33,37 @@ struct BagView: View {
     @State var showAddBagContentSet = false
     @State var showBagContentSets = false
     @State var showKeyboardShortcutsView = false
+    @State var scrollToCategoryName:String = ""
     
     var body: some View {
         NavigationView {
+            VStack {
             Text("Bag sidebar")
+            Button(action: {
+                scrollToCategoryName = "food"
+            }) {
+                Text("DUPA!!!")
+            }
+                
+                Button(action: {
+                    scrollToCategoryName = "clothes"
+                }) {
+                    Text("DUPA!!!")
+                }
+                
+                Button(action: {
+                    scrollToCategoryName = "electrical"
+                }) {
+                    Text("DUPA!!!")
+                }
+            }
             VStack {
                 ModulesAndShelvesView()
                 VolumeWeightDurationIndicatorsView()
                     .zIndex(800)
                 
                 
-                ItemsView()
+                ItemsView(scrollToCategoryName: $scrollToCategoryName)
                 Button(action: {
                     self.showKeyboardShortcutsView = true
                 }){
@@ -59,6 +79,9 @@ struct BagView: View {
             }
             .background(selectedThemeColors.bgMainColour)
             .navigationBarTitle("Pack", displayMode: .inline)
+            .onChange(of: scrollToCategoryName) { newValue in
+                            print("BAG VIEW Name changed to \(scrollToCategoryName)!")
+                        }
         }
     }
 }
@@ -67,5 +90,6 @@ struct BagView_Previews: PreviewProvider {
     static var previews: some View {
         BagView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(SelectedThemeColors())
     }
 }
