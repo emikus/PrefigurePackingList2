@@ -32,7 +32,11 @@ struct ContentView: View {
     var body: some View {
     GeometryReader { geo in
      TabView {
-        BagView()
+        NavigationView {
+            Text("12345")
+            Text("987654")
+            Text("asdfasdf")
+        }
             .tabItem {
                 Image(systemName: "plus")
                 Text("🗄 Pack")

@@ -26,11 +26,6 @@ struct ItemsView: View {
         }
         .padding(.all, 5.0)
         .background(selectedThemeColors.bgMainColour)
-        .onChange(of: scrollToCategoryName) { newValue in
-                        print("ItemsView Name changed to \(scrollToCategoryName)!")
-                    }
-            
-            
     }
 }
 

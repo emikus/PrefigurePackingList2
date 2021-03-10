@@ -50,6 +50,7 @@
 		52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F52A9325345E9C00541E8A /* DataFacade.swift */; };
 		52FFC4B82539AB2000164B06 /* GridItemWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FFC4B72539AB2000164B06 /* GridItemWrapper.swift */; };
 		C710332025CB2FA900A068C9 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710331F25CB2FA900A068C9 /* Preferences.swift */; };
+		C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710C3DE25F575BB004DA52C /* TestingPlayground.swift */; };
 		C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */; };
 		C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */; };
 		C72CC87425DC75A00072D573 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = C72CC7ED25DC4A350072D573 /* Icon */; };
@@ -110,6 +111,7 @@
 		52F52A9325345E9C00541E8A /* DataFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFacade.swift; sourceTree = "<group>"; };
 		52FFC4B72539AB2000164B06 /* GridItemWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridItemWrapper.swift; sourceTree = "<group>"; };
 		C710331F25CB2FA900A068C9 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		C710C3DE25F575BB004DA52C /* TestingPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestingPlayground.swift; path = PPL/TestingPlayground.swift; sourceTree = SOURCE_ROOT; };
 		C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemsGridView.swift; sourceTree = "<group>"; };
 		C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemToBuyGridView.swift; sourceTree = "<group>"; };
 		C72CC7ED25DC4A350072D573 /* Icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icon; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				52DC9E952530B002007BA478 /* ActivityView.swift */,
 				52DC9E8E2530AC53007BA478 /* PanelsView.swift */,
 				52DC9E922530AD18007BA478 /* PlanView.swift */,
+				C710C3DE25F575BB004DA52C /* TestingPlayground.swift */,
 				52DC9E982530C191007BA478 /* ActivitiesListView.swift */,
 				52DC9E9E2530C5F5007BA478 /* AddEditActivityView.swift */,
 			);
@@ -423,6 +426,7 @@
 				C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */,
 				C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */,
 				52B0C323252F6C46006F441B /* PPLApp.swift in Sources */,
+				C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */,
 				52F52A8625344D8000541E8A /* ItemsView.swift in Sources */,
 				523E27DE253630D800CDCC7B /* ItemGridView.swift in Sources */,
 				52F11497253EFCE1009220A9 /* Module+CoreDataClass.swift in Sources */,

@@ -127,6 +127,9 @@ struct AddEditActivityView: View {
                         newActivity.id = UUID()
                         newActivity.name = self.name
                         newActivity.symbol = self.symbol
+
+
+
                         newActivity.duration = Int16(self.duration)!
 //                        newActivity.items = self.activityItems
                         newActivity.category = self.category

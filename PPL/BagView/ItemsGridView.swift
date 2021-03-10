@@ -26,6 +26,11 @@ struct ItemsGridView: View {
     @EnvironmentObject var modules: Modules
     @State var showAddEditItemView = false
     @State var foodHidden: Bool = false
+    @State var categoriesSectionsVisibility:[String:Bool] = [
+        "clothes": true,
+        "electrical": true,
+        "food": true
+    ]
     @State var clothesHidden: Bool = false
     @State var electricalHidden: Bool = false
     @State var referenceFoodArray: [GridItemWrapper] = []
@@ -91,56 +96,24 @@ struct ItemsGridView: View {
                             .padding([.trailing], 18)
                             .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])
                         }
-                        HStack {
-                            Text("FOOD")
-                            Image(systemName:self.foodHidden == true ? "chevron.down" : "chevron.up")
-                            Spacer()
-                        }
-                        .foregroundColor(selectedThemeColors.fontMainColour)
-                        .padding([.top,.leading], 15)
-                        .onTapGesture {
-                            withAnimation{
-                                self.foodHidden.toggle()
-                            }
-                        }
-                        .id("food")
                         
-                        if self.foodHidden == false {
-                            LazyVGrid(columns: layout, spacing: 15) {
-                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "food"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
-                                    
-                                    if gridItemWrapper.id < self.items.filter({$0.itemCategory == "food"}).count  {
-                                        ItemGridView(item: gridItemWrapper.item)
-                                    } else {
-                                        if gridItemWrapper.id == self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "food"})).count - 1 {
-                                            BuyItemsGridView()
-                                            
-                                        } else {
-                                            ItemToBuyGridView()
-                                        }
-                                        
-                                    }
-                                }
-                            }
-                            .padding([.leading, .trailing], 10.0)
-                            .padding(.top, 10.0)
-                        }
+                        
                         
                         HStack {
                             Text("CLOTHES")
-                            Image(systemName:self.clothesHidden == true ? "chevron.down" : "chevron.up")
+                            Image(systemName:self.categoriesSectionsVisibility["clothes"] == false ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
                         .foregroundColor(selectedThemeColors.fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
-                                self.clothesHidden.toggle()
+                                self.categoriesSectionsVisibility["clothes"]?.toggle()
                             }
                         }
                         .id("clothes")
                         
-                        if self.clothesHidden == false {
+                        if self.categoriesSectionsVisibility["clothes"] == !false {
                             LazyVGrid(columns: layout, spacing: 15) {
                                 ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "clothes"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
                                     
@@ -163,14 +136,14 @@ struct ItemsGridView: View {
                         
                         HStack {
                             Text("ELECTRICAL")
-                            Image(systemName:self.electricalHidden == true ? "chevron.down" : "chevron.up")
+                            Image(systemName:self.categoriesSectionsVisibility["electrical"] == false ? "chevron.down" : "chevron.up")
                             Spacer()
                         }
                         .foregroundColor(selectedThemeColors.fontMainColour)
                         .padding([.top,.leading], 15)
                         .onTapGesture {
                             withAnimation{
-                                self.electricalHidden.toggle()
+                                self.categoriesSectionsVisibility["electrical"]?.toggle()
                             }
                         }
                         .id("electrical")
@@ -178,11 +151,12 @@ struct ItemsGridView: View {
                                         print("ItemsGridView: Name changed to \(scrollToCategoryName)!")
                             withAnimation{
                                 scrollView.scrollTo(scrollToCategoryName, anchor: .top)
+                                self.categoriesSectionsVisibility[scrollToCategoryName] = true
                             }
-                                    }
+                        }
                         
                         
-                        if self.electricalHidden == false {
+                        if self.categoriesSectionsVisibility["electrical"] == true {
                             LazyVGrid(columns: layout, spacing: 15) {
                                 ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "electrical"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
                                     
@@ -202,6 +176,41 @@ struct ItemsGridView: View {
                             .padding([.leading, .trailing], 10.0)
                             .padding(.top, 10.0)
                             
+                        }
+                        
+                        HStack {
+                            Text("FOOD")
+                            Image(systemName:self.categoriesSectionsVisibility["food"] == false ? "chevron.down" : "chevron.up")
+                            Spacer()
+                        }
+                        .foregroundColor(selectedThemeColors.fontMainColour)
+                        .padding([.top,.leading], 15)
+                        .onTapGesture {
+                            withAnimation{
+                                self.categoriesSectionsVisibility["food"]?.toggle()
+                            }
+                        }
+                        .id("food")
+                        
+                        if self.categoriesSectionsVisibility["food"] == true {
+                            LazyVGrid(columns: layout, spacing: 15) {
+                                ForEach(self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "food"})).filter({searchFilter(item: $0.item)})) { gridItemWrapper in
+                                    
+                                    if gridItemWrapper.id < self.items.filter({$0.itemCategory == "food"}).count  {
+                                        ItemGridView(item: gridItemWrapper.item)
+                                    } else {
+                                        if gridItemWrapper.id == self.getItemsToBuyArray(itemsArray: self.items.filter({$0.itemCategory == "food"})).count - 1 {
+                                            BuyItemsGridView()
+                                            
+                                        } else {
+                                            ItemToBuyGridView()
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                            .padding([.leading, .trailing], 10.0)
+                            .padding(.top, 10.0)
                         }
                         
                     }

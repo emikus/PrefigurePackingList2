@@ -34,29 +34,55 @@ struct BagView: View {
     @State var showBagContentSets = false
     @State var showKeyboardShortcutsView = false
     @State var scrollToCategoryName:String = ""
+    @State var itemsCategories: [String] = []
     
     var body: some View {
         NavigationView {
-            VStack {
-            Text("Bag sidebar")
-            Button(action: {
-                scrollToCategoryName = "food"
-            }) {
-                Text("DUPA!!!")
-            }
-                
-                Button(action: {
-                    scrollToCategoryName = "clothes"
-                }) {
-                    Text("DUPA!!!")
+            List {
+                Section(header: HStack {
+                    Text("Scroll to:")
+                    .foregroundColor(selectedThemeColors.listHeaderColour)
+                    .padding()
+                        
+                    
+                    Spacer()
                 }
-                
-                Button(action: {
-                    scrollToCategoryName = "electrical"
-                }) {
-                    Text("DUPA!!!")
+                .listRowInsets(EdgeInsets(
+                top: 0,
+                leading: 0,
+                bottom: 0,
+                trailing: 0))) {
+                    ForEach(itemsCategories, id: \.self) {itemCategory in
+                            Text(itemCategory.uppercased())
+                                .onTapGesture {
+                                    scrollToCategoryName = itemCategory
+                                }
+                    }
                 }
             }
+            .listStyle(GroupedListStyle())
+            
+            
+//            VStack {
+//            Text("Bag sidebar")
+//            Button(action: {
+//                scrollToCategoryName = "food"
+//            }) {
+//                Text("DUPA!!!")
+//            }
+//
+//                Button(action: {
+//                    scrollToCategoryName = "clothes"
+//                }) {
+//                    Text("DUPA!!!")
+//                }
+//
+//                Button(action: {
+//                    scrollToCategoryName = "electrical"
+//                }) {
+//                    Text("DUPA!!!")
+//                }
+//            }
             VStack {
                 ModulesAndShelvesView()
                 VolumeWeightDurationIndicatorsView()
@@ -82,6 +108,11 @@ struct BagView: View {
             .onChange(of: scrollToCategoryName) { newValue in
                             print("BAG VIEW Name changed to \(scrollToCategoryName)!")
                         }
+        }
+        .onAppear{
+            let itemsCategories = self.items.compactMap { $0.itemCategory }
+            print (Set(itemsCategories))
+            self.itemsCategories = Array(Set(itemsCategories)).sorted {$0 < $1}
         }
     }
 }

@@ -24,6 +24,8 @@ struct ActivitiesListView: View {
     //debug only END
     @State private var expandedActivityId: UUID = UUID()
     @State var showAddEditActivityView = false
+    @Binding var scrollToCategoryName: String
+    
     func getActivitiesDuration () -> Int {
         var allActivitiesDuration = 0
         for activity in self.activities.filter({$0.isSelected==true}) {
@@ -42,9 +44,7 @@ struct ActivitiesListView: View {
         return itemsInBagVolume
     }
     
-    init() {
-        UITableView.appearance().separatorColor = .clear
-    }
+//    .co
 
     var body: some View {
             HStack {
@@ -57,74 +57,83 @@ struct ActivitiesListView: View {
                         Text("Add activity")
                     }
                     .keyboardShortcut(KeyEquivalent("n"), modifiers: .command)
-
-                    List {
-//                        Section(header:
-//                            Text("Favourite activities".uppercased())
-//                                
-//                                .foregroundColor(.orange)) {
-//                                    ForEach(self.activities.activitiesPinned) { suggestedActivity in
-//                                        ActivityView(activity: suggestedActivity, expandedActivityId: self.$expandedActivityId)
-//                                        .navigationBarBackButtonHidden(true)
-//                                            .animation(.easeInOut(duration: 0.5))
-//                                }
-//                                .listRowBackground(Color.black)
-//                                
-//                        }
-                        
-//                        Section(header: HStack{
-//                                    Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
-//                                .foregroundColor(listHeaderColour)
-//                                .padding()
-//
-//                                Spacer()
-//                        }
-//                        .background(bgMainColour)
-//                        .listRowInsets(EdgeInsets(
-//                                top: 0,
-//                                leading: 0,
-//                                bottom: 0,
-//                                trailing: 0))) {
-                        
-                        
-                        
-                        
-                        ForEach(activitiesCategories, id: \.self) {category in
-                            Section(header: HStack {
-                                Text(category.uppercased())
-                                .foregroundColor(selectedThemeColors.listHeaderColour)
-                                .padding()
-                                
-                                Spacer()
-                            }
-                            .background(selectedThemeColors.bgMainColour)
-                            .listRowInsets(EdgeInsets(
-                            top: 0,
-                            leading: 0,
-                            bottom: 0,
-                            trailing: 0))
+                    ScrollViewReader { scrollView in
+                        List {
+                            //                        Section(header:
+                            //                            Text("Favourite activities".uppercased())
+                            //
+                            //                                .foregroundColor(.orange)) {
+                            //                                    ForEach(self.activities.activitiesPinned) { suggestedActivity in
+                            //                                        ActivityView(activity: suggestedActivity, expandedActivityId: self.$expandedActivityId)
+                            //                                        .navigationBarBackButtonHidden(true)
+                            //                                            .animation(.easeInOut(duration: 0.5))
+                            //                                }
+                            //                                .listRowBackground(Color.black)
+                            //
+                            //                        }
+                            
+                            //                        Section(header: HStack{
+                            //                                    Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
+                            //                                .foregroundColor(listHeaderColour)
+                            //                                .padding()
+                            //
+                            //                                Spacer()
+                            //                        }
+                            //                        .background(bgMainColour)
+                            //                        .listRowInsets(EdgeInsets(
+                            //                                top: 0,
+                            //                                leading: 0,
+                            //                                bottom: 0,
+                            //                                trailing: 0))) {
+                            
+                            
+                            
+                            
+                            ForEach(activitiesCategories, id: \.self) {category in
+                                Section(header: HStack {
+                                    Text(category.uppercased())
+                                        .foregroundColor(selectedThemeColors.listHeaderColour)
+                                        .padding()
+                                    
+                                    Spacer()
+                                }
+                                .background(selectedThemeColors.bgMainColour)
+                                .listRowInsets(EdgeInsets(
+                                                top: 0,
+                                                leading: 0,
+                                                bottom: 0,
+                                                trailing: 0))
+                                .id(category)
                                 ) {
                                     ForEach(self.activities.filter {$0.category == category}) { activity in
                                         ActivityView(activity: activity, expandedActivityId: self.$expandedActivityId)
                                             .animation(.linear(duration: 0.5))
                                     }
-                                .listRowBackground(selectedThemeColors.bgMainColour)
+                                    .listRowBackground(selectedThemeColors.bgMainColour)
+                                }
+                            }
+                        }
+                        .listStyle(GroupedListStyle())
+                        .animation(.linear(duration: 0.3))
+                        .onChange(of: scrollToCategoryName) { newValue in
+                            print("ActivitiesListView: Name changed to \(scrollToCategoryName)!")
+                            withAnimation{
+                                scrollView.scrollTo(scrollToCategoryName, anchor: .top)
                             }
                         }
                     }
-                    .listStyle(GroupedListStyle())
-                    .animation(.linear(duration: 0.3))
                 }
                 .sheet(isPresented: self.$showAddEditActivityView) {
                     AddEditActivityView()
                         .environment(\.managedObjectContext, self.viewContext)
+                        .environmentObject(self.selectedThemeColors)
                                 
                 }
             }
             .onAppear {
                 self.getActivitiesDuration()
                 self.itemsInBagVolume()
-    }
+            }
     
     }
     
@@ -133,7 +142,7 @@ struct ActivitiesListView: View {
 
 struct ActivitiesList_Previews: PreviewProvider {
     static var previews: some View {
-        ActivitiesListView()
+        ActivitiesListView(scrollToCategoryName: .constant(""))
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(SelectedThemeColors())
         
