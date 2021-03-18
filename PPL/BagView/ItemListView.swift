@@ -163,6 +163,9 @@ struct ItemListView: View {
         }
         .sheet(isPresented: self.$showAddEditItemView) {
             AddEditItem(item: self.item)
+                .environment(\.managedObjectContext, self.viewContext)
+                .environmentObject(self.selectedThemeColors)
+                .environmentObject(self.dataFacade)
         }
     }
 }
@@ -177,5 +180,6 @@ struct ItemListView_Previews: PreviewProvider {
         ItemListView(item: item)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
+            .environmentObject(SelectedThemeColors())
     }
 }

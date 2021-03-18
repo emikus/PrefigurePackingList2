@@ -20,10 +20,16 @@ struct AddEditItem: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.name, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
+        animation: .default)
+    private var tags: FetchedResults<Tag>
+    
     @EnvironmentObject var modules: Modules
     var item:Item?
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var dataFacade: DataFacade
+//    @EnvironmentObject var dataFacade: DataFacade
     @State private var name:String = ""
     @State private var weight:String = ""
     @State private var volume:String = ""
@@ -35,6 +41,38 @@ struct AddEditItem: View {
     @State private var itemActivities:[Activity] = [Activity]()
     @State private var allModulesSymbols = [""]
     @State private var isPinned = false
+    @State private var itemTags = ""
+    @State private var isExpanded: Bool = false
+    
+    func splitTagsStringIntoArray(tagsString: String) -> [String] {
+        return tagsString.components(separatedBy: " ")
+    }
+    
+    func manageTags(itemTags: [String]) -> Void {
+        for tagName in itemTags {
+            let tagExists = tags.contains(where: {$0.name == tagName})
+            
+            if !tagExists {
+                let newTag = Tag(context: viewContext)
+                newTag.name = tagName
+                try? viewContext.save()
+            }
+        }
+    }
+    
+    func addItemToTags(item: Item,tagsNames: [String]) -> Void {
+        for tagName in tagsNames {
+            let tag = tags.first(where: {$0.name == tagName})
+
+            item.addToTag(tag!)
+        }
+    }
+    
+    func deleteTagsFromItem(item: Item) {
+        for tag in tags {
+            item.removeFromTag(tag)
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -50,6 +88,41 @@ struct AddEditItem: View {
                     TextField("Item's battery consumption", text: $batteryConsumption)
                     .keyboardType(UIKeyboardType.decimalPad)
                     TextField("Item's symbol", text: $symbol)
+                }
+                
+                Section (header: Text("Tags")){
+//                    if self.item != nil {
+//                        ForEach (item!.tagArray, id: \.id) {tag in
+//                            Text(tag.wrappedName)
+//                        }
+//                    }
+//                    ForEach (tags, id: \.id) {tag in
+//                        Text(tag.wrappedName)
+//                    }
+                    TextField("Item's tags", text: $itemTags)
+                    
+//                    TagCloudView(tags: tags.map {$0.name!})
+                    Text(tags.map {$0.name!}.joined(separator: " "))
+                                .lineLimit(isExpanded ? nil : 1)
+                                .overlay(
+                                    GeometryReader { proxy in
+                                        Button(action: {
+                                            
+                                                isExpanded.toggle()
+                                        }) {
+                                            Text(isExpanded ? "Less" : "More")
+                                                .font(.caption).bold()
+                                                .padding(.leading, 8.0)
+                                                .padding(.top, 4.0)
+//                                                .background(Color.white)
+                                        }
+                                        .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottomTrailing)
+                                    }
+                                )
+                            
+//
+                    
+//                    .frame(height: 23)
                 }
 
                 Picker("Item category", selection: $itemCategory) {
@@ -103,6 +176,11 @@ struct AddEditItem: View {
                 trailing:
                 Button(action: {
                     
+                    let tagsNamesArray = splitTagsStringIntoArray(tagsString: self.itemTags)
+                    
+                    print(splitTagsStringIntoArray(tagsString: self.itemTags))
+                    manageTags(itemTags: tagsNamesArray)
+                    
                     if self.item != nil {
                         self.item!.name = self.name
                         self.item!.weight = Int16(self.weight)!
@@ -117,7 +195,10 @@ struct AddEditItem: View {
                         self.item!.refillable = false
                         self.item!.ultraviolet = false
 
-                        self.dataFacade.updateItemActivities(item: self.item!, itemActivities: self.itemActivities)
+                        dataFacade.updateItemActivities(item: self.item!, itemActivities: self.itemActivities)
+                        
+                        deleteTagsFromItem(item: self.item!)
+                        addItemToTags(item: self.item!, tagsNames: tagsNamesArray)
                     } else {
                         let newItem = Item(context: viewContext)
                         newItem.id = UUID()
@@ -133,8 +214,12 @@ struct AddEditItem: View {
                         newItem.electric = false
                         newItem.ultraviolet = false
 
-                        self.dataFacade.addNewItemToActivities(newItem: newItem, itemActivities: self.itemActivities)
+                        dataFacade.addNewItemToActivities(newItem: newItem, itemActivities: self.itemActivities)
+                        addItemToTags(item: newItem, tagsNames: tagsNamesArray)
+//                        addTagsToItem(tagsNames: tagsNamesArray, item: newItem)
                     }
+                    
+                    
                     
                     try? viewContext.save()
 
@@ -150,6 +235,13 @@ struct AddEditItem: View {
         .navigationViewStyle(StackNavigationViewStyle())
 //        // .preferredColorScheme(.light)
         .onAppear(perform: {
+//            for tag in tags {
+//                viewContext.delete(tag)
+//                try? viewContext.save()
+//            }
+            
+            
+            
             if self.item != nil {
                 self.name = self.item!.name!
                 self.weight = String(self.item!.weight)
@@ -161,6 +253,7 @@ struct AddEditItem: View {
                 self.moduleSymbol = self.item!.moduleSymbol ?? ""
                 self.isPinned = self.item!.isPinned
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}
+                self.itemTags = (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
             }
             
             self.allModulesSymbols += Array(modules.standBookModeModulesFrontOccupation.keys)
@@ -192,5 +285,6 @@ struct AddEditItem_Previews: PreviewProvider {
         AddEditItem()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
+            .environmentObject(SelectedThemeColors())
     }
 }

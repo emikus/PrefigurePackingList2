@@ -33,5 +33,7 @@ struct ItemsView_Previews: PreviewProvider {
     static var previews: some View {
         ItemsView(scrollToCategoryName: .constant(""))
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(SelectedThemeColors())
+            .environmentObject(Modules())
     }
 }

@@ -26,6 +26,10 @@ struct BagView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \BagContentSet.date, ascending: false)],
         animation: .default)
     private var bagContentSets: FetchedResults<BagContentSet>
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
+        animation: .default)
+    private var tags: FetchedResults<Tag>
     
     @State var isDragging = false
     @State var upperPanelHeight = 190.0
@@ -35,54 +39,68 @@ struct BagView: View {
     @State var showKeyboardShortcutsView = false
     @State var scrollToCategoryName:String = ""
     @State var itemsCategories: [String] = []
+    @State var selectedTag: Any = "Dupa"
     
     var body: some View {
         NavigationView {
+            //            VStack(alignment: .leading) {
             List {
-                Section(header: HStack {
-                    Text("Scroll to:")
-                    .foregroundColor(selectedThemeColors.listHeaderColour)
-                    .padding()
-                        
-                    
-                    Spacer()
+                Section(header: Text("Tags list")) {
+                    ForEach (tags, id: \.id) {tag in
+                        VStack {
+                            Text(tag.wrappedName)
+                            
+                        }
+                        .onTapGesture {
+                            selectedTag = tag
+                        }
+                    }
                 }
-                .listRowInsets(EdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 0,
-                trailing: 0))) {
-                    ForEach(itemsCategories, id: \.self) {itemCategory in
+            }
+            .listStyle(SidebarListStyle())
+            VStack {
+                List {
+                    Section(header: HStack {
+                        Text("Scroll to:")
+                            .foregroundColor(selectedThemeColors.listHeaderColour)
+                            .padding()
+                    }
+                    .listRowInsets(EdgeInsets(
+                                    top: 0,
+                                    leading: 0,
+                                    bottom: 0,
+                                    trailing: 0))) {
+                        ForEach(itemsCategories, id: \.self) {itemCategory in
                             Text(itemCategory.uppercased())
                                 .onTapGesture {
                                     scrollToCategoryName = itemCategory
                                 }
+                        }
+                    }
+                }
+                .listStyle(SidebarListStyle())
+                //            }
+                
+                
+                if (type(of: selectedTag) == Tag.self) {
+                    List {
+                        Section(header: HStack {
+                            Text(((selectedTag as AnyObject).name!))
+                                .foregroundColor(selectedThemeColors.listHeaderColour)
+                                .padding()
+                        }
+                        .listRowInsets(EdgeInsets(
+                                        top: 0,
+                                        leading: 0,
+                                        bottom: 0,
+                                        trailing: 0))) {
+                            ForEach((selectedTag as! Tag).itemArray, id: \.self) {item in
+                                Text(item.name!.uppercased())
+                            }
+                        }
                     }
                 }
             }
-            .listStyle(GroupedListStyle())
-            
-            
-//            VStack {
-//            Text("Bag sidebar")
-//            Button(action: {
-//                scrollToCategoryName = "food"
-//            }) {
-//                Text("DUPA!!!")
-//            }
-//
-//                Button(action: {
-//                    scrollToCategoryName = "clothes"
-//                }) {
-//                    Text("DUPA!!!")
-//                }
-//
-//                Button(action: {
-//                    scrollToCategoryName = "electrical"
-//                }) {
-//                    Text("DUPA!!!")
-//                }
-//            }
             VStack {
                 ModulesAndShelvesView()
                 VolumeWeightDurationIndicatorsView()
@@ -93,10 +111,10 @@ struct BagView: View {
                 Button(action: {
                     self.showKeyboardShortcutsView = true
                 }){
-                        Text("Keyboard shortcuts")
-                            .font(.system(size: 0))
-                        
-                    }
+                    Text("Keyboard shortcuts")
+                        .font(.system(size: 0))
+                    
+                }
                 .keyboardShortcut(KeyEquivalent(","))
                 .sheet(isPresented: self.$showKeyboardShortcutsView) {
                     KeyboardShortcutsView()
@@ -106,10 +124,13 @@ struct BagView: View {
             .background(selectedThemeColors.bgMainColour)
             .navigationBarTitle("Pack", displayMode: .inline)
             .onChange(of: scrollToCategoryName) { newValue in
-                            print("BAG VIEW Name changed to \(scrollToCategoryName)!")
-                        }
+                print("BAG VIEW Name changed to \(scrollToCategoryName)!")
+            }
+            
         }
         .onAppear{
+            
+            print (type(of: selectedTag))
             let itemsCategories = self.items.compactMap { $0.itemCategory }
             print (Set(itemsCategories))
             self.itemsCategories = Array(Set(itemsCategories)).sorted {$0 < $1}
@@ -122,5 +143,6 @@ struct BagView_Previews: PreviewProvider {
         BagView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(SelectedThemeColors())
+            .environmentObject(Modules())
     }
 }

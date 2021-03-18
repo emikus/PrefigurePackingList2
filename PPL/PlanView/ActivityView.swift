@@ -100,6 +100,8 @@ struct ActivityView: View {
         }
         .sheet(isPresented: self.$showAddEditActivityView) {
             AddEditActivityView(activity: self.activity)
+            .environment(\.managedObjectContext, self.viewContext)
+            .environmentObject(self.selectedThemeColors)
                         
         }
     }

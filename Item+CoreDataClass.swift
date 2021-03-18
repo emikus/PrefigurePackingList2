@@ -32,6 +32,14 @@ extension Item {
         return Int(weight)
     }
     
+    public var tagArray: [Tag] {
+        let set = tag as? Set<Tag> ?? []
+        
+        return set.sorted {
+            $0.name! < $1.name!
+        }
+    }
+    
     
 }
 
@@ -54,7 +62,7 @@ extension Item: NSItemProviderReading {
         item.symbol = components[9].trimmingCharacters(in: .whitespaces)
         item.volume = Int16(components[10])!
         item.weight = Int16(components[11])!
-        item.origin = []
+//        item.origin = []
 print("JDJKLJKLJKLJKLJKLJKL")
         item.id = UUID(uuidString: components[0])!
         return item

@@ -41,6 +41,11 @@ struct PersistenceController {
             newActivity.symbol = ":)"
         }
         
+        for i in 0..<5 {
+            let newActivity = Tag(context: viewContext)
+            newActivity.name = "#tag " + String(i)
+        }
+        
         // test bag content set
         let newBagContentSet = BagContentSet(context: viewContext)
         newBagContentSet.date = Date()
@@ -62,6 +67,11 @@ struct PersistenceController {
         let newModule = Module(context: viewContext)
         newModule.item = newItem
         // test module END
+        
+        for i in 0..<15 {
+            let newTag = Tag(context: viewContext)
+            newTag.name = "#testowyTag" + String(i)
+        }
         
         do {
             try viewContext.save()

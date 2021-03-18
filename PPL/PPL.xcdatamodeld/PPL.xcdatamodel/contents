@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20D91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Activity" representedClassName="Activity" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="duration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -8,7 +8,8 @@
         <attribute name="isSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="symbol" optional="YES" attributeType="String"/>
-        <relationship name="item" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="origin" inverseEntity="Item"/>
+        <relationship name="item" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="activity" inverseEntity="Item"/>
+        <relationship name="tag" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="activity" inverseEntity="Tag"/>
     </entity>
     <entity name="BagContentSet" representedClassName="BagContentSet" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -32,7 +33,8 @@
         <attribute name="ultraviolet" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="volume" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="origin" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="item" inverseEntity="Activity"/>
+        <relationship name="activity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="item" inverseEntity="Activity"/>
+        <relationship name="tag" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="item" inverseEntity="Tag"/>
     </entity>
     <entity name="Module" representedClassName="Module" syncable="YES">
         <attribute name="symbol" optional="YES" attributeType="String"/>
@@ -42,16 +44,17 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="module" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Module"/>
     </entity>
-    <entity name="Tag" representedClassName="Tag" syncable="YES" codeGenerationType="class">
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify"/>
+        <relationship name="activity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="tag" inverseEntity="Activity"/>
+        <relationship name="item" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="tag" inverseEntity="Item"/>
     </entity>
     <elements>
-        <element name="Activity" positionX="-18" positionY="108" width="128" height="163"/>
-        <element name="BagContentSet" positionX="-9" positionY="135" width="128" height="103"/>
-        <element name="Item" positionX="-45" positionY="0" width="128" height="269"/>
-        <element name="Module" positionX="-27" positionY="117" width="128" height="73"/>
-        <element name="ModulesSet" positionX="-27" positionY="126" width="128" height="73"/>
-        <element name="Tag" positionX="-27" positionY="126" width="128" height="59"/>
+        <element name="Activity" positionX="109.2578125" positionY="-60.25" width="128" height="178"/>
+        <element name="BagContentSet" positionX="52.5625" positionY="319.625" width="128" height="103"/>
+        <element name="Item" positionX="-45" positionY="0" width="128" height="298"/>
+        <element name="Module" positionX="-208.69921875" positionY="-72.56640625" width="128" height="73"/>
+        <element name="ModulesSet" positionX="-370.5" positionY="36.75" width="128" height="73"/>
+        <element name="Tag" positionX="-62.48828125" positionY="-273.3125" width="128" height="88"/>
     </elements>
 </model>

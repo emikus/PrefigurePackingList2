@@ -2,7 +2,7 @@
 //  Activity+CoreDataProperties.swift
 //  PPL
 //
-//  Created by Macbook Pro on 30/10/2020.
+//  Created by Michal Jendrzejewski on 18/03/2021.
 //
 //
 
@@ -19,11 +19,12 @@ extension Activity {
     @NSManaged public var category: String?
     @NSManaged public var duration: Int16
     @NSManaged public var id: UUID?
+    @NSManaged public var isPinned: Bool
     @NSManaged public var isSelected: Bool
     @NSManaged public var name: String?
     @NSManaged public var symbol: String?
-    @NSManaged public var isPinned: Bool
     @NSManaged public var item: NSSet?
+    @NSManaged public var tag: NSSet?
 
 }
 
@@ -41,6 +42,23 @@ extension Activity {
 
     @objc(removeItem:)
     @NSManaged public func removeFromItem(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for tag
+extension Activity {
+
+    @objc(addTagObject:)
+    @NSManaged public func addToTag(_ value: Tag)
+
+    @objc(removeTagObject:)
+    @NSManaged public func removeFromTag(_ value: Tag)
+
+    @objc(addTag:)
+    @NSManaged public func addToTag(_ values: NSSet)
+
+    @objc(removeTag:)
+    @NSManaged public func removeFromTag(_ values: NSSet)
 
 }
 

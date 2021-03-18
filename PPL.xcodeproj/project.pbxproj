@@ -63,6 +63,8 @@
 		C76E835E25E67FD400FD4124 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835D25E67FD400FD4124 /* Icon.swift */; };
 		C76E835F25E67FD400FD4124 /* Icon+PreviewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */; };
 		C76E836025E67FD400FD4124 /* IconGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835B25E67FD300FD4124 /* IconGenerator.swift */; };
+		C7921D5F25F977BD00A923B0 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */; };
+		C7921D6025F977BD00A923B0 /* Tag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +126,8 @@
 		C76E835B25E67FD300FD4124 /* IconGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerator.swift; sourceTree = "<group>"; };
 		C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Icon+PreviewHelpers.swift"; sourceTree = "<group>"; };
 		C76E835D25E67FD400FD4124 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
+		C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +144,8 @@
 		52B0C316252F6C46006F441B = {
 			isa = PBXGroup;
 			children = (
+				C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */,
+				C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */,
 				52F1149C253F0021009220A9 /* BagContentSet+CoreDataClass.swift */,
 				52F1149D253F0021009220A9 /* BagContentSet+CoreDataProperties.swift */,
 				52F11493253EFCE1009220A9 /* Module+CoreDataClass.swift */,
@@ -382,6 +388,7 @@
 				52F52A7125334EF800541E8A /* Extensions.swift in Sources */,
 				52DC9E962530B002007BA478 /* ActivityView.swift in Sources */,
 				52F52A792533574700541E8A /* ModulesAndShelvesView.swift in Sources */,
+				C7921D5F25F977BD00A923B0 /* Tag+CoreDataClass.swift in Sources */,
 				52DC9E9F2530C5F5007BA478 /* AddEditActivityView.swift in Sources */,
 				C76E835725E5554000FD4124 /* Icons.swift in Sources */,
 				523E27D7253621E000CDCC7B /* ItemsGridView.swift in Sources */,
@@ -428,6 +435,7 @@
 				52B0C323252F6C46006F441B /* PPLApp.swift in Sources */,
 				C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */,
 				52F52A8625344D8000541E8A /* ItemsView.swift in Sources */,
+				C7921D6025F977BD00A923B0 /* Tag+CoreDataProperties.swift in Sources */,
 				523E27DE253630D800CDCC7B /* ItemGridView.swift in Sources */,
 				52F11497253EFCE1009220A9 /* Module+CoreDataClass.swift in Sources */,
 				52DC9E932530AD18007BA478 /* PlanView.swift in Sources */,

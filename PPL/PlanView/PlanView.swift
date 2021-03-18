@@ -10,33 +10,55 @@ import SwiftUI
 struct PlanView: View {
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State var scrollToCategoryName:String = ""
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
+        animation: .default)
+    private var tags: FetchedResults<Tag>
     
     
     var body: some View {
         NavigationView {
-            List {
-                Section(header: HStack {
-                    Text("Scroll to:")
-                    .foregroundColor(selectedThemeColors.listHeaderColour)
-                    .padding()
-                        
-                    
-                    Spacer()
+            VStack {
+                List {
+                    Section(header: Text("Tags list")) {
+                        ForEach (tags, id: \.id) {tag in
+                            VStack {
+                                Text(tag.wrappedName)
+                                ForEach (tag.activityArray, id: \.id) {activity in
+                                    Text(activity.wrappedName)
+                                        .padding(.leading, 30)
+                                        .foregroundColor(.orange)
+                                }
+                            }
+                        }
+                    }
                 }
-                .listRowInsets(EdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 0,
-                trailing: 0))) {
-                    ForEach(activitiesCategories, id: \.self) {category in
+                .listStyle(SidebarListStyle())
+                
+                List {
+                    Section(header: HStack {
+                        Text("Scroll to:")
+                            .foregroundColor(selectedThemeColors.listHeaderColour)
+                            .padding()
+                        
+                        
+                        Spacer()
+                    }
+                    .listRowInsets(EdgeInsets(
+                                    top: 0,
+                                    leading: 0,
+                                    bottom: 0,
+                                    trailing: 0))) {
+                        ForEach(activitiesCategories, id: \.self) {category in
                             Text(category.uppercased())
                                 .onTapGesture {
                                     scrollToCategoryName = category
                                 }
+                        }
                     }
                 }
+                .listStyle(GroupedListStyle())
             }
-            .listStyle(GroupedListStyle())
             
             VStack {
                 PanelsView()

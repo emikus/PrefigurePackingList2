@@ -115,5 +115,7 @@ struct StandGraphicView: View {
 struct StandGraphicView_Previews: PreviewProvider {
     static var previews: some View {
         StandGraphicView()
+            .environmentObject(Modules())
+            .environmentObject(SelectedThemeColors())
     }
 }

@@ -25,6 +25,12 @@ struct AddEditActivityView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default)
     private var activities: FetchedResults<Activity>
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
+        animation: .default)
+    private var tags: FetchedResults<Tag>
+    
     var activity:Activity?
     @Environment(\.presentationMode) var presentationMode
     @State var name:String = ""
@@ -34,10 +40,43 @@ struct AddEditActivityView: View {
     @State var category: String = "general"
     @State var itemsNumberDividedByThree = 0
     @State var activitySymbolsSet: [String] = ["pencil.circle", "map", "lock", "hammer", "bitcoinsign.circle", "video", "lightbulb", "sportscourt", "tv.music.note", "book", "dollarsign.circle", "guitars"]
+    @State private var activityTags = ""
+    @State private var isExpanded: Bool = false
     
     private func endEditing() {
             UIApplication.shared.endEditing()
+    }
+    
+    func splitTagsStringIntoArray(tagsString: String) -> [String] {
+        return tagsString.components(separatedBy: " ")
+    }
+    
+    func manageTags(activityTags: [String]) -> Void {
+        for tagName in activityTags {
+            let tagExists = tags.contains(where: {$0.name == tagName})
+            
+            if !tagExists {
+                let newTag = Tag(context: viewContext)
+                newTag.name = tagName
+                try? viewContext.save()
+            }
         }
+    }
+    
+    func addActivityToTags(activity: Activity,tagsNames: [String]) -> Void {
+        for tagName in tagsNames {
+            let tag = tags.first(where: {$0.name == tagName})
+
+            activity.addToTag(tag!)
+        }
+    }
+    
+    func deleteAllTagsFromActivity(activity: Activity) {
+        for tag in tags {
+            activity.removeFromTag(tag)
+        }
+    }
+    
     
     var body: some View {
         NavigationView {
@@ -56,8 +95,35 @@ struct AddEditActivityView: View {
                     .keyboardType(UIKeyboardType.decimalPad)
                 }
                 .onTapGesture {
-                            self.endEditing()
-                        }
+                    self.endEditing()
+                }
+                
+                Section (header: Text("Tags")){
+
+                    TextField("Activity's tags", text: $activityTags)
+                    
+                    Text(tags.map {$0.name!}.joined(separator: " "))
+                                .lineLimit(isExpanded ? nil : 1)
+                                .overlay(
+                                    GeometryReader { proxy in
+                                        Button(action: {
+                                            
+                                                isExpanded.toggle()
+                                        }) {
+                                            Text(isExpanded ? "Less" : "More")
+                                                .font(.caption).bold()
+                                                .padding(.leading, 8.0)
+                                                .padding(.top, 4.0)
+//                                                .background(Color.white)
+                                        }
+                                        .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottomTrailing)
+                                    }
+                                )
+                            
+//
+                    
+//                    .frame(height: 23)
+                }
                 
                 Section(header: Text("Activity's symbol, tap to choose.")) {
                     Picker("Symbol", selection: self.$symbol) {
@@ -110,6 +176,8 @@ struct AddEditActivityView: View {
                 .keyboardShortcut(KeyEquivalent(",")),
                 trailing:
                 Button(action: {
+                    let tagsNamesArray = splitTagsStringIntoArray(tagsString: self.activityTags)
+                    manageTags(activityTags: tagsNamesArray)
                     // activity edition
                     if self.activity != nil {
                         
@@ -121,6 +189,9 @@ struct AddEditActivityView: View {
                         for item in activityItems {
                             self.activity!.addToItem(item)
                         }
+                        deleteAllTagsFromActivity(activity: self.activity!)
+                        addActivityToTags(activity: self.activity!, tagsNames: tagsNamesArray)
+                        
                     } else {
                         // adding new activity
                         let newActivity = Activity(context: viewContext)
@@ -138,6 +209,8 @@ struct AddEditActivityView: View {
                         for item in activityItems {
                             newActivity.addToItem(item)
                         }
+                        
+                        addActivityToTags(activity: newActivity, tagsNames: tagsNamesArray)
                     }
                     try? viewContext.save()
                     self.presentationMode.wrappedValue.dismiss()
@@ -158,6 +231,7 @@ struct AddEditActivityView: View {
                 self.duration = String(self.activity!.duration)
                 self.activityItems = self.activity!.itemArray
                 self.category = self.activity!.category!
+                self.activityTags = (self.activity!.tagArray.map {$0.name!}).joined(separator: " ")
             }
         })
     }

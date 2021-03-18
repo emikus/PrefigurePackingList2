@@ -41,6 +41,14 @@ extension Activity {
         }
     }
     
+    public var tagArray: [Tag] {
+        let set = tag as? Set<Tag> ?? []
+        
+        return set.sorted {
+            $0.name! < $1.name!
+        }
+    }
+    
 
     
     public var durationInHoursAndMinutes: String {

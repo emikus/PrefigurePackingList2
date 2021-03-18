@@ -155,6 +155,9 @@ struct ItemGridView: View {
         }
         .sheet(isPresented: self.$showAddEditItemView) {
             AddEditItem(item: self.item)
+                .environment(\.managedObjectContext, self.viewContext)
+                .environmentObject(self.selectedThemeColors)
+                .environmentObject(self.dataFacade)
                 
         }
 //                // .preferredColorScheme(.light)
@@ -172,5 +175,6 @@ struct ItemGridView_Previews: PreviewProvider {
         ItemGridView(item: item)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
+        .environmentObject(SelectedThemeColors())
     }
 }

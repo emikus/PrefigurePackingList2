@@ -133,5 +133,6 @@ struct SaveBagContentSetView_Previews: PreviewProvider {
         SaveBagContentSetView()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
+        .environmentObject(SelectedThemeColors())
     }
 }

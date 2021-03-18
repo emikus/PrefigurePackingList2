@@ -10,6 +10,7 @@ import SwiftUI
 struct ModulesAndShelvesView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
+    @EnvironmentObject var dataFacade: DataFacade
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.name, ascending: true)],
         animation: .default
@@ -108,6 +109,7 @@ struct ModulesAndShelvesView: View {
                                         AddEditItem()
                                             .environment(\.managedObjectContext, self.viewContext)
                                             .environmentObject(self.selectedThemeColors)
+                                            .environmentObject(self.dataFacade)
                                     }
                                     
                                     Button(action: {
@@ -178,5 +180,6 @@ struct ModulesAndShelvesView_Previews: PreviewProvider {
             .previewDevice("iPad Pro (9.7-inch)")
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(Modules())
+            .environmentObject(SelectedThemeColors())
     }
 }

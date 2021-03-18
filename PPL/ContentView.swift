@@ -32,11 +32,17 @@ struct ContentView: View {
     var body: some View {
     GeometryReader { geo in
      TabView {
-        NavigationView {
-            Text("12345")
-            Text("987654")
-            Text("asdfasdf")
-        }
+//        NavigationView {
+//            Text("12345")
+//
+//            Text("987654")
+//            Button(action: {
+//                addItem()
+//            }) {
+//                Text("Add item")
+//            }
+//        }
+        BagView()
             .tabItem {
                 Image(systemName: "plus")
                 Text("🗄 Pack")
@@ -92,6 +98,8 @@ struct ContentView: View {
     func addItem() {
         
         withAnimation {
+            let newTag = Tag(context: viewContext)
+            newTag.name = "#jakiśTag"
             let newItem = Item(context: viewContext)
             newItem.id = UUID()
             newItem.name = "Item " + randomString(length: 3)
@@ -100,6 +108,11 @@ struct ContentView: View {
             newItem.refillable = false
             newItem.electric = false
             newItem.ultraviolet = false
+//            newItem.tag = "#jakiśTag"
+            newTag.addToItem(newItem)
+            newItem.addToTag(newTag)
+            print(newItem)
+            print(newTag)
             self.isInBag.toggle()
             do {
                 try viewContext.save()

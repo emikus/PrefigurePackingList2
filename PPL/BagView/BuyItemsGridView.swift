@@ -35,5 +35,6 @@ struct BuyItemsGridView: View {
 struct BuyItemsGridView_Previews: PreviewProvider {
     static var previews: some View {
         BuyItemsGridView()
+            .environmentObject(SelectedThemeColors())
     }
 }

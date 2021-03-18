@@ -158,6 +158,7 @@ struct ItemsListView_Previews: PreviewProvider {
         ItemsListView()
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(Modules())
+            .environmentObject(SelectedThemeColors())
 
     }
 }
