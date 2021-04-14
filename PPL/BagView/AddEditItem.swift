@@ -40,9 +40,12 @@ struct AddEditItem: View {
     @State private var itemCategory = "food"
     @State private var itemActivities:[Activity] = [Activity]()
     @State private var allModulesSymbols = [""]
-    @State private var isPinned = false
-    @State private var itemTags = ""
+    @State private var isPinned: Bool = false
+    @State private var itemTags:String = ""
     @State private var isExpanded: Bool = false
+    @State private var tagsAutoCompleteVisible: Bool = false
+    @State private var tagsTextFieldFocused: Bool = false
+    @State private var lastTag:String = ""
     
     func splitTagsStringIntoArray(tagsString: String) -> [String] {
         return tagsString.components(separatedBy: " ")
@@ -74,95 +77,178 @@ struct AddEditItem: View {
         }
     }
     
+    
+    
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    TextField("Item's name", text: $name)
-                    TextField("Item's weight", text: $weight)
-                    .keyboardType(UIKeyboardType.decimalPad)
-                    TextField("Item's volume", text: $volume)
-                    .keyboardType(UIKeyboardType.decimalPad)
-                    TextField("Item's cost", text: $cost)
-                    .keyboardType(UIKeyboardType.decimalPad)
-                    TextField("Item's battery consumption", text: $batteryConsumption)
-                    .keyboardType(UIKeyboardType.decimalPad)
-                    TextField("Item's symbol", text: $symbol)
-                }
-                
-                Section (header: Text("Tags")){
-//                    if self.item != nil {
-//                        ForEach (item!.tagArray, id: \.id) {tag in
-//                            Text(tag.wrappedName)
-//                        }
-//                    }
-//                    ForEach (tags, id: \.id) {tag in
-//                        Text(tag.wrappedName)
-//                    }
-                    TextField("Item's tags", text: $itemTags)
+            ZStack {
+                Form {
+                    Section {
+                        TextField("Item's name", text: $name)
+                        TextField("Item's weight", text: $weight)
+                            .keyboardType(UIKeyboardType.decimalPad)
+                        TextField("Item's volume", text: $volume)
+                            .keyboardType(UIKeyboardType.decimalPad)
+                        TextField("Item's cost", text: $cost)
+                            .keyboardType(UIKeyboardType.decimalPad)
+                        TextField("Item's battery consumption", text: $batteryConsumption)
+                            .keyboardType(UIKeyboardType.decimalPad)
+                        TextField("Item's symbol", text: $symbol)
+                    }
                     
-//                    TagCloudView(tags: tags.map {$0.name!})
-                    Text(tags.map {$0.name!}.joined(separator: " "))
-                                .lineLimit(isExpanded ? nil : 1)
-                                .overlay(
-                                    GeometryReader { proxy in
-                                        Button(action: {
-                                            
-                                                isExpanded.toggle()
-                                        }) {
-                                            Text(isExpanded ? "Less" : "More")
-                                                .font(.caption).bold()
-                                                .padding(.leading, 8.0)
-                                                .padding(.top, 4.0)
-//                                                .background(Color.white)
-                                        }
-                                        .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottomTrailing)
-                                    }
-                                )
+                    Section (header: Text("Tags")){
+                        //                    if self.item != nil {
+                        //                        ForEach (item!.tagArray, id: \.id) {tag in
+                        //                            Text(tag.wrappedName)
+                        //                        }
+                        //                    }
+                        //                    ForEach (tags, id: \.id) {tag in
+                        //                        Text(tag.wrappedName)
+                        //                    }
+                        TextField(
+                            "Item's tags",
+                            text: $itemTags,
+                            onEditingChanged: { changing in
+                                tagsTextFieldFocused.toggle()
+                                if tagsTextFieldFocused == false {
+                                    tagsAutoCompleteVisible = false
+                                }
+                            }
+                        )
+                        .onChange(of: itemTags) { newValue in
+                            print("Item tags: \(itemTags)!")
                             
-//
+//                            let itemTagsArray = String(itemTags).componentsSeparatedByString(" ")
+                            let newTagsString = self.itemTags.replacingOccurrences(of: (self.item!.tagArray.map {$0.name!}).joined(separator: " "), with: "")
+                            let newTagsArray = newTagsString.byWords
+                            let newTag = newTagsArray.last
+                            self.lastTag = newTag == nil ? "" : String(newTag!)
+                            let lastCharacterInNewTagsStringIsSpaceOrHash = self.itemTags.last == " " || self.itemTags.last == "#"
+                            
+                            print(newTag)
+                            print(self.item!.tagArray.filter{($0.name!.contains(self.lastTag))})
+                            print(self.item!.tagArray)
+                            let newTagIsLongEnough = newTag != nil && newTag!.count > 2
+                            
+                            if tagsTextFieldFocused == true
+                                && newValue != (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
+                                && newTagIsLongEnough == true
+                                && lastCharacterInNewTagsStringIsSpaceOrHash == false {
+                                tagsAutoCompleteVisible = true
+                            } else {
+                                tagsAutoCompleteVisible = false
+                            }
+                        }
+                        
+                        
+                        TagCloudView(itemTagsString: self.$itemTags)
+                        Text(tags.map {$0.name!}.joined(separator: " "))
+                            .lineLimit(isExpanded ? nil : 1)
+                            .overlay(
+                                GeometryReader { geometry in
+                                    Button(action: {
+                                        
+                                        isExpanded.toggle()
+                                    }) {
+                                        Text(isExpanded ? "Less" : "More")
+                                            .font(.caption).bold()
+                                            .padding(.leading, 8.0)
+                                            .padding(.top, 4.0)
+                                            .position(x: geometry.size.width - 20, y: geometry.size.height + 5)
+                                        //                                                .background(Color.white)
+                                    }
+                                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomTrailing)
+                                }
+                            )
+                            .padding([.bottom], 13)
+                        
+                        //
+                        
+                        //                    .frame(height: 23)
+                    }
                     
-//                    .frame(height: 23)
-                }
-
-                Picker("Item category", selection: $itemCategory) {
-                    ForEach(itemCategories, id: \.self) {itemCategory in
-                    Text(itemCategory.uppercased())
+                    
+                    Picker("Item category", selection: $itemCategory) {
+                        ForEach(itemCategories, id: \.self) {itemCategory in
+                            Text(itemCategory.uppercased())
+                        }
                     }
-                }.pickerStyle(SegmentedPickerStyle())
-                
-                Picker("Module symbol", selection: $moduleSymbol) {
-                    ForEach(allModulesSymbols, id: \.self) {moduleSymbol in
-                    Text(moduleSymbol)
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                    
+                    Picker("Module symbol", selection: $moduleSymbol) {
+                        ForEach(allModulesSymbols, id: \.self) {moduleSymbol in
+                            Text(moduleSymbol)
+                        }
                     }
-                }.pickerStyle(MenuPickerStyle())
-
-                Section(header: Text("Item's activities, tap to toggle. \(String(self.itemActivities.count)) chosen already.")) {
+                    .pickerStyle(MenuPickerStyle())
+                    
+                    Section(header: Text("Item's activities, tap to toggle. \(String(self.itemActivities.count)) chosen already.")) {
                         ForEach (self.activities)  { activity in
                             Button(action:{
                                 self.addRemoveItemActivity(activity: activity)
                             })
                             {
-                            HStack {
-                                Image(systemName: activity.wrappedSymbol)
-                                Text(activity.wrappedName)
-
+                                HStack {
+                                    Image(systemName: activity.wrappedSymbol)
+                                    Text(activity.wrappedName)
+                                    
+                                }
+                                .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                             }
-                            .foregroundColor(self.itemActivities.contains{$0.id==activity.id} ? selectedThemeColors.elementActiveColour : selectedThemeColors.fontSecondaryColour)
                         }
                     }
+                    
+                    
+                    
+                    //                Button(action: {
+                    //                    self.presentationMode.wrappedValue.dismiss()
+                    //
+                    //                })
+                    //                {
+                    //                    Text("Cancel")
+                    //                }
+                    //                .keyboardShortcut(.cancelAction)
+                    
                 }
                 
-//                Button(action: {
-//                    self.presentationMode.wrappedValue.dismiss()
-//
-//                })
-//                {
-//                    Text("Cancel")
-//                }
-//                .keyboardShortcut(.cancelAction)
-
-            }
+                if tagsAutoCompleteVisible == true {
+                    VStack {
+                        List {
+                            ForEach (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) }, id: \.id) {tag in
+                                HStack {
+                                    Text(tag.wrappedName)
+                                        .onTapGesture {
+//                                            withAnimation {
+//                                                selectedTag = tag
+//                                            }
+                                            let tappedTagNameWithoutHash = tag.wrappedName.replacingOccurrences(of: "#", with: "")
+                                            
+                                            self.itemTags = self.itemTags.replacingLastOccurrenceOfString(self.lastTag, with: tappedTagNameWithoutHash)
+                                            print(self.itemTags.replacingOccurrences(of: self.lastTag, with: tag.wrappedName))
+                                        }
+//                                    Spacer()
+                                }
+                                
+                            }
+                        }
+//                        Text(self.lastTag)
+//                        if self.lastTag.count > 3 {Text(self.lastTag)}
+//                        if self.lastTag.count > 4 {Text(self.lastTag)}
+//                        if self.lastTag.count > 5 {Text(self.lastTag)}
+//                        if self.lastTag.count > 6 {Text(self.lastTag)}
+//                        Text(self.lastTag)
+//                    .padding()
+                    }
+                    .frame(width: 300, height: CGFloat(tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0)}.count * 44))
+                    .background(Color.red)
+                    .position(x: 180, y: CGFloat(400 + (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0)}.count * 22)))
+                    .keyboardShortcut(/*@START_MENU_TOKEN@*/KeyEquivalent("a")/*@END_MENU_TOKEN@*/)
+                }
+                
+                
+                
+        }
             .navigationBarTitle(self.item == nil ? "Add item" : "Edit item", displayMode: .inline)
             .navigationBarItems(
                 leading: Button(action: {

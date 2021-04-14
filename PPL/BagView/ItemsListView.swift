@@ -97,7 +97,9 @@ struct ItemsListView: View {
                                     ItemListView(item: item)
 
                                 }
-
+                        .onDelete(perform: { indexSet in
+                            print(indexSet)
+                        })
                                 .onInsert(of: ["ppl.item"], perform: onInsert)
                         .listRowBackground(selectedThemeColors.bgSecondaryColour)
 

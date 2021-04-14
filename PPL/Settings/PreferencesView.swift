@@ -132,7 +132,8 @@ struct PreferencesView: View {
                         Button(action: {
                             self.presentationMode.wrappedValue.dismiss()
                         }) {
-                            Text("x")
+                            Image(systemName: ("xmark"))
+                                .padding(.trailing, 10)
                         }
                     }
                     .padding(.bottom, 5)

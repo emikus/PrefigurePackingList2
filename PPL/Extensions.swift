@@ -8,6 +8,41 @@
 import Foundation
 import SwiftUI
 
+
+extension StringProtocol { // for Swift 4 you need to add the constrain `where Index == String.Index`
+    var byWords: [SubSequence] {
+        var byWords: [SubSequence] = []
+        enumerateSubstrings(in: startIndex..., options: .byWords) { _, range, _, _ in
+            byWords.append(self[range])
+        }
+        return byWords
+    }
+}
+
+extension String
+{
+    func replacingLastOccurrenceOfString(_ searchString: String,
+            with replacementString: String,
+            caseInsensitive: Bool = true) -> String
+    {
+        let options: String.CompareOptions
+        if caseInsensitive {
+            options = [.backwards, .caseInsensitive]
+        } else {
+            options = [.backwards]
+        }
+
+        if let range = self.range(of: searchString,
+                options: options,
+                range: nil,
+                locale: nil) {
+
+            return self.replacingCharacters(in: range, with: replacementString)
+        }
+        return self
+    }
+}
+
 extension View {
 
       func flipRotate(_ degrees : Double) -> some View {
@@ -28,7 +63,13 @@ extension String {
 
 
 struct TagCloudView: View {
-    var tags: [String]
+    @Binding var itemTagsString: String
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
+        animation: .default)
+    private var tags: FetchedResults<Tag>
+    
 
     @State private var totalHeight
 //          = CGFloat.zero       // << variant for ScrollView/List
@@ -74,16 +115,38 @@ struct TagCloudView: View {
                         return result
                     })
             }
-        }.background(viewHeightReader($totalHeight))
+        }
+        
+//        .frame(height: 10)
+//        .border(Color.red, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
+        .background(viewHeightReader($totalHeight))
     }
 
-    private func item(for text: String) -> some View {
-        Text(text)
-            .padding(.all, 5)
-            .font(.body)
-            .background(Color.blue)
-            .foregroundColor(Color.white)
-            .cornerRadius(5)
+    private func item(for tag: Tag) -> some View {
+        HStack {
+            Text(tag.wrappedName)
+
+            Image(systemName: ("xmark"))
+            .foregroundColor(themes[0].themeColours.buttonMainColour)
+            .padding(.trailing, 5)
+            .onTapGesture {
+                print(tag.wrappedName)
+                viewContext.delete(tag)
+                do {
+                    print("udało się!!!!")
+                    try viewContext.save()
+                    itemTagsString = itemTagsString.replacingOccurrences(of: tag.wrappedName, with: "")
+                } catch {
+                    print("ni udało się!!!!")
+                }
+            }
+        }
+        .padding(.all, 5)
+        .font(.body)
+        .background(themes[0].themeColours.fontSecondaryColour)
+        .foregroundColor(themes[0].themeColours.bgMainColour)
+        .cornerRadius(5)
+        
     }
 
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {

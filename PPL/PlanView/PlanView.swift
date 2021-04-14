@@ -8,32 +8,71 @@
 import SwiftUI
 
 struct PlanView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State var scrollToCategoryName:String = ""
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
         animation: .default)
     private var tags: FetchedResults<Tag>
+    @State var selectedTag: Any = "Dupa"
     
     
     var body: some View {
         NavigationView {
-            VStack {
-                List {
-                    Section(header: Text("Tags list")) {
-                        ForEach (tags, id: \.id) {tag in
-                            VStack {
-                                Text(tag.wrappedName)
-                                ForEach (tag.activityArray, id: \.id) {activity in
-                                    Text(activity.wrappedName)
-                                        .padding(.leading, 30)
-                                        .foregroundColor(.orange)
+            List {
+                Section(header: Text("Tags list")) {
+                    ForEach (tags, id: \.id) {tag in
+                        HStack {
+                            Text(tag.wrappedName)
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedTag = tag
+                                    }
                                 }
+                            Spacer()
+                            
+                            Button(action: {
+                                viewContext.delete(tag)
+                                try? viewContext.save()
+                            }, label: {
+                                Image(systemName: ("trash"))
+                                    .foregroundColor(selectedThemeColors.buttonMainColour)
+                                    .padding(.trailing, 5)
+                            })
+                        }
+                        
+                    }
+                }
+            }
+            .listStyle(SidebarListStyle())
+            VStack {
+                if (type(of: selectedTag) == Tag.self) {
+                    HStack {
+                        Text(((selectedTag as AnyObject).name!.lowercased()))
+                            .foregroundColor(selectedThemeColors.listHeaderColour)
+                            .padding()
+                        Spacer()
+                        Button(action: {
+                            withAnimation {
+                                selectedTag = "dupa"
                             }
+                        }, label: {
+                            Image(systemName: ("xmark"))
+                                .padding(.trailing, 10)
+                        })
+                    }
+                    .listRowInsets(EdgeInsets(
+                                    top: 0,
+                                    leading: 0,
+                                    bottom: 0,
+                                    trailing: 0))
+                    List {
+                        ForEach((selectedTag as! Tag).activityArray, id: \.self) {activity in
+                            Text(activity.name!)
                         }
                     }
                 }
-                .listStyle(SidebarListStyle())
                 
                 List {
                     Section(header: HStack {
@@ -52,13 +91,16 @@ struct PlanView: View {
                         ForEach(activitiesCategories, id: \.self) {category in
                             Text(category.uppercased())
                                 .onTapGesture {
+                                    withAnimation {
                                     scrollToCategoryName = category
+                                    }
                                 }
                         }
                     }
                 }
                 .listStyle(GroupedListStyle())
             }
+            .transition(.slide)
             
             VStack {
                 PanelsView()
@@ -67,12 +109,9 @@ struct PlanView: View {
                 ActivitiesListView(scrollToCategoryName: $scrollToCategoryName)
                 
             }
-//             .preferredColorScheme(.dark)
-//            .onAppear(perform: {
-//                changeColorTheme(theme: themes[0].themeColours)
-//            })
             .navigationBarTitle("Plan", displayMode: .inline)
         }
+        
     }
 }
 
