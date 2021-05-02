@@ -103,11 +103,14 @@ extension String {
 
 
 struct TagCloudView: View {
+    @Binding var tagsArray:[Tag]
+    var action: (_ tag: Tag) -> Void
+    var actionImageName: String
+    var actionImageColor: Color
     
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
-    @Binding var itemTagsString: String
-    var item: Item
-    var allTags: Bool
+//    @Binding var itemTagsString: String
+    
     
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
@@ -120,13 +123,13 @@ struct TagCloudView: View {
 //          = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
     
-    func getTagsArray() -> Array<Tag> {
-        if allTags == false {
-            return self.tags.filter{$0.itemArray.contains(item)}
-        } else {
-            return self.tags.filter{!$0.itemArray.contains(item)}
-        }
-    }
+//    func getTagsArray() -> Array<Tag> {
+//        if allTags == false {
+//            return self.tags.filter{$0.itemArray.contains(item)}
+//        } else {
+//            return self.tags.filter{!$0.itemArray.contains(item)}
+//        }
+//    }
 
     var body: some View {
         
@@ -145,28 +148,26 @@ struct TagCloudView: View {
 
         return ZStack(alignment: .topLeading) {
             
-            ForEach(getTagsArray()) { tag in
+            ForEach(tagsArray) { tag in
                 self.item(for: tag)
                     .padding([.horizontal, .vertical], 4)
                     .alignmentGuide(.leading, computeValue: { d in
-//                        print(d.width)
                         if (abs(width - d.width) > g.size.width)
                         {
                             width = 0
                             height -= d.height
                         }
                         let result = width
-                        if tag == getTagsArray().last! {
+                        if tag == tagsArray.last! {
                             width = 0 //last item
                         } else {
                             width -= d.width
                         }
-//                        print (result)
                         return result
                     })
                     .alignmentGuide(.top, computeValue: {d in
                         let result = height
-                        if tag == getTagsArray().last! {
+                        if tag == tagsArray.last! {
                             height = 0 // last item
                         }
                         return result
@@ -179,33 +180,13 @@ struct TagCloudView: View {
     private func item(for tag: Tag) -> some View {
         HStack {
             TagView(tag: tag)
-                .opacity(allTags == true && item.tagArray.contains(tag) ? 0.5 : 1)
-            Image(systemName: (allTags == true ? "plus" : "xmark"))
-                .foregroundColor(allTags == true ? .green : .red)
-                .opacity(allTags == true && item.tagArray.contains(tag) ? 0.3 : 1)
+            Image(systemName: self.actionImageName)
+                .foregroundColor(self.actionImageColor)
             .padding(.trailing, 5)
             .onTapGesture {
-                print(tag.wrappedName)
-                print(tag.icon)
-//                if (itemTagsString.contains(tag.wrappedName + " ")) {
-//                    itemTagsString = itemTagsString.replacingOccurrences(of: tag.wrappedName + " ", with: "")
-//                } else {
-//                    itemTagsString = itemTagsString.replacingOccurrences(of: tag.wrappedName, with: "")
-//                }
                 
-                if allTags == true {
-                    item.addToTag(tag)
-                } else {
-                    item.removeFromTag(tag)
-                }
-                
-                do {
-                    
-                    try viewContext.save()
-                    
-                } catch {
-                    print("ni udało się!!!!")
-                }
+                self.action(tag)
+                print(self.tagsArray.count, "tyle elementów!!!!!!")
             }
         }
         .padding(.all, 5)

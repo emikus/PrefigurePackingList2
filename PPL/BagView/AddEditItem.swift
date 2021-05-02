@@ -46,7 +46,8 @@ struct AddEditItem: View {
     @State private var tagsAutoCompleteVisible: Bool = false
     @State private var tagsTextFieldFocused: Bool = false
     @State private var lastTag:String = ""
-    @State private var tempItemTagArray: [Tag] = []
+    @State private var tempItemTagsArray: [Tag] = []
+    @State private var allTagsWithoutTempItemTags: [Tag] = []
     
     func setTagSuggestedIcon(tag: Tag) -> Void {
         let tagNameWithoutHashSymbol = tag.name?.replacingOccurrences(of: "#", with: "")
@@ -71,22 +72,18 @@ struct AddEditItem: View {
                 let newTag = Tag(context: viewContext)
                 newTag.name = tagName
                 setTagSuggestedIcon(tag: newTag)
-                print ("ICON!!!!!", newTag.icon)
                 try? viewContext.save()
+                addTagToTempItemTagArray(tag: newTag)
+                self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
+            } else if tagExists {
+                addTagToTempItemTagArray(tag: tags.filter {$0.name == tagName}[0])
             }
         }
     }
     
-    func addItemToTags(item: Item,tagsNames: [String]) -> Void {
-        
-        for tagName in tagsNames {
-            let tag = tags.first(where: {$0.name == tagName})
-            let tagLongEnough = tagName.count > 3
-            
-            if tagLongEnough {
-                item.addToTag(tag!)
-            }
-            
+    func addTagsToItem() -> Void {
+        for tag in tempItemTagsArray {
+            tag.addToItem(item!)
         }
     }
     
@@ -94,6 +91,25 @@ struct AddEditItem: View {
         for tag in tags {
             item.removeFromTag(tag)
         }
+    }
+    
+    
+    func actionTest() -> Void {
+        print("action Test!!!")
+    }
+    
+    func removeTagFromTempItemTagArray(tag: Tag) -> Void {
+        if let index = self.tempItemTagsArray.firstIndex(of: tag) {
+            tempItemTagsArray.remove(at: index)
+        }
+    }
+    
+    func addTagToTempItemTagArray(tag: Tag) -> Void {
+        tempItemTagsArray.insert(tag, at: 0)
+    }
+    
+    func getAllTagsWithoutTempItemTags() -> Array<Tag> {
+        return self.tags.filter{!self.tempItemTagsArray.contains($0)}
     }
     
     var body: some View {
@@ -124,6 +140,9 @@ struct AddEditItem: View {
                                     if tagsTextFieldFocused == false {
                                         tagsAutoCompleteVisible = false
                                     }
+                                },
+                                onCommit: {
+                                    print("commit!!!!!")
                                 }
                             )
                             .onChange(of: itemTags) { newValue in
@@ -148,7 +167,6 @@ struct AddEditItem: View {
                             Button(action: {
                                 let tagsNamesArray = splitTagsStringIntoArray(tagsString: self.itemTags)
                                 manageTags(itemTags: tagsNamesArray)
-                                addItemToTags(item: self.item!, tagsNames: tagsNamesArray)
                                 self.itemTags = ""
                             })
                             {
@@ -156,7 +174,7 @@ struct AddEditItem: View {
                             }
                         }
                         
-                        if ((item?.tagArray.count)! > 0) {
+//                        if ((item?.tagArray.count)! > 0) {
                             VStack(alignment: .leading, spacing: 5, content: {
                                 HStack {
                                     Text("Item's tags:")
@@ -166,12 +184,12 @@ struct AddEditItem: View {
                                 }
                                 
                                 TagCloudView(
-                                    itemTagsString: self.$itemTags,
-                                    item: item!,
-                                    allTags: false
-                                )
+                                    tagsArray: self.$tempItemTagsArray,
+                                    action: self.removeTagFromTempItemTagArray,
+                                    actionImageName: "xmark",
+                                    actionImageColor: Color.red)
                             })
-                        }
+//                        }
                         
                         VStack(alignment: .leading, spacing: 5, content: {
                             HStack {
@@ -185,14 +203,18 @@ struct AddEditItem: View {
                                 label: { Text("Collapsible") },
                                 content: {
                                     TagCloudView(
-                                        itemTagsString: self.$itemTags,
-                                        item: item!,
-                                        allTags: true
-                                    )
+                                        tagsArray: self.$allTagsWithoutTempItemTags,
+                                        action: self.addTagToTempItemTagArray,
+                                        actionImageName: "plus",
+                                        actionImageColor: Color.green)
                                     .environmentObject(self.selectedThemeColors)
                                 }
                             )
                             .frame(maxWidth: .infinity)
+                        })
+                        .onChange(of: tempItemTagsArray, perform: { value in
+                            self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
+                            print(allTagsWithoutTempItemTags.count, "tutaj!!!!!!!")
                         })
                     }
                     
@@ -292,10 +314,6 @@ struct AddEditItem: View {
                 trailing:
                 Button(action: {
                     
-                    let tagsNamesArray = splitTagsStringIntoArray(tagsString: self.itemTags)
-                    
-                    print(splitTagsStringIntoArray(tagsString: self.itemTags))
-                    manageTags(itemTags: tagsNamesArray)
                     
                     if self.item != nil {
                         self.item!.name = self.name
@@ -314,7 +332,7 @@ struct AddEditItem: View {
                         dataFacade.updateItemActivities(item: self.item!, itemActivities: self.itemActivities)
                         
                         deleteTagsFromItem(item: self.item!)
-                        addItemToTags(item: self.item!, tagsNames: tagsNamesArray)
+                        addTagsToItem()
                     } else {
                         let newItem = Item(context: viewContext)
                         newItem.id = UUID()
@@ -362,7 +380,8 @@ struct AddEditItem: View {
                 self.moduleSymbol = self.item!.moduleSymbol ?? ""
                 self.isPinned = self.item!.isPinned
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}
-                self.tempItemTagArray = item!.tagArray
+                self.tempItemTagsArray = item!.tagArray
+                self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
 //                self.itemTags = (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
             }
             
