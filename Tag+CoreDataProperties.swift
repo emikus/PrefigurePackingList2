@@ -2,7 +2,7 @@
 //  Tag+CoreDataProperties.swift
 //  PPL
 //
-//  Created by Michal Jendrzejewski on 18/03/2021.
+//  Created by Michal Jendrzejewski on 29/04/2021.
 //
 //
 
@@ -17,25 +17,9 @@ extension Tag {
     }
 
     @NSManaged public var name: String?
-    @NSManaged public var item: NSSet?
+    @NSManaged public var icon: String?
     @NSManaged public var activity: NSSet?
-
-}
-
-// MARK: Generated accessors for item
-extension Tag {
-
-    @objc(addItemObject:)
-    @NSManaged public func addToItem(_ value: Item)
-
-    @objc(removeItemObject:)
-    @NSManaged public func removeFromItem(_ value: Item)
-
-    @objc(addItem:)
-    @NSManaged public func addToItem(_ values: NSSet)
-
-    @objc(removeItem:)
-    @NSManaged public func removeFromItem(_ values: NSSet)
+    @NSManaged public var item: NSSet?
 
 }
 
@@ -53,6 +37,23 @@ extension Tag {
 
     @objc(removeActivity:)
     @NSManaged public func removeFromActivity(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for item
+extension Tag {
+
+    @objc(addItemObject:)
+    @NSManaged public func addToItem(_ value: Item)
+
+    @objc(removeItemObject:)
+    @NSManaged public func removeFromItem(_ value: Item)
+
+    @objc(addItem:)
+    @NSManaged public func addToItem(_ values: NSSet)
+
+    @objc(removeItem:)
+    @NSManaged public func removeFromItem(_ values: NSSet)
 
 }
 

@@ -71,6 +71,7 @@ struct PersistenceController {
         for i in 0..<15 {
             let newTag = Tag(context: viewContext)
             newTag.name = "#testowyTag" + String(i)
+            newTag.addToItem(newItem)
         }
         
         do {

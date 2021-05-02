@@ -46,6 +46,17 @@ struct AddEditItem: View {
     @State private var tagsAutoCompleteVisible: Bool = false
     @State private var tagsTextFieldFocused: Bool = false
     @State private var lastTag:String = ""
+    @State private var tempItemTagArray: [Tag] = []
+    
+    func setTagSuggestedIcon(tag: Tag) -> Void {
+        let tagNameWithoutHashSymbol = tag.name?.replacingOccurrences(of: "#", with: "")
+        
+        print("tagNameWithoutHashSymbol", tagNameWithoutHashSymbol)
+        print(tagIconSuggestions[tagNameWithoutHashSymbol!])
+        if (tagIconSuggestions[tagNameWithoutHashSymbol!] != nil) {
+            tag.icon = tagIconSuggestions[tagNameWithoutHashSymbol!]
+        }
+    }
     
     func splitTagsStringIntoArray(tagsString: String) -> [String] {
         return tagsString.components(separatedBy: " ")
@@ -54,20 +65,28 @@ struct AddEditItem: View {
     func manageTags(itemTags: [String]) -> Void {
         for tagName in itemTags {
             let tagExists = tags.contains(where: {$0.name == tagName})
+            let tagLongEnough = tagName.count > 3
             
-            if !tagExists {
+            if !tagExists && tagLongEnough {
                 let newTag = Tag(context: viewContext)
                 newTag.name = tagName
+                setTagSuggestedIcon(tag: newTag)
+                print ("ICON!!!!!", newTag.icon)
                 try? viewContext.save()
             }
         }
     }
     
     func addItemToTags(item: Item,tagsNames: [String]) -> Void {
+        
         for tagName in tagsNames {
             let tag = tags.first(where: {$0.name == tagName})
-
-            item.addToTag(tag!)
+            let tagLongEnough = tagName.count > 3
+            
+            if tagLongEnough {
+                item.addToTag(tag!)
+            }
+            
         }
     }
     
@@ -76,8 +95,6 @@ struct AddEditItem: View {
             item.removeFromTag(tag)
         }
     }
-    
-    
     
     var body: some View {
         NavigationView {
@@ -97,75 +114,88 @@ struct AddEditItem: View {
                     }
                     
                     Section (header: Text("Tags")){
-                        //                    if self.item != nil {
-                        //                        ForEach (item!.tagArray, id: \.id) {tag in
-                        //                            Text(tag.wrappedName)
-                        //                        }
-                        //                    }
-                        //                    ForEach (tags, id: \.id) {tag in
-                        //                        Text(tag.wrappedName)
-                        //                    }
-                        TextField(
-                            "Item's tags",
-                            text: $itemTags,
-                            onEditingChanged: { changing in
-                                tagsTextFieldFocused.toggle()
-                                if tagsTextFieldFocused == false {
+                        
+                        HStack {
+                            TextField(
+                                "Type to add new or existing tag",
+                                text: $itemTags,
+                                onEditingChanged: { changing in
+                                    tagsTextFieldFocused.toggle()
+                                    if tagsTextFieldFocused == false {
+                                        tagsAutoCompleteVisible = false
+                                    }
+                                }
+                            )
+                            .onChange(of: itemTags) { newValue in
+                              
+                                let newTagsString = self.itemTags.replacingOccurrences(of: (self.item!.tagArray.map {$0.name!}).joined(separator: " "), with: "")
+                                let newTagsArray = newTagsString.byWords
+                                let newTag = newTagsArray.last
+                                self.lastTag = newTag == nil ? "" : String(newTag!)
+                                let lastCharacterInNewTagsStringIsSpaceOrHash = self.itemTags.last == " " || self.itemTags.last == "#"
+                                
+                                let newTagIsLongEnough = newTag != nil && newTag!.count > 2
+                                
+                                if tagsTextFieldFocused == true
+                                    && newValue != (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
+                                    && newTagIsLongEnough == true
+                                    && lastCharacterInNewTagsStringIsSpaceOrHash == false {
+                                    tagsAutoCompleteVisible = true
+                                } else {
                                     tagsAutoCompleteVisible = false
                                 }
                             }
-                        )
-                        .onChange(of: itemTags) { newValue in
-                            print("Item tags: \(itemTags)!")
-                            
-//                            let itemTagsArray = String(itemTags).componentsSeparatedByString(" ")
-                            let newTagsString = self.itemTags.replacingOccurrences(of: (self.item!.tagArray.map {$0.name!}).joined(separator: " "), with: "")
-                            let newTagsArray = newTagsString.byWords
-                            let newTag = newTagsArray.last
-                            self.lastTag = newTag == nil ? "" : String(newTag!)
-                            let lastCharacterInNewTagsStringIsSpaceOrHash = self.itemTags.last == " " || self.itemTags.last == "#"
-                            
-                            print(newTag)
-                            print(self.item!.tagArray.filter{($0.name!.contains(self.lastTag))})
-                            print(self.item!.tagArray)
-                            let newTagIsLongEnough = newTag != nil && newTag!.count > 2
-                            
-                            if tagsTextFieldFocused == true
-                                && newValue != (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
-                                && newTagIsLongEnough == true
-                                && lastCharacterInNewTagsStringIsSpaceOrHash == false {
-                                tagsAutoCompleteVisible = true
-                            } else {
-                                tagsAutoCompleteVisible = false
+                            Button(action: {
+                                let tagsNamesArray = splitTagsStringIntoArray(tagsString: self.itemTags)
+                                manageTags(itemTags: tagsNamesArray)
+                                addItemToTags(item: self.item!, tagsNames: tagsNamesArray)
+                                self.itemTags = ""
+                            })
+                            {
+                                Text("Add tags")
                             }
                         }
                         
+                        if ((item?.tagArray.count)! > 0) {
+                            VStack(alignment: .leading, spacing: 5, content: {
+                                HStack {
+                                    Text("Item's tags:")
+                                    Text("(tap one to disconnect it from the item)")
+                                        .font(.footnote)
+                                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                                }
+                                
+                                TagCloudView(
+                                    itemTagsString: self.$itemTags,
+                                    item: item!,
+                                    allTags: false
+                                )
+                            })
+                        }
                         
-                        TagCloudView(itemTagsString: self.$itemTags)
-                        Text(tags.map {$0.name!}.joined(separator: " "))
-                            .lineLimit(isExpanded ? nil : 1)
-                            .overlay(
-                                GeometryReader { geometry in
-                                    Button(action: {
-                                        
-                                        isExpanded.toggle()
-                                    }) {
-                                        Text(isExpanded ? "Less" : "More")
-                                            .font(.caption).bold()
-                                            .padding(.leading, 8.0)
-                                            .padding(.top, 4.0)
-                                            .position(x: geometry.size.width - 20, y: geometry.size.height + 5)
-                                        //                                                .background(Color.white)
-                                    }
-                                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomTrailing)
+                        VStack(alignment: .leading, spacing: 5, content: {
+                            HStack {
+                                Text("All your tags:")
+                                Text("(tap one to add it to the item)")
+                                    .font(.footnote)
+                                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                            }
+
+                            Collapsible(
+                                label: { Text("Collapsible") },
+                                content: {
+                                    TagCloudView(
+                                        itemTagsString: self.$itemTags,
+                                        item: item!,
+                                        allTags: true
+                                    )
+                                    .environmentObject(self.selectedThemeColors)
                                 }
                             )
-                            .padding([.bottom], 13)
-                        
-                        //
-                        
-                        //                    .frame(height: 23)
+                            .frame(maxWidth: .infinity)
+                        })
                     }
+                    
                     
                     
                     Picker("Item category", selection: $itemCategory) {
@@ -215,7 +245,7 @@ struct AddEditItem: View {
                 if tagsAutoCompleteVisible == true {
                     VStack {
                         List {
-                            ForEach (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) }, id: \.id) {tag in
+                            ForEach (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) }, id: \.id) {tag in
                                 HStack {
                                     Text(tag.wrappedName)
                                         .onTapGesture {
@@ -225,7 +255,7 @@ struct AddEditItem: View {
                                             let tappedTagNameWithoutHash = tag.wrappedName.replacingOccurrences(of: "#", with: "")
                                             
                                             self.itemTags = self.itemTags.replacingLastOccurrenceOfString(self.lastTag, with: tappedTagNameWithoutHash)
-                                            print(self.itemTags.replacingOccurrences(of: self.lastTag, with: tag.wrappedName))
+                                            tagsAutoCompleteVisible = false
                                         }
 //                                    Spacer()
                                 }
@@ -240,9 +270,9 @@ struct AddEditItem: View {
 //                        Text(self.lastTag)
 //                    .padding()
                     }
-                    .frame(width: 300, height: CGFloat(tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0)}.count * 44))
+                    .frame(width: 300, height: CGFloat(tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) }.count * 44))
                     .background(Color.red)
-                    .position(x: 180, y: CGFloat(400 + (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0)}.count * 22)))
+                    .position(x: 180, y: CGFloat(450 + (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0)}.count * 22)))
                     .keyboardShortcut(/*@START_MENU_TOKEN@*/KeyEquivalent("a")/*@END_MENU_TOKEN@*/)
                 }
                 
@@ -301,8 +331,7 @@ struct AddEditItem: View {
                         newItem.ultraviolet = false
 
                         dataFacade.addNewItemToActivities(newItem: newItem, itemActivities: self.itemActivities)
-                        addItemToTags(item: newItem, tagsNames: tagsNamesArray)
-//                        addTagsToItem(tagsNames: tagsNamesArray, item: newItem)
+//                        addItemToTags(item: newItem, tagsNames: tagsNamesArray)
                     }
                     
                     
@@ -319,27 +348,22 @@ struct AddEditItem: View {
         }
         .navigationBarBackButtonHidden(self.item == nil ? true : false)
         .navigationViewStyle(StackNavigationViewStyle())
-//        // .preferredColorScheme(.light)
         .onAppear(perform: {
-//            for tag in tags {
-//                viewContext.delete(tag)
-//                try? viewContext.save()
-//            }
-            
-            
             
             if self.item != nil {
-                self.name = self.item!.name!
+                print("PREVIEWWW!!!!!", item)
+                self.name = self.item!.wrappedName
                 self.weight = String(self.item!.weight)
                 self.volume = String(self.item!.volume)
                 self.cost = String(self.item!.cost)
                 self.batteryConsumption = String(self.item!.batteryConsumption)
-                self.itemCategory = self.item!.itemCategory!
+                self.itemCategory = self.item!.itemCategory != nil ? self.item?.itemCategory as! String : "food"
                 self.symbol = self.item!.wrappedSymbol
                 self.moduleSymbol = self.item!.moduleSymbol ?? ""
                 self.isPinned = self.item!.isPinned
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}
-                self.itemTags = (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
+                self.tempItemTagArray = item!.tagArray
+//                self.itemTags = (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
             }
             
             self.allModulesSymbols += Array(modules.standBookModeModulesFrontOccupation.keys)
@@ -351,7 +375,7 @@ struct AddEditItem: View {
             self.allModulesSymbols += Array(modules.strapTwoFrontModulesOccupation.keys)
             self.allModulesSymbols += Array(modules.strapTwoBackModulesOccupation.keys)
         })
-                .preferredColorScheme(.dark)
+//                .preferredColorScheme(.dar
 //                .onAppear(perform: {
 //                    changeColorTheme(theme: themes[0].themeColours)
 //                })
@@ -368,9 +392,11 @@ struct AddEditItem: View {
 
 struct AddEditItem_Previews: PreviewProvider {
     static var previews: some View {
-        AddEditItem()
+        let item = Item(context: PersistenceController.preview.container.viewContext)
+//        item.name = "dupa"
+        AddEditItem(item:item)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
-            .environmentObject(SelectedThemeColors())
+        .environmentObject(SelectedThemeColors())
     }
 }

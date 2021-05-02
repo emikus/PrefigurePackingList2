@@ -7,6 +7,28 @@
 
 import Foundation
 
+var tagIconSuggestions: [String: String] = [
+    "football": "sportscourt",
+    "volleyball": "sportscourt",
+    "swimming": "sportscourt",
+    "skating": "sportscourt",
+    "tennis": "sportscourt",
+    "snowboarding": "sportscourt",
+    "windsurfing": "sportscourt",
+    "kitesurfing": "sportscourt",
+    "sailing": "sportscourt",
+    "bike": "sportscourt",
+    "jogging": "sportscourt",
+    "running": "sportscourt",
+    "climbing": "sportscourt",
+    "work": "dollarsign.circle",
+    "money": "dollarsign.circle",
+    "office": "dollarsign.circle",
+    "clientmeeting": "dollarsign.circle",
+    "travel": "airplane",
+    "flight": "airplane"
+]
+
 var sampleModules: [String:String] = [
     "🟦": "First Item",
     "🟠": "Second Item",

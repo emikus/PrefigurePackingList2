@@ -53,6 +53,7 @@
 		C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710C3DE25F575BB004DA52C /* TestingPlayground.swift */; };
 		C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */; };
 		C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */; };
+		C728D58D263B4BD100A8E444 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C728D58C263B4BD100A8E444 /* TagView.swift */; };
 		C72CC87425DC75A00072D573 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = C72CC7ED25DC4A350072D573 /* Icon */; };
 		C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */; };
 		C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */; };
@@ -116,6 +117,7 @@
 		C710C3DE25F575BB004DA52C /* TestingPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestingPlayground.swift; path = PPL/TestingPlayground.swift; sourceTree = SOURCE_ROOT; };
 		C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemsGridView.swift; sourceTree = "<group>"; };
 		C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemToBuyGridView.swift; sourceTree = "<group>"; };
+		C728D58C263B4BD100A8E444 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		C72CC7ED25DC4A350072D573 /* Icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icon; sourceTree = "<group>"; };
 		C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsView.swift; sourceTree = "<group>"; };
 		C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcut.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				52B0C32D252F6C49006F441B /* PPL.xcdatamodeld */,
 				52B0C328252F6C49006F441B /* Preview Content */,
 				C761465225BF85A300FC71AE /* ThemesColours.swift */,
+				C728D58C263B4BD100A8E444 /* TagView.swift */,
 			);
 			path = PPL;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				52DC9E992530C191007BA478 /* ActivitiesListView.swift in Sources */,
 				52F11499253EFCE1009220A9 /* ModulesSet+CoreDataClass.swift in Sources */,
 				C761464B25BC9A3F00FC71AE /* PreferencesView.swift in Sources */,
+				C728D58D263B4BD100A8E444 /* TagView.swift in Sources */,
 				52DC9E9C2530C217007BA478 /* ModelHardCoded.swift in Sources */,
 				52F52A90253459CD00541E8A /* AddEditItem.swift in Sources */,
 				52B0C325252F6C46006F441B /* ContentView.swift in Sources */,

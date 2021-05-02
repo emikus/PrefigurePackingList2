@@ -9,6 +9,46 @@ import Foundation
 import SwiftUI
 
 
+
+struct Collapsible<Content: View>: View {
+    @State var label: () -> Text
+    @State var content: () -> Content
+    
+    @State private var collapsed: Bool = true
+    
+    var body: some View {
+        VStack {
+            
+            
+            VStack {
+                Spacer()
+                
+                self.content()
+//                    .padding([.top], self.collapsed ? 40 : 0)
+            }
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: collapsed ? 50 : .none, alignment: .top)
+            .clipped()
+            .animation(.easeOut)
+            .transition(.slide)
+            
+            Button(
+                action: { self.collapsed.toggle() },
+                label: {
+                    HStack {
+                        Spacer()
+                        Text(self.collapsed ? "Show more" : "Show less")
+                        Image(systemName: self.collapsed ? "chevron.down" : "chevron.up")
+                    }
+                    .padding(.bottom, 1)
+                    .background(Color.white.opacity(0.01))
+                }
+            )
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
+}
+
+
 extension StringProtocol { // for Swift 4 you need to add the constrain `where Index == String.Index`
     var byWords: [SubSequence] {
         var byWords: [SubSequence] = []
@@ -63,7 +103,12 @@ extension String {
 
 
 struct TagCloudView: View {
+    
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @Binding var itemTagsString: String
+    var item: Item
+    var allTags: Bool
+    
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
@@ -74,8 +119,17 @@ struct TagCloudView: View {
     @State private var totalHeight
 //          = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
+    
+    func getTagsArray() -> Array<Tag> {
+        if allTags == false {
+            return self.tags.filter{$0.itemArray.contains(item)}
+        } else {
+            return self.tags.filter{!$0.itemArray.contains(item)}
+        }
+    }
 
     var body: some View {
+        
         VStack {
             GeometryReader { geometry in
                 self.generateContent(in: geometry)
@@ -90,52 +144,65 @@ struct TagCloudView: View {
         var height = CGFloat.zero
 
         return ZStack(alignment: .topLeading) {
-            ForEach(self.tags, id: \.self) { tag in
+            
+            ForEach(getTagsArray()) { tag in
                 self.item(for: tag)
                     .padding([.horizontal, .vertical], 4)
                     .alignmentGuide(.leading, computeValue: { d in
+//                        print(d.width)
                         if (abs(width - d.width) > g.size.width)
                         {
                             width = 0
                             height -= d.height
                         }
                         let result = width
-                        if tag == self.tags.last! {
+                        if tag == getTagsArray().last! {
                             width = 0 //last item
                         } else {
                             width -= d.width
                         }
+//                        print (result)
                         return result
                     })
                     .alignmentGuide(.top, computeValue: {d in
                         let result = height
-                        if tag == self.tags.last! {
+                        if tag == getTagsArray().last! {
                             height = 0 // last item
                         }
                         return result
                     })
             }
         }
-        
-//        .frame(height: 10)
-//        .border(Color.red, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
         .background(viewHeightReader($totalHeight))
     }
 
     private func item(for tag: Tag) -> some View {
         HStack {
-            Text(tag.wrappedName)
-
-            Image(systemName: ("xmark"))
-            .foregroundColor(themes[0].themeColours.buttonMainColour)
+            TagView(tag: tag)
+                .opacity(allTags == true && item.tagArray.contains(tag) ? 0.5 : 1)
+            Image(systemName: (allTags == true ? "plus" : "xmark"))
+                .foregroundColor(allTags == true ? .green : .red)
+                .opacity(allTags == true && item.tagArray.contains(tag) ? 0.3 : 1)
             .padding(.trailing, 5)
             .onTapGesture {
                 print(tag.wrappedName)
-                viewContext.delete(tag)
+                print(tag.icon)
+//                if (itemTagsString.contains(tag.wrappedName + " ")) {
+//                    itemTagsString = itemTagsString.replacingOccurrences(of: tag.wrappedName + " ", with: "")
+//                } else {
+//                    itemTagsString = itemTagsString.replacingOccurrences(of: tag.wrappedName, with: "")
+//                }
+                
+                if allTags == true {
+                    item.addToTag(tag)
+                } else {
+                    item.removeFromTag(tag)
+                }
+                
                 do {
-                    print("udało się!!!!")
+                    
                     try viewContext.save()
-                    itemTagsString = itemTagsString.replacingOccurrences(of: tag.wrappedName, with: "")
+                    
                 } catch {
                     print("ni udało się!!!!")
                 }
@@ -143,7 +210,7 @@ struct TagCloudView: View {
         }
         .padding(.all, 5)
         .font(.body)
-        .background(themes[0].themeColours.fontSecondaryColour)
+        .background(selectedThemeColors.bgSecondaryColour)
         .foregroundColor(themes[0].themeColours.bgMainColour)
         .cornerRadius(5)
         

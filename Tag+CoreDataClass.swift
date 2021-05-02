@@ -19,6 +19,10 @@ extension Tag {
         return name ?? "Unknown name"
     }
     
+    public var wrappedIcon:String {
+        return icon ?? "number"
+    }
+    
     public var itemArray: [Item] {
         let set = item as? Set<Item> ?? []
         
