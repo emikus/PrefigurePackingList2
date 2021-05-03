@@ -40,6 +40,14 @@ extension Item {
         }
     }
     
+    public var activityArray: [Activity] {
+        let set = activity as? Set<Activity> ?? []
+        
+        return set.sorted {
+            $0.name! < $1.name!
+        }
+    }
+    
     
 }
 

@@ -48,6 +48,46 @@ struct AddEditItem: View {
     @State private var lastTag:String = ""
     @State private var tempItemTagsArray: [Tag] = []
     @State private var allTagsWithoutTempItemTags: [Tag] = []
+//    @State private var editedItemFormContentChanged =
+        
+        
+    func getItemEdited() -> Bool {
+        
+        if (self.item != nil &&
+                (
+                    item!.name != self.name ||
+                    item!.weight != Int16(self.weight)! ||
+                    item!.volume != Int16(self.volume)! ||
+                    item!.cost != Int16(self.cost)! ||
+                    item!.batteryConsumption != Int16(self.batteryConsumption)! ||
+                    item!.symbol != self.symbol ||
+                    item!.itemCategory != self.itemCategory ||
+                    item!.moduleSymbol != self.moduleSymbol ||
+                    Set(item!.activityArray) != Set(itemActivities) ||
+                    Set(item!.tagArray) != Set(tempItemTagsArray)
+                )
+        ) {
+            return false
+        } else if (self.item == nil && (
+            self.name == "" &&
+            self.weight == "" &&
+            self.volume == "" &&
+            self.cost == "" &&
+            self.batteryConsumption == "" &&
+            self.symbol == "" &&
+            self.itemCategory == "food" &&
+            self.moduleSymbol == "" &&
+            self.itemActivities.count == 0 &&
+            self.tempItemTagsArray.count == 0
+            )
+        ) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
     
     func setTagSuggestedIcon(tag: Tag) -> Void {
         let tagNameWithoutHashSymbol = tag.name?.replacingOccurrences(of: "#", with: "")
@@ -174,22 +214,20 @@ struct AddEditItem: View {
                             }
                         }
                         
-//                        if ((item?.tagArray.count)! > 0) {
-                            VStack(alignment: .leading, spacing: 5, content: {
-                                HStack {
-                                    Text("Item's tags:")
-                                    Text("(tap one to disconnect it from the item)")
-                                        .font(.footnote)
-                                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
-                                }
-                                
-                                TagCloudView(
-                                    tagsArray: self.$tempItemTagsArray,
-                                    action: self.removeTagFromTempItemTagArray,
-                                    actionImageName: "xmark",
-                                    actionImageColor: Color.red)
-                            })
-//                        }
+                        VStack(alignment: .leading, spacing: 5, content: {
+                            HStack {
+                                Text("Item's tags:")
+                                Text("(tap one to disconnect it from the item)")
+                                    .font(.footnote)
+                                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                            }
+                            
+                            TagCloudView(
+                                tagsArray: self.$tempItemTagsArray,
+                                action: self.removeTagFromTempItemTagArray,
+                                actionImageName: "xmark",
+                                actionImageColor: Color.red)
+                        })
                         
                         VStack(alignment: .leading, spacing: 5, content: {
                             HStack {
@@ -361,6 +399,7 @@ struct AddEditItem: View {
                     Text("Save")
                     Image(systemName: "square.and.arrow.down")
                 }
+                .disabled(getItemEdited())
                 .keyboardShortcut(.defaultAction)
             )
         }
@@ -381,9 +420,10 @@ struct AddEditItem: View {
                 self.isPinned = self.item!.isPinned
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}
                 self.tempItemTagsArray = item!.tagArray
-                self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
+                
 //                self.itemTags = (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
             }
+            self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
             
             self.allModulesSymbols += Array(modules.standBookModeModulesFrontOccupation.keys)
             self.allModulesSymbols += Array(modules.standBookModeModulesBackOccupation.keys)
@@ -411,9 +451,10 @@ struct AddEditItem: View {
 
 struct AddEditItem_Previews: PreviewProvider {
     static var previews: some View {
-        let item = Item(context: PersistenceController.preview.container.viewContext)
+//        let item = Item(context: PersistenceController.preview.container.viewContext)
 //        item.name = "dupa"
-        AddEditItem(item:item)
+//        AddEditItem(item:item)
+        AddEditItem()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
         .environmentObject(SelectedThemeColors())
