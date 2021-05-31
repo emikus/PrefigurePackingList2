@@ -107,6 +107,7 @@ struct TagCloudView: View {
     var action: (_ tag: Tag) -> Void
     var actionImageName: String
     var actionImageColor: Color
+    var backgroundColor: Color?
     
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
 //    @Binding var itemTagsString: String
@@ -191,8 +192,8 @@ struct TagCloudView: View {
         }
         .padding(.all, 5)
         .font(.body)
-        .background(selectedThemeColors.bgSecondaryColour)
-        .foregroundColor(themes[0].themeColours.bgMainColour)
+        .background(backgroundColor != nil ? backgroundColor : selectedThemeColors.bgSecondaryColour)
+        .foregroundColor(themes[0].themeColours.bgSecondaryColour)
         .cornerRadius(5)
         
     }
@@ -225,7 +226,7 @@ extension View {
         animation: Animation = Animation.easeOut(duration: 0.3),
         autohideIn: Double? = nil,
         closeOnTap: Bool = true,
-        closeOnTapOutside: Bool = false,
+        closeOnTapOutside: Bool = true,
         view: @escaping () -> PopupContent) -> some View {
         self.modifier(
             Popup(
@@ -421,6 +422,31 @@ public struct Popup<PopupContent>: ViewModifier where PopupContent: View {
 
 class DispatchWorkHolder {
     var work: DispatchWorkItem?
+}
+
+class MyRange: Hashable, Equatable {
+    public var hashValue: Int {
+        get {
+            return (self.range.lowerBound + self.range.upperBound).hashValue
+        }
+    }
+
+    var range: Range<Int>!
+
+    public static func ==(_ lhs: MyRange, _ rhs: MyRange) -> Bool {
+        return lhs.range == rhs.range
+    }
+
+    init(range: Range<Int>) {
+        self.range = range
+    }
+}
+
+
+extension Dictionary where Key: MyRange, Value: ExpressibleByStringLiteral {
+    internal subscript(index: Int) -> [String] {
+        return self.filter({$0.key.range.contains(index)}).map({$0.value as! String})
+    }
 }
 
 

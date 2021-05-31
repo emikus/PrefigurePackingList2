@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSymbolsPicker
 
 struct BagView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -40,6 +41,15 @@ struct BagView: View {
     @State var scrollToCategoryName:String = ""
     @State var itemsCategories: [String] = []
     @State var selectedTag: Any = "Dupa"
+    @State var selectedTagIndex: Int = 0
+    
+    
+    @State var tagIconPickerVisible: Bool = false
+    @State private var icon = ""
+    @State private var isPresented = true
+    let sfSymbolsPickerWidth: CGFloat = 330
+
+    
     
     private func deleteTags(offsets: IndexSet) {
             withAnimation {
@@ -65,9 +75,11 @@ struct BagView: View {
                                     withAnimation {
                                         selectedTag = tag
                                     }
+
                                 }
+
                             Spacer()
-                            
+
                             Button(action: {
                                 viewContext.delete(tag)
                                 try? viewContext.save()
@@ -76,13 +88,20 @@ struct BagView: View {
                                     .foregroundColor(selectedThemeColors.buttonMainColour)
                                     .padding(.trailing, 5)
                             })
+                            .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                         }
-                        
+
                     }
                     .onDelete(perform: deleteTags)
                 }
             }
             .listStyle(SidebarListStyle())
+            .onChange(of: icon, perform: { value in
+                tags[selectedTagIndex].icon = value
+                try? viewContext.save()
+            })
+            
+            
             VStack {
                 if (type(of: selectedTag) == Tag.self) {
                     HStack {
@@ -132,20 +151,20 @@ struct BagView: View {
                     }
                 }
                 .listStyle(GroupedListStyle())
-                //            }
-                
-                
                 
             }
             .transition(.slide)
+            
+
+            
             
             VStack {
                 ModulesAndShelvesView()
                 VolumeWeightDurationIndicatorsView()
                     .zIndex(800)
                 
-                
                 ItemsView(scrollToCategoryName: $scrollToCategoryName)
+                
                 Button(action: {
                     self.showKeyboardShortcutsView = true
                 }){
@@ -170,8 +189,9 @@ struct BagView: View {
             
             print (type(of: selectedTag))
             let itemsCategories = self.items.compactMap { $0.itemCategory }
-            print (Set(itemsCategories))
             self.itemsCategories = Array(Set(itemsCategories)).sorted {$0 < $1}
+            
+            
         }
     }
 }

@@ -11,6 +11,11 @@ import CoreData
 struct ContentView: View {
     @ObservedObject var modules = Modules()
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Tag.name, ascending: true)],
+        animation: .default)
+    private var tags: FetchedResults<Tag>
     
     var dataFacade = DataFacade()
     
@@ -30,62 +35,102 @@ struct ContentView: View {
         @State var bag:[Item] = []
     
     var body: some View {
-    GeometryReader { geo in
-     TabView {
-//        NavigationView {
-//            Text("12345")
-//
-//            Text("987654")
-//            Button(action: {
-//                addItem()
-//            }) {
-//                Text("Add item")
-//            }
-//        }
-        BagView()
-            .tabItem {
-                Image(systemName: "plus")
-                Text("🗄 Pack")
-        }
-         
-         PlanView()
-             .tabItem {
-                 Image(systemName: "plus")
-                 Text("🟥 Plan")
-             }
-         
-        KeyboardShortcutsView()
-             .tabItem {
-                 Image(systemName: "plus")
-                 .font(.largeTitle)
-         }
-         
-         BagView()
-             .tabItem {
-                 Image(systemName: "plus")
-                 Text("🗄 Pack")
-         }
-        
-        
-        
-        
-         
-        
-        .tabItem {
-            Image(systemName: "plus")
-            Text("🎒 Buy")
-        }
-        
-        PreferencesView()
-            .tabItem {
-                Image(systemName: "plus")
-                Text("⚙️ Preferences")
+        GeometryReader { geo in
+            TabView {
+                //        NavigationView {
+                //            Text("12345")
+                //
+                //            Text("987654")
+                //            Button(action: {
+                //                addItem()
+                //            }) {
+                //                Text("Add item")
+                //            }
+                //        }
+                BagView()
+                    .tabItem {
+                        Image(systemName: "plus")
+                        Text("🗄 Pack")
+                    }
+                
+                PlanView()
+                    .tabItem {
+                        Image(systemName: "plus")
+                        Text("🟥 Plan")
+                    }
+                
+                KeyboardShortcutsView()
+                    .tabItem {
+                        Image(systemName: "plus")
+                            .font(.largeTitle)
+                    }
+                
+                BagView()
+                    .tabItem {
+                        Image(systemName: "plus")
+                        Text("🗄 Pack")
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    .tabItem {
+                        Image(systemName: "plus")
+                        Text("🎒 Buy")
+                    }
+                
+                PreferencesView()
+                    .tabItem {
+                        Image(systemName: "plus")
+                        Text("⚙️ Preferences")
+                    }
+                
             }
-        
-    }
-     .environmentObject(self.modules)
-     .environmentObject(self.dataFacade)
+            .environmentObject(self.modules)
+            .environmentObject(self.dataFacade)
         }
+        .onAppear{
+            
+//          fill the app with samples of item/activity/tag
+            if activities.count == 0 {
+                let newActivity = Activity(context: viewContext)
+                newActivity.id = UUID()
+                newActivity.name = "Sample activity"
+                newActivity.symbol = ""
+                newActivity.duration = 45
+                newActivity.category = "general"
+                newActivity.isSelected = false
+                do {
+                    try viewContext.save()
+                } catch {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    let nsError = error as NSError
+                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                }
+            }
+            
+            if items.count == 0 {
+                addItem()
+            }
+            
+            if tags.count == 0 {
+                let newTag = Tag(context: viewContext)
+                newTag.name = "#jakiśTag"
+                
+                do {
+                    try viewContext.save()
+                } catch {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    let nsError = error as NSError
+                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                }
+            }
+        }
+        
     }
     
     func randomString(length: Int) -> String {
@@ -98,8 +143,8 @@ struct ContentView: View {
     func addItem() {
         
         withAnimation {
-            let newTag = Tag(context: viewContext)
-            newTag.name = "#jakiśTag"
+            
+            
             let newItem = Item(context: viewContext)
             newItem.id = UUID()
             newItem.name = "Item " + randomString(length: 3)
@@ -108,11 +153,7 @@ struct ContentView: View {
             newItem.refillable = false
             newItem.electric = false
             newItem.ultraviolet = false
-//            newItem.tag = "#jakiśTag"
-            newTag.addToItem(newItem)
-            newItem.addToTag(newTag)
-            print(newItem)
-            print(newTag)
+
             self.isInBag.toggle()
             do {
                 try viewContext.save()

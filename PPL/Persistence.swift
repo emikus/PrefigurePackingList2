@@ -22,7 +22,7 @@ struct PersistenceController {
 //            newItem.name = "Dupa"
 //            newItem.itemCategory = ((i%2) != 0) ? "food" : "clothes"
 //        }
-        for i in 0..<10 {
+        for i in 0..<3 {
             let newItem = Item(context: viewContext)
             newItem.name = "Testowy item"
             newItem.cost = 34

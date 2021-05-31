@@ -40,8 +40,39 @@ struct AddEditActivityView: View {
     @State var category: String = "general"
     @State var itemsNumberDividedByThree = 0
     @State var activitySymbolsSet: [String] = ["pencil.circle", "map", "lock", "hammer", "bitcoinsign.circle", "video", "lightbulb", "sportscourt", "tv.music.note", "book", "dollarsign.circle", "guitars"]
-    @State private var activityTags = ""
     @State private var isExpanded: Bool = false
+    @State private var activityTags:String = ""
+    @State private var tagsAutoCompleteVisible: Bool = true
+    @State private var tagsTextFieldFocused: Bool = false
+    @State private var lastTag:String = ""
+    @State private var tempActivityTagsArray: [Tag] = []
+    @State private var allTagsWithoutTempItemTags: [Tag] = []
+    @State private var showingCancelingAfterChangesIntroducedAlert = false
+    
+    func getActivityHasNotBeenEdited() -> Bool {
+        
+        if (self.activity != nil) {
+
+            return (activity!.name == self.name &&
+                        activity!.symbol == self.symbol &&
+                        activity!.duration == Int16(self.duration)! &&
+                        activity!.category == self.category &&
+                    Set(activity!.tagArray) == Set(tempActivityTagsArray) &&
+                        Set(activity!.itemArray) == Set(activityItems)
+            )
+        } else if (self.activity == nil) {
+            return (self.name == "" &&
+                self.symbol == "" &&
+                self.duration == "" &&
+                self.category == "general" &&
+                self.activityItems.count == 0 &&
+                self.tempActivityTagsArray.count == 0
+    )
+                        
+        }
+        return true
+    }
+    
     
     private func endEditing() {
             UIApplication.shared.endEditing()
@@ -54,20 +85,24 @@ struct AddEditActivityView: View {
     func manageTags(activityTags: [String]) -> Void {
         for tagName in activityTags {
             let tagExists = tags.contains(where: {$0.name == tagName})
+            let tagLongEnough = tagName.count > 3
             
-            if !tagExists {
+            if !tagExists && tagLongEnough {
                 let newTag = Tag(context: viewContext)
                 newTag.name = tagName
+                dataFacade.setTagSuggestedIcon(tag: newTag)
                 try? viewContext.save()
+                addTagToTempItemTagArray(tag: newTag)
+                self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempActivityTagsArray.contains($0)}
+            } else if tagExists {
+                addTagToTempItemTagArray(tag: tags.filter {$0.name == tagName}[0])
             }
         }
     }
     
-    func addActivityToTags(activity: Activity,tagsNames: [String]) -> Void {
-        for tagName in tagsNames {
-            let tag = tags.first(where: {$0.name == tagName})
-
-            activity.addToTag(tag!)
+    func addTagsToActivity() -> Void {
+        for tag in tempActivityTagsArray {
+            tag.addToActivity(activity!)
         }
     }
     
@@ -77,10 +112,20 @@ struct AddEditActivityView: View {
         }
     }
     
+    func removeTagFromTempItemTagArray(tag: Tag) -> Void {
+        if let index = self.tempActivityTagsArray.firstIndex(of: tag) {
+            tempActivityTagsArray.remove(at: index)
+        }
+    }
+    
+    func addTagToTempItemTagArray(tag: Tag) -> Void {
+        tempActivityTagsArray.insert(tag, at: 0)
+    }
+    
     
     var body: some View {
         NavigationView {
-            
+            ZStack {
             Form {
 
                 Section {
@@ -98,33 +143,6 @@ struct AddEditActivityView: View {
                     self.endEditing()
                 }
                 
-                Section (header: Text("Tags")){
-
-                    TextField("Activity's tags", text: $activityTags)
-                    
-                    Text(tags.map {$0.name!}.joined(separator: " "))
-                                .lineLimit(isExpanded ? nil : 1)
-                                .overlay(
-                                    GeometryReader { proxy in
-                                        Button(action: {
-                                            
-                                                isExpanded.toggle()
-                                        }) {
-                                            Text(isExpanded ? "Less" : "More")
-                                                .font(.caption).bold()
-                                                .padding(.leading, 8.0)
-                                                .padding(.top, 4.0)
-//                                                .background(Color.white)
-                                        }
-                                        .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottomTrailing)
-                                    }
-                                )
-                            
-//
-                    
-//                    .frame(height: 23)
-                }
-                
                 Section(header: Text("Activity's symbol, tap to choose.")) {
                     Picker("Symbol", selection: self.$symbol) {
                         ForEach(self.activitySymbolsSet, id: \.self) { symbol in
@@ -134,6 +152,94 @@ struct AddEditActivityView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     
+                }
+                
+                Section (header: Text("Tags")) {
+                    
+                    HStack {
+                        TextField(
+                            "Type to add new or existing tag",
+                            text: $activityTags,
+                            onEditingChanged: { changing in
+                                tagsTextFieldFocused.toggle()
+                                if tagsTextFieldFocused == false {
+                                    tagsAutoCompleteVisible = false
+                                }
+                            },
+                            onCommit: {
+                                print("commit!!!!!")
+                            }
+                        )
+                        .onChange(of: activityTags) { newValue in
+                          
+                            let newTagsString = self.activityTags.replacingOccurrences(of: (self.activity!.tagArray.map {$0.name!}).joined(separator: " "), with: "")
+                            let newTagsArray = newTagsString.byWords
+                            let newTag = newTagsArray.last
+                            self.lastTag = newTag == nil ? "" : String(newTag!)
+                            let lastCharacterInNewTagsStringIsSpaceOrHash = self.activityTags.last == " " || self.activityTags.last == "#"
+                            
+                            let newTagIsLongEnough = newTag != nil && newTag!.count > 2
+                            
+                            if tagsTextFieldFocused == true
+                                && newValue != (self.activity!.tagArray.map {$0.name!}).joined(separator: " ")
+                                && newTagIsLongEnough == true
+                                && lastCharacterInNewTagsStringIsSpaceOrHash == false {
+                                tagsAutoCompleteVisible = true
+                            } else {
+                                tagsAutoCompleteVisible = false
+                            }
+                        }
+                        Button(action: {
+                            let tagsNamesArray = splitTagsStringIntoArray(tagsString: self.activityTags)
+                            manageTags(activityTags: tagsNamesArray)
+                            self.activityTags = ""
+                        })
+                        {
+                            Text("Add tags")
+                        }
+                    }
+                    
+                    
+                    VStack(alignment: .leading, spacing: 5, content: {
+                        HStack {
+                            Text("Activity's tags:")
+                            Text("(tap one to disconnect it from the activity)")
+                                .font(.footnote)
+                                .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                        }
+
+                        TagCloudView(
+                            tagsArray: self.$tempActivityTagsArray,
+                            action: self.removeTagFromTempItemTagArray,
+                            actionImageName: "xmark",
+                            actionImageColor: Color.red)
+                    })
+                    
+                    VStack(alignment: .leading, spacing: 5, content: {
+                        HStack {
+                            Text("All your tags:")
+                            Text("(tap one to add it to the activity)")
+                                .font(.footnote)
+                                .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                        }
+
+                        Collapsible(
+                            label: { Text("Collapsible") },
+                            content: {
+                                TagCloudView(
+                                    tagsArray: self.$allTagsWithoutTempItemTags,
+                                    action: self.addTagToTempItemTagArray,
+                                    actionImageName: "plus",
+                                    actionImageColor: Color.green)
+                                .environmentObject(self.selectedThemeColors)
+                            }
+                        )
+                        .frame(maxWidth: .infinity)
+                    })
+                    .onChange(of: tempActivityTagsArray, perform: { value in
+                        self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempActivityTagsArray.contains($0)}
+                        print(allTagsWithoutTempItemTags.count, "tutaj!!!!!!!")
+                    })
                 }
                 
                 Section(header: Text("Activity's category, tap to choose.")) {
@@ -161,13 +267,19 @@ struct AddEditActivityView: View {
                     }
                 }
                 
+                
+                
+                
             }
             
             .navigationBarTitle(self.activity == nil ? "Add activity" : "Edit activity", displayMode: .inline)
             .navigationBarItems(
                 leading: Button(action: {
-                    print("dupa")
-                    self.presentationMode.wrappedValue.dismiss()
+                    if (getActivityHasNotBeenEdited() == true) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } else {
+                        showingCancelingAfterChangesIntroducedAlert = true
+                    }
                     
                 })
                 {
@@ -190,8 +302,6 @@ struct AddEditActivityView: View {
                             self.activity!.addToItem(item)
                         }
                         deleteAllTagsFromActivity(activity: self.activity!)
-                        addActivityToTags(activity: self.activity!, tagsNames: tagsNamesArray)
-                        
                     } else {
                         // adding new activity
                         let newActivity = Activity(context: viewContext)
@@ -202,25 +312,52 @@ struct AddEditActivityView: View {
 
 
                         newActivity.duration = Int16(self.duration)!
-//                        newActivity.items = self.activityItems
                         newActivity.category = self.category
                         newActivity.isSelected = false
                         
                         for item in activityItems {
                             newActivity.addToItem(item)
                         }
-                        
-                        addActivityToTags(activity: newActivity, tagsNames: tagsNamesArray)
                     }
+                    addTagsToActivity()
+                    
                     try? viewContext.save()
                     self.presentationMode.wrappedValue.dismiss()
                     
                 }) {
                     Text("Save")
-                    Image(systemName: "square.and.arrow.down")
                 }
+                .disabled(getActivityHasNotBeenEdited())
                 .keyboardShortcut(.defaultAction)
             )
+                
+                if tagsAutoCompleteVisible == true {
+                    VStack {
+                        List {
+                            ForEach (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.activity!.tagArray.contains($0) && $0.name != self.lastTag && !self.activityTags.contains($0.name!) && !self.tempActivityTagsArray.contains($0) }, id: \.id) {tag in
+                                HStack {
+                                    Text(tag.wrappedName)
+                                        .onTapGesture {
+//                                            withAnimation {
+//                                                selectedTag = tag
+//                                            }
+                                            let tappedTagNameWithoutHash = tag.wrappedName.replacingOccurrences(of: "#", with: "")
+                                            
+                                            self.activityTags = self.activityTags.replacingLastOccurrenceOfString(self.lastTag, with: tappedTagNameWithoutHash)
+                                            tagsAutoCompleteVisible = false
+                                        }
+                                }
+                                
+                            }
+                        }
+                        .border(Color.green)
+                    }
+                    .border(Color.red)
+                    .frame(width: 300, height: CGFloat(tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.activity!.tagArray.contains($0) && $0.name != self.lastTag && !self.activityTags.contains($0.name!) && !self.tempActivityTagsArray.contains($0)}.count * 44))
+                    .position(x: 180, y: CGFloat(340 + (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.activity!.tagArray.contains($0) && !self.tempActivityTagsArray.contains($0)}.count * 22)))
+                    .keyboardShortcut(/*@START_MENU_TOKEN@*/KeyEquivalent("a")/*@END_MENU_TOKEN@*/)
+                }
+        }
         }
         .navigationBarBackButtonHidden(self.activity == nil ? true : false)
         .navigationViewStyle(StackNavigationViewStyle())
@@ -231,9 +368,19 @@ struct AddEditActivityView: View {
                 self.duration = String(self.activity!.duration)
                 self.activityItems = self.activity!.itemArray
                 self.category = self.activity!.category!
-                self.activityTags = (self.activity!.tagArray.map {$0.name!}).joined(separator: " ")
+                self.tempActivityTagsArray = activity!.tagArray
             }
+            
+            self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempActivityTagsArray.contains($0)}
         })
+        .alert(isPresented: $showingCancelingAfterChangesIntroducedAlert) {
+            Alert(
+                title: Text("Your changes will be lost😱"),
+                message: Text("Do you really wanna loose them?"),
+                primaryButton: ActionSheet.Button.default(Text("Oh, thanks, I want to save them first!!!")) { showingCancelingAfterChangesIntroducedAlert = false },
+                secondaryButton: ActionSheet.Button.cancel(Text("Don't be overprotective maaaan :)")) { self.presentationMode.wrappedValue.dismiss() }
+            )
+        }
     }
     
     func addRemoveActivityItem(item: Item) {
@@ -248,7 +395,8 @@ struct AddEditActivityView: View {
 struct AddEditActivityView_Previews: PreviewProvider {
     static var previews: some View {
         AddEditActivityView()
-        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-        .environmentObject(Modules())
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(Modules())
+            .environmentObject(SelectedThemeColors())
     }
 }

@@ -108,7 +108,6 @@ struct ProgressBarView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-//                Text(String(self.itemsInBagVolume()))
                 ZStack(alignment: .bottomLeading) {
                     Rectangle()
                         .foregroundColor(Color(.secondarySystemBackground))

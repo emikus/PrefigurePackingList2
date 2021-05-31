@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -53,6 +53,7 @@
 		C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710C3DE25F575BB004DA52C /* TestingPlayground.swift */; };
 		C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */; };
 		C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AC257AF8D40013926F /* ItemToBuyGridView.swift */; };
+		C71F3B202652B26800B38C2E /* SFSymbolsPicker in Frameworks */ = {isa = PBXBuildFile; productRef = C71F3B1F2652B26800B38C2E /* SFSymbolsPicker */; };
 		C728D58D263B4BD100A8E444 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C728D58C263B4BD100A8E444 /* TagView.swift */; };
 		C72CC87425DC75A00072D573 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = C72CC7ED25DC4A350072D573 /* Icon */; };
 		C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */; };
@@ -64,6 +65,7 @@
 		C76E835E25E67FD400FD4124 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835D25E67FD400FD4124 /* Icon.swift */; };
 		C76E835F25E67FD400FD4124 /* Icon+PreviewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */; };
 		C76E836025E67FD400FD4124 /* IconGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76E835B25E67FD300FD4124 /* IconGenerator.swift */; };
+		C782825C2661184400BE10FF /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782825B2661184400BE10FF /* IconPickerView.swift */; };
 		C7921D5F25F977BD00A923B0 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */; };
 		C7921D6025F977BD00A923B0 /* Tag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
@@ -128,6 +130,7 @@
 		C76E835B25E67FD300FD4124 /* IconGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerator.swift; sourceTree = "<group>"; };
 		C76E835C25E67FD400FD4124 /* Icon+PreviewHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Icon+PreviewHelpers.swift"; sourceTree = "<group>"; };
 		C76E835D25E67FD400FD4124 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
+		C782825B2661184400BE10FF /* IconPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerView.swift; sourceTree = "<group>"; };
 		C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C71F3B202652B26800B38C2E /* SFSymbolsPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +256,7 @@
 		52F52A9225345E7D00541E8A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				C782825A2661182800BE10FF /* IconPicker */,
 				52820ABC25777A89003D8B1C /* ButtonsStyling.swift */,
 				52F52A9325345E9C00541E8A /* DataFacade.swift */,
 				52B0C33C252F6E95006F441B /* Model */,
@@ -276,6 +281,14 @@
 				C710331F25CB2FA900A068C9 /* Preferences.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		C782825A2661182800BE10FF /* IconPicker */ = {
+			isa = PBXGroup;
+			children = (
+				C782825B2661184400BE10FF /* IconPickerView.swift */,
+			);
+			path = IconPicker;
 			sourceTree = "<group>";
 		};
 		C7D6EE4325DC8006002D1B8C /* Appearance */ = {
@@ -308,6 +321,7 @@
 			);
 			name = PPL;
 			packageProductDependencies = (
+				C71F3B1F2652B26800B38C2E /* SFSymbolsPicker */,
 			);
 			productName = PPL;
 			productReference = 52B0C31F252F6C46006F441B /* PPL.app */;
@@ -337,6 +351,7 @@
 			);
 			mainGroup = 52B0C316252F6C46006F441B;
 			packageReferences = (
+				C71F3B1E2652B26800B38C2E /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */,
 			);
 			productRefGroup = 52B0C320252F6C46006F441B /* Products */;
 			projectDirPath = "";
@@ -422,6 +437,7 @@
 				52F52A8D253457CC00541E8A /* ItemListView.swift in Sources */,
 				52F11498253EFCE1009220A9 /* Module+CoreDataProperties.swift in Sources */,
 				52DC9E8B25308F7C007BA478 /* Activity+CoreDataProperties.swift in Sources */,
+				C782825C2661184400BE10FF /* IconPickerView.swift in Sources */,
 				52DC9E8A25308F7C007BA478 /* Activity+CoreDataClass.swift in Sources */,
 				52DC9E992530C191007BA478 /* ActivitiesListView.swift in Sources */,
 				52F11499253EFCE1009220A9 /* ModulesSet+CoreDataClass.swift in Sources */,
@@ -631,6 +647,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C71F3B1E2652B26800B38C2E /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alessiorubicini/SFSymbolsPicker";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C71F3B1F2652B26800B38C2E /* SFSymbolsPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C71F3B1E2652B26800B38C2E /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */;
+			productName = SFSymbolsPicker;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		52B0C32D252F6C49006F441B /* PPL.xcdatamodeld */ = {

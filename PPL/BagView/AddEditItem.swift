@@ -42,61 +42,45 @@ struct AddEditItem: View {
     @State private var allModulesSymbols = [""]
     @State private var isPinned: Bool = false
     @State private var itemTags:String = ""
-    @State private var isExpanded: Bool = false
+    
     @State private var tagsAutoCompleteVisible: Bool = false
     @State private var tagsTextFieldFocused: Bool = false
     @State private var lastTag:String = ""
     @State private var tempItemTagsArray: [Tag] = []
     @State private var allTagsWithoutTempItemTags: [Tag] = []
-//    @State private var editedItemFormContentChanged =
+    @State private var showingCancelingAfterChangesIntroducedAlert = false
+
         
         
-    func getItemEdited() -> Bool {
+    func getItemHasNotBeenEdited() -> Bool {
         
-        if (self.item != nil &&
-                (
-                    item!.name != self.name ||
-                    item!.weight != Int16(self.weight)! ||
-                    item!.volume != Int16(self.volume)! ||
-                    item!.cost != Int16(self.cost)! ||
-                    item!.batteryConsumption != Int16(self.batteryConsumption)! ||
-                    item!.symbol != self.symbol ||
-                    item!.itemCategory != self.itemCategory ||
-                    item!.moduleSymbol != self.moduleSymbol ||
-                    Set(item!.activityArray) != Set(itemActivities) ||
-                    Set(item!.tagArray) != Set(tempItemTagsArray)
-                )
-        ) {
-            return false
-        } else if (self.item == nil && (
-            self.name == "" &&
-            self.weight == "" &&
-            self.volume == "" &&
-            self.cost == "" &&
-            self.batteryConsumption == "" &&
-            self.symbol == "" &&
-            self.itemCategory == "food" &&
-            self.moduleSymbol == "" &&
-            self.itemActivities.count == 0 &&
-            self.tempItemTagsArray.count == 0
+        if (self.item != nil) {
+
+            return (item!.name == self.name &&
+            item!.weight == Int16(self.weight)! &&
+            item!.volume == Int16(self.volume)! &&
+            item!.cost == Int16(self.cost)! &&
+            item!.batteryConsumption == Int16(self.batteryConsumption)! &&
+            item!.symbol == self.symbol &&
+            item!.itemCategory == self.itemCategory &&
+            item!.moduleSymbol == self.moduleSymbol &&
+            Set(item!.activityArray) == Set(itemActivities) &&
+            Set(item!.tagArray) == Set(tempItemTagsArray))
+                
+        } else if (self.item == nil) {
+            return (self.name == "" &&
+                        self.weight == "" &&
+                        self.volume == "" &&
+                        self.cost == "" &&
+                        self.batteryConsumption == "" &&
+                        self.symbol == "" &&
+                        self.itemCategory == "food" &&
+                        self.moduleSymbol == "" &&
+                        self.itemActivities.count == 0 &&
+                        self.tempItemTagsArray.count == 0
             )
-        ) {
-            return true
-        } else {
-            return false
         }
-    }
-    
-    
-    
-    func setTagSuggestedIcon(tag: Tag) -> Void {
-        let tagNameWithoutHashSymbol = tag.name?.replacingOccurrences(of: "#", with: "")
-        
-        print("tagNameWithoutHashSymbol", tagNameWithoutHashSymbol)
-        print(tagIconSuggestions[tagNameWithoutHashSymbol!])
-        if (tagIconSuggestions[tagNameWithoutHashSymbol!] != nil) {
-            tag.icon = tagIconSuggestions[tagNameWithoutHashSymbol!]
-        }
+        return true
     }
     
     func splitTagsStringIntoArray(tagsString: String) -> [String] {
@@ -111,7 +95,7 @@ struct AddEditItem: View {
             if !tagExists && tagLongEnough {
                 let newTag = Tag(context: viewContext)
                 newTag.name = tagName
-                setTagSuggestedIcon(tag: newTag)
+                dataFacade.setTagSuggestedIcon(tag: newTag)
                 try? viewContext.save()
                 addTagToTempItemTagArray(tag: newTag)
                 self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
@@ -158,6 +142,7 @@ struct AddEditItem: View {
                 Form {
                     Section {
                         TextField("Item's name", text: $name)
+                            
                         TextField("Item's weight", text: $weight)
                             .keyboardType(UIKeyboardType.decimalPad)
                         TextField("Item's volume", text: $volume)
@@ -167,7 +152,10 @@ struct AddEditItem: View {
                         TextField("Item's battery consumption", text: $batteryConsumption)
                             .keyboardType(UIKeyboardType.decimalPad)
                         TextField("Item's symbol", text: $symbol)
+                            
                     }
+                    
+                    
                     
                     Section (header: Text("Tags")){
                         
@@ -212,7 +200,9 @@ struct AddEditItem: View {
                             {
                                 Text("Add tags")
                             }
+                            .disabled(self.itemTags.count < 4)
                         }
+                        
                         
                         VStack(alignment: .leading, spacing: 5, content: {
                             HStack {
@@ -226,7 +216,8 @@ struct AddEditItem: View {
                                 tagsArray: self.$tempItemTagsArray,
                                 action: self.removeTagFromTempItemTagArray,
                                 actionImageName: "xmark",
-                                actionImageColor: Color.red)
+                                actionImageColor: Color.red
+                            )
                         })
                         
                         VStack(alignment: .leading, spacing: 5, content: {
@@ -244,7 +235,8 @@ struct AddEditItem: View {
                                         tagsArray: self.$allTagsWithoutTempItemTags,
                                         action: self.addTagToTempItemTagArray,
                                         actionImageName: "plus",
-                                        actionImageColor: Color.green)
+                                        actionImageColor: Color.green,
+                                        backgroundColor: selectedThemeColors.bgSecondaryColour.opacity(0.8))
                                     .environmentObject(self.selectedThemeColors)
                                 }
                             )
@@ -290,24 +282,15 @@ struct AddEditItem: View {
                     }
                     
                     
-                    
-                    //                Button(action: {
-                    //                    self.presentationMode.wrappedValue.dismiss()
-                    //
-                    //                })
-                    //                {
-                    //                    Text("Cancel")
-                    //                }
-                    //                .keyboardShortcut(.cancelAction)
-                    
                 }
                 
                 if tagsAutoCompleteVisible == true {
                     VStack {
                         List {
-                            ForEach (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) }, id: \.id) {tag in
+                            ForEach (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) && !self.tempItemTagsArray.contains($0) }, id: \.id) {tag in
                                 HStack {
                                     Text(tag.wrappedName)
+                                        
                                         .onTapGesture {
 //                                            withAnimation {
 //                                                selectedTag = tag
@@ -317,36 +300,30 @@ struct AddEditItem: View {
                                             self.itemTags = self.itemTags.replacingLastOccurrenceOfString(self.lastTag, with: tappedTagNameWithoutHash)
                                             tagsAutoCompleteVisible = false
                                         }
-//                                    Spacer()
                                 }
                                 
                             }
                         }
-//                        Text(self.lastTag)
-//                        if self.lastTag.count > 3 {Text(self.lastTag)}
-//                        if self.lastTag.count > 4 {Text(self.lastTag)}
-//                        if self.lastTag.count > 5 {Text(self.lastTag)}
-//                        if self.lastTag.count > 6 {Text(self.lastTag)}
-//                        Text(self.lastTag)
-//                    .padding()
                     }
-                    .frame(width: 300, height: CGFloat(tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) }.count * 44))
+                    .frame(width: 300, height: CGFloat(tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) && !self.tempItemTagsArray.contains($0) }.count * 44))
                     .background(Color.red)
-                    .position(x: 180, y: CGFloat(450 + (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0)}.count * 22)))
+                    .position(x: 180, y: CGFloat(450 + (tags.filter{ $0.name!.range(of: self.lastTag, options: .caseInsensitive) != nil && !self.item!.tagArray.contains($0) && $0.name != self.lastTag && !self.itemTags.contains($0.name!) && !self.tempItemTagsArray.contains($0)}.count * 22)))
                     .keyboardShortcut(/*@START_MENU_TOKEN@*/KeyEquivalent("a")/*@END_MENU_TOKEN@*/)
                 }
-                
-                
-                
         }
             .navigationBarTitle(self.item == nil ? "Add item" : "Edit item", displayMode: .inline)
             .navigationBarItems(
                 leading: Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    if (getItemHasNotBeenEdited() == true) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } else {
+                        showingCancelingAfterChangesIntroducedAlert = true
+                    }
 
                 })
                 {
                     Text("Cancel")
+                        .fontWeight(.light)
                 }
                 .keyboardShortcut(KeyEquivalent("k")),
                 trailing:
@@ -370,7 +347,6 @@ struct AddEditItem: View {
                         dataFacade.updateItemActivities(item: self.item!, itemActivities: self.itemActivities)
                         
                         deleteTagsFromItem(item: self.item!)
-                        addTagsToItem()
                     } else {
                         let newItem = Item(context: viewContext)
                         newItem.id = UUID()
@@ -387,19 +363,19 @@ struct AddEditItem: View {
                         newItem.ultraviolet = false
 
                         dataFacade.addNewItemToActivities(newItem: newItem, itemActivities: self.itemActivities)
-//                        addItemToTags(item: newItem, tagsNames: tagsNamesArray)
+                        
                     }
                     
-                    
+                    addTagsToItem()
                     
                     try? viewContext.save()
 
                     self.presentationMode.wrappedValue.dismiss()
                 }) {
                     Text("Save")
-                    Image(systemName: "square.and.arrow.down")
+                    
                 }
-                .disabled(getItemEdited())
+                .disabled(getItemHasNotBeenEdited())
                 .keyboardShortcut(.defaultAction)
             )
         }
@@ -408,7 +384,6 @@ struct AddEditItem: View {
         .onAppear(perform: {
             
             if self.item != nil {
-                print("PREVIEWWW!!!!!", item)
                 self.name = self.item!.wrappedName
                 self.weight = String(self.item!.weight)
                 self.volume = String(self.item!.volume)
@@ -421,7 +396,6 @@ struct AddEditItem: View {
                 self.itemActivities = self.activities.filter {$0.itemArray.filter {$0.id == self.item?.id}.count > 0}
                 self.tempItemTagsArray = item!.tagArray
                 
-//                self.itemTags = (self.item!.tagArray.map {$0.name!}).joined(separator: " ")
             }
             self.allTagsWithoutTempItemTags = self.tags.filter{!self.tempItemTagsArray.contains($0)}
             
@@ -434,6 +408,14 @@ struct AddEditItem: View {
             self.allModulesSymbols += Array(modules.strapTwoFrontModulesOccupation.keys)
             self.allModulesSymbols += Array(modules.strapTwoBackModulesOccupation.keys)
         })
+        .alert(isPresented: $showingCancelingAfterChangesIntroducedAlert) {
+            Alert(
+                title: Text("Your changes will be lost😱"),
+                message: Text("Do you really wanna loose them?"),
+                primaryButton: ActionSheet.Button.default(Text("Oh, thanks, I want to save them first!!!")) { showingCancelingAfterChangesIntroducedAlert = false },
+                secondaryButton: ActionSheet.Button.cancel(Text("Don't be overprotective maaaan :)")) { self.presentationMode.wrappedValue.dismiss() }
+            )
+        }
 //                .preferredColorScheme(.dar
 //                .onAppear(perform: {
 //                    changeColorTheme(theme: themes[0].themeColours)
@@ -451,10 +433,10 @@ struct AddEditItem: View {
 
 struct AddEditItem_Previews: PreviewProvider {
     static var previews: some View {
-//        let item = Item(context: PersistenceController.preview.container.viewContext)
+        let item = Item(context: PersistenceController.preview.container.viewContext)
 //        item.name = "dupa"
-//        AddEditItem(item:item)
-        AddEditItem()
+        AddEditItem(item:item)
+//        AddEditItem()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(Modules())
         .environmentObject(SelectedThemeColors())

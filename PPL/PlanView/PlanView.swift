@@ -17,6 +17,18 @@ struct PlanView: View {
     private var tags: FetchedResults<Tag>
     @State var selectedTag: Any = "Dupa"
     
+    private func deleteTags(offsets: IndexSet) {
+            withAnimation {
+                offsets.map { tags[$0] }.forEach(viewContext.delete)
+
+                do {
+                    try viewContext.save()
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    
     
     var body: some View {
         NavigationView {
@@ -24,12 +36,13 @@ struct PlanView: View {
                 Section(header: Text("Tags list")) {
                     ForEach (tags, id: \.id) {tag in
                         HStack {
-                            Text(tag.wrappedName)
+                            TagView(tag: tag)
                                 .onTapGesture {
                                     withAnimation {
                                         selectedTag = tag
                                     }
                                 }
+                                
                             Spacer()
                             
                             Button(action: {
@@ -41,8 +54,8 @@ struct PlanView: View {
                                     .padding(.trailing, 5)
                             })
                         }
-                        
                     }
+                    .onDelete(perform: deleteTags)
                 }
             }
             .listStyle(SidebarListStyle())

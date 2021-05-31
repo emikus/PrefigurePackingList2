@@ -77,9 +77,6 @@ struct ItemsGridView: View {
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
-
-                
-                
                 ScrollView {
                     ScrollViewReader { scrollView in
                         HStack {
@@ -148,7 +145,6 @@ struct ItemsGridView: View {
                         }
                         .id("electrical")
                         .onChange(of: scrollToCategoryName) { newValue in
-                                        print("ItemsGridView: Name changed to \(scrollToCategoryName)!")
                             withAnimation{
                                 scrollView.scrollTo(scrollToCategoryName, anchor: .top)
                                 self.categoriesSectionsVisibility[scrollToCategoryName] = true

@@ -178,6 +178,14 @@ class DataFacade: ObservableObject, Identifiable {
         try? managedContext.save()
     }
     
+    public func setTagSuggestedIcon(tag: Tag) -> Void {
+        let tagNameWithoutHashSymbol = tag.name?.replacingOccurrences(of: "#", with: "")
+        
+        if (tagIconSuggestions[tagNameWithoutHashSymbol!] != nil) {
+            tag.icon = tagIconSuggestions[tagNameWithoutHashSymbol!]
+        }
+    }
+    
     
 }
 
