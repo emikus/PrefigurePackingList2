@@ -12,6 +12,7 @@ struct IconPickerView: View {
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State private var searchIconName:String = ""
     @State private var scrolledToCategoryName:String = ""
+    @State private var allIconsArray: [String] = []
     @State private var dict = Dictionary<MyRange, String>()
     var iconTapAction: (_ iconName: String) -> Void
     let rows = [
@@ -28,7 +29,7 @@ struct IconPickerView: View {
             
             VStack {
                 
-                TextField("Search icon", text: $searchIconName)
+                SearchBar(text: $searchIconName)
                     .padding(10)
                     .background(selectedThemeColors.bgSecondaryColour)
                     .foregroundColor(selectedThemeColors.fontSecondaryColour)
@@ -107,11 +108,71 @@ struct IconPickerView: View {
             .frame(width: 310)
             
             if self.searchIconName.count > 2 {
-                Text("Search results")
-                    .foregroundColor(.red)
+//                Text("Search results number: \(self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}).count)")
+//                    .foregroundColor(.red)
+//                    .offset(x: 0, y: -80)
+                VStack(alignment: .leading) {
+                    if self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}).count > 0 {
+                        HStack {
+                            Text("Results for ") + Text(self.searchIconName).bold() + Text(":")
+                            Spacer()
+                            Image(systemName: "multiply.circle.fill")
+                                .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                                .onTapGesture {
+                                    self.searchIconName = ""
+                                }
+                        }
+                        
+                        ScrollView {
+                            LazyVGrid(columns: rows, spacing: 20) {
+                                //                List{
+                                ForEach(self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}), id: \.self) { symbol in
+                                    
+                                    Image(systemName: symbol)
+                                        
+                                        .onTapGesture {
+                                            self.iconTapAction(symbol)
+                                        }
+                                }
+                            }
+                        }
+                    } else {
+                        HStack {
+                            Text("No icons for ") + Text(self.searchIconName).bold() + Text(":(")
+                            Spacer()
+                            Image(systemName: "multiply.circle.fill")
+                                .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                                .onTapGesture {
+                                    self.searchIconName = ""
+                                }
+                        }
+                    }
+//
+                }
+                .padding()
+                .frame(minWidth: 0, maxWidth: 260, minHeight: 0, maxHeight: self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}).count > 0 ? 260 : 40)
+                .background(selectedThemeColors.bgSecondaryColour.opacity(0.9))
+                .cornerRadius(15)
+//                .border()
+                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
+                .foregroundColor(selectedThemeColors.fontMainColour)
+                .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(selectedThemeColors.fontSecondaryColour, lineWidth: 1)
+                    )
             }
         }
-//        .frame(width: 310)
+        .onAppear{
+            
+            for (_, value) in symbols {
+                allIconsArray += value
+            }
+            allIconsArray = Array(Set(allIconsArray))
+            print(self.allIconsArray)
+            let duplicates = Array(Set(allIconsArray.filter({ (i: String) in allIconsArray.filter({ $0 == i }).count > 1})))
+            print("duplicates:", duplicates)
+        }
+
     }
 }
 
