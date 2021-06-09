@@ -23,6 +23,8 @@ struct IconPickerView: View {
     @AppStorage("pinnedIcons") var pinnedIcons: [String] = []
     @AppStorage("last24Icons") var last24Icons: [String] = []
     @Namespace private var animation
+    private let gridSpacing = 10
+    private let iconWidth = 24
     
     var iconTapAction: (_ iconName: String) -> Void
     let rows = [
@@ -68,11 +70,11 @@ struct IconPickerView: View {
             var rangeStart = Int(self.initialScrollOffset)
             
             for categoryName in Array(iconsCategoriesSizes.keys).sorted() {
-                let rangeMax = rangeStart + Int(self.iconsCategoriesSizes[categoryName]!)
+                let rangeMax = rangeStart + Int(self.iconsCategoriesSizes[categoryName]!) + 27
                 
                 self.iconsCategoriesOffsetsReverese[MyRange(range: rangeStart..<rangeMax)] = categoryName
                 self.iconsCategoriesOffsets[categoryName] = [rangeStart, rangeMax]
-                rangeStart = rangeMax + 1
+                rangeStart = rangeMax
             }
         }
     }
@@ -107,7 +109,7 @@ struct IconPickerView: View {
                             VStack(alignment: .leading) {
                                 Text("Pinned")
                                     .iconsSectionHeaderStyle()
-                                    .offset(x: self.scrollOffset + 64 - self.scrollOffset)
+                                    .offset(x: self.scrollOffset + 69)
                                 
                                 
                                 
@@ -120,7 +122,7 @@ struct IconPickerView: View {
                                     Spacer()
                                     
                                 } else {
-                                    LazyHGrid(rows: rows, spacing: 20) {
+                                    LazyHGrid(rows: rows, spacing: CGFloat(gridSpacing)) {
                                         ForEach(pinnedIcons, id: \.self) { iconName in
                                             
                                             Image(systemName: iconName)
@@ -130,6 +132,7 @@ struct IconPickerView: View {
                                                 .onLongPressGesture {
                                                     self.removeIconFromPinned(iconName: iconName)
                                                 }
+                                                .frame(width: CGFloat(iconWidth))
                                         }
                                     }
                                     .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
@@ -138,14 +141,14 @@ struct IconPickerView: View {
                                 }
                             }
                             .id("pinned")
-                            .frame(height: 255.00)
+                            .frame(width: CGFloat((ceil(Double(Float(pinnedIcons.count)/Float(6))))*34),height: 255.00)
                             .padding(10)
                             .background(selectedThemeColors.bgSecondaryColour)
                             .cornerRadius(10)
-                            .readSize { size in
+                            .onAppear {
                                 // the horizontal available space is size.width
-                                print("Pinned", size.width)
-                                self.iconsCategoriesSizes["AAPinned"] = size.width
+//                                print("Pinned", size.width)
+                                self.iconsCategoriesSizes["AAPinned"] = CGFloat((ceil(Double(Float(pinnedIcons.count)/Float(6))))*34)
                                 
                                 self.setCategoriesSizesAndOffsets()
                             }
@@ -153,7 +156,7 @@ struct IconPickerView: View {
                             VStack(alignment: .leading) {
                                 Text("History")
                                     .iconsSectionHeaderStyle()
-//                                    .offset(x: self.scrollOffset + 64)
+                                    .offset(x: self.visibleCategoryName == "History" ? (CGFloat(Int(self.scrollOffset)) - 34) : 0)
                                 
                                 if (last24Icons.count == 0) {
                                     Spacer()
@@ -163,7 +166,7 @@ struct IconPickerView: View {
                                     Spacer()
                                     
                                 } else {
-                                    LazyHGrid(rows: rows, spacing: 20) {
+                                    LazyHGrid(rows: rows, spacing: CGFloat(gridSpacing)) {
                                         ForEach(last24Icons, id: \.self) { iconName in
                                             
                                             Image(systemName: iconName)
@@ -173,6 +176,7 @@ struct IconPickerView: View {
                                                 .onLongPressGesture {
                                                     self.addIconToPinned(iconName: iconName)
                                                 }
+                                                .frame(width: CGFloat(iconWidth))
                                         }
                                     }
                                     .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
@@ -181,14 +185,14 @@ struct IconPickerView: View {
                                 }
                             }
                             .id("last24Used")
-                            .frame(height: 255.00)
+                            .frame(width: CGFloat((ceil(Double(Float(last24Icons.count)/Float(6))))*34),height: 255.00)
                             .padding(10)
                             .background(selectedThemeColors.bgSecondaryColour)
                             .cornerRadius(10)
                             .fixedSize()
-                            .readSize { size in
+                            .onAppear {
                                 // the horizontal available space is size.width
-                                self.iconsCategoriesSizes["AHistory"] = size.width
+                                self.iconsCategoriesSizes["AHistory"] = CGFloat((ceil(Double(Float(last24Icons.count)/Float(6))))*34)
                                 
                                 self.setCategoriesSizesAndOffsets()
                             }
@@ -199,49 +203,37 @@ struct IconPickerView: View {
                                 VStack(alignment: .leading) {
                                     Text(category)
                                         .iconsSectionHeaderStyle()
-                                        .offset(x: self.iconsCategoriesOffsets[category] != nil ? CGFloat(Int(self.scrollOffset) - self.iconsCategoriesOffsets[category]![0]) : 0, y: 0)
+                                        .offset(x: self.visibleCategoryName == category ? (self.iconsCategoriesOffsets[category] != nil ? CGFloat(Int(self.scrollOffset) - self.iconsCategoriesOffsets[category]![0]) : 0) : 0, y: 0)
 //                                        .offset(x: self.iconsCategoriesOffsets[category][0] + 64)
 //                                        .onChange(of: self.scrollOffset, perform: { value in
 ////                                            print(value, type(of: value))
 //                                        })
                                     
                                     //                                .frame(width: 100, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                    LazyHGrid(rows: rows, spacing: 20) {
+                                    LazyHGrid(rows: rows, spacing: CGFloat(gridSpacing)) {
                                         ForEach(symbols[category]!, id: \.self) { iconName in
                                             
                                             Image(systemName: iconName)
-                                                //                                                .onLongPressGesture {
-                                                //                                                    self.addIconToPinned(iconName: iconName)
-                                                //                                                }
                                                 .onTapGesture {
                                                     self.iconTapAction(iconName)
                                                     self.addIconToLast24(iconName: iconName)
-                                                    
-                                                    let catRange = self.iconsCategoriesOffsetsReverese
-                                                        .filter { (k, v) -> Bool in v == category }
-                                                        .map { (k, v) -> MyRange in k }[0].range
-                                                    print(catRange!.lowerBound, catRange!.upperBound)
-                                                    
-                                                    print(category, "----", iconsCategoriesOffsets[category]![0])
                                                 }
+                                                .frame(width: CGFloat(iconWidth))
                                         }
                                     }
                                     .frame(height: 220.00)
                                     
                                 }
+                                .frame(width: CGFloat((ceil(Double(Float(symbols[category]!.count)/Float(6))))*34))
                                 .id(category)
                                 .padding(10)
                                 .background(selectedThemeColors.bgSecondaryColour)
                                 .cornerRadius(10)
                                 .fixedSize()
-                                .readSize { size in
-                                    // the horizontal available space is size.width
-                                    if self.iconsCategoriesSizes[category] == nil {
-                                        self.iconsCategoriesSizes[category] = size.width
-                                        
-                                    }
+                                .onAppear {
+                                    self.iconsCategoriesSizes[category] = CGFloat((ceil(Double(Float(symbols[category]!.count)/Float(6))))*34)
+//                                    }
                                     self.setCategoriesSizesAndOffsets()
-                                    
                                 }
                             }
                         }
@@ -260,6 +252,7 @@ struct IconPickerView: View {
                                 self.initialScrollOffset =  $0
                             }
                             setVisibleCategoryNameAsTitle(offsetKey: $0)
+                            print($0)
                         }
                     }
                 }
@@ -328,7 +321,7 @@ struct IconPickerView: View {
                         }
                         
                         ScrollView {
-                            LazyVGrid(columns: rows, spacing: 20) {
+                            LazyHGrid(rows: rows, spacing: CGFloat(gridSpacing)) {
                                 //                List{
                                 ForEach(self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}), id: \.self) { symbol in
                                     
