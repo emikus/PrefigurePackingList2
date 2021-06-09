@@ -186,7 +186,6 @@ struct BagView: View {
             
         }
         .onAppear{
-            
             print (type(of: selectedTag))
             let itemsCategories = self.items.compactMap { $0.itemCategory }
             self.itemsCategories = Array(Set(itemsCategories)).sorted {$0 < $1}

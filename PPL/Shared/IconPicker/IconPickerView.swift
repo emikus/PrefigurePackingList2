@@ -13,7 +13,17 @@ struct IconPickerView: View {
     @State private var searchIconName:String = ""
     @State private var scrolledToCategoryName:String = ""
     @State private var allIconsArray: [String] = []
-    @State private var dict = Dictionary<MyRange, String>()
+    @State private var iconsCategoriesOffsetsReverese = Dictionary<MyRange, String>()
+    @State private var iconsCategoriesOffsets: [String: [Int]] = [:]
+    @State private var iconsCategoriesSizes: [String: CGFloat] = [:]
+    @State private var visibleCategoryName: String = "Pinned"
+    @State private var visibleCategoryRangeLowerBound: Int = -64
+    @State private var scrollOffset: ViewOffsetKey.Value = -64
+    @State private var initialScrollOffset: ViewOffsetKey.Value = -1000
+    @AppStorage("pinnedIcons") var pinnedIcons: [String] = []
+    @AppStorage("last24Icons") var last24Icons: [String] = []
+    @Namespace private var animation
+    
     var iconTapAction: (_ iconName: String) -> Void
     let rows = [
         GridItem(.fixed(40.00), spacing: 0),
@@ -23,7 +33,57 @@ struct IconPickerView: View {
         GridItem(.fixed(40.00), spacing: 0),
         GridItem(.fixed(40.00), spacing: 0)
     ]
+    
+    func addIconToPinned(iconName: String) -> Void {
+        if !pinnedIcons.contains(iconName) {
+            pinnedIcons.insert(iconName, at: 0)
+        }
+    }
+    
+    func removeIconFromPinned(iconName: String) -> Void {
+        if let iconNameIndex = pinnedIcons.firstIndex(of: iconName) {
+            pinnedIcons.remove(at: iconNameIndex)
+        }
+    }
+    
+    func addIconToLast24(iconName: String) -> Void {
+        
+        if let iconNameIndex = last24Icons.firstIndex(of: iconName) {
+            last24Icons.remove(at: iconNameIndex)
+        }
+        
+        if last24Icons.count < 24 {
+            withAnimation {
+                last24Icons.insert(iconName, at: 0)
+            }
+        } else {
+            last24Icons.remove(at: 23)
+            last24Icons.insert(iconName, at: 0)
+        }
+    }
+    
+    func setCategoriesSizesAndOffsets() -> Void {
+        if self.iconsCategoriesSizes.count == symbols.count + 2 && self.iconsCategoriesOffsetsReverese.count == 0 {
+            
+            var rangeStart = Int(self.initialScrollOffset)
+            
+            for categoryName in Array(iconsCategoriesSizes.keys).sorted() {
+                let rangeMax = rangeStart + Int(self.iconsCategoriesSizes[categoryName]!)
+                
+                self.iconsCategoriesOffsetsReverese[MyRange(range: rangeStart..<rangeMax)] = categoryName
+                self.iconsCategoriesOffsets[categoryName] = [rangeStart, rangeMax]
+                rangeStart = rangeMax + 1
+            }
+        }
+    }
 
+    func setVisibleCategoryNameAsTitle(offsetKey: ViewOffsetKey.Value) -> Void {
+        if self.iconsCategoriesOffsetsReverese[Int(offsetKey)].count > 0 {
+            let visibleCategoryName = self.iconsCategoriesOffsetsReverese[Int(offsetKey)][0].replacingOccurrences(of: "AAPinned", with: "Pinned").replacingOccurrences(of: "AHistory", with: "History")
+            self.visibleCategoryName = visibleCategoryName
+        }
+    }
+    
     var body: some View {
         ZStack {
             
@@ -34,57 +94,198 @@ struct IconPickerView: View {
                     .background(selectedThemeColors.bgSecondaryColour)
                     .foregroundColor(selectedThemeColors.fontSecondaryColour)
                     .cornerRadius(10)
+                    .environmentObject(SelectedThemeColors())
+                
+                Text(visibleCategoryName)
+                    .foregroundColor(selectedThemeColors.fontMainColour)
                 
                 ScrollView(. horizontal) {
                     ScrollViewReader { scrollView in
+                        
                         HStack {
+                            
+                            VStack(alignment: .leading) {
+                                Text("Pinned")
+                                    .iconsSectionHeaderStyle()
+                                    .offset(x: self.scrollOffset + 64 - self.scrollOffset)
+                                
+                                
+                                
+                                if (pinnedIcons.count == 0) {
+                                    Spacer()
+                                    Text("Long press any icon to keep it here. Do the same within this section to unpin it.")
+                                        .font(.footnote)
+                                        .frame(width: 70)
+                                    //                                        .padding([.top], 60)
+                                    Spacer()
+                                    
+                                } else {
+                                    LazyHGrid(rows: rows, spacing: 20) {
+                                        ForEach(pinnedIcons, id: \.self) { iconName in
+                                            
+                                            Image(systemName: iconName)
+                                                .onTapGesture {
+                                                    self.iconTapAction(iconName)
+                                                }
+                                                .onLongPressGesture {
+                                                    self.removeIconFromPinned(iconName: iconName)
+                                                }
+                                        }
+                                    }
+                                    .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
+                                    .frame(height: 220.00)
+                                    
+                                }
+                            }
+                            .id("pinned")
+                            .frame(height: 255.00)
+                            .padding(10)
+                            .background(selectedThemeColors.bgSecondaryColour)
+                            .cornerRadius(10)
+                            .readSize { size in
+                                // the horizontal available space is size.width
+                                print("Pinned", size.width)
+                                self.iconsCategoriesSizes["AAPinned"] = size.width
+                                
+                                self.setCategoriesSizesAndOffsets()
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                Text("History")
+                                    .iconsSectionHeaderStyle()
+//                                    .offset(x: self.scrollOffset + 64)
+                                
+                                if (last24Icons.count == 0) {
+                                    Spacer()
+                                    Text("Soon will be full :)")
+                                        .font(.footnote)
+                                        .frame(width: 70)
+                                    Spacer()
+                                    
+                                } else {
+                                    LazyHGrid(rows: rows, spacing: 20) {
+                                        ForEach(last24Icons, id: \.self) { iconName in
+                                            
+                                            Image(systemName: iconName)
+                                                .onTapGesture {
+                                                    self.iconTapAction(iconName)
+                                                }
+                                                .onLongPressGesture {
+                                                    self.addIconToPinned(iconName: iconName)
+                                                }
+                                        }
+                                    }
+                                    .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
+                                    .frame(height: 220.00)
+                                    
+                                }
+                            }
+                            .id("last24Used")
+                            .frame(height: 255.00)
+                            .padding(10)
+                            .background(selectedThemeColors.bgSecondaryColour)
+                            .cornerRadius(10)
+                            .fixedSize()
+                            .readSize { size in
+                                // the horizontal available space is size.width
+                                self.iconsCategoriesSizes["AHistory"] = size.width
+                                
+                                self.setCategoriesSizesAndOffsets()
+                            }
+                            
+                            
                             ForEach (Array(symbols.keys).sorted(), id: \.self) {category in
                                 
                                 VStack(alignment: .leading) {
                                     Text(category)
-                                        .foregroundColor(selectedThemeColors.fontMainColour)
+                                        .iconsSectionHeaderStyle()
+                                        .offset(x: self.iconsCategoriesOffsets[category] != nil ? CGFloat(Int(self.scrollOffset) - self.iconsCategoriesOffsets[category]![0]) : 0, y: 0)
+//                                        .offset(x: self.iconsCategoriesOffsets[category][0] + 64)
+//                                        .onChange(of: self.scrollOffset, perform: { value in
+////                                            print(value, type(of: value))
+//                                        })
                                     
                                     //                                .frame(width: 100, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                     LazyHGrid(rows: rows, spacing: 20) {
-                                        ForEach(symbols[category]!, id: \.self) { symbol in
+                                        ForEach(symbols[category]!, id: \.self) { iconName in
                                             
-                                            Image(systemName: symbol)
-                                                .foregroundColor(selectedThemeColors.fontMainColour)
+                                            Image(systemName: iconName)
+                                                //                                                .onLongPressGesture {
+                                                //                                                    self.addIconToPinned(iconName: iconName)
+                                                //                                                }
                                                 .onTapGesture {
-                                                    self.iconTapAction(symbol)
+                                                    self.iconTapAction(iconName)
+                                                    self.addIconToLast24(iconName: iconName)
+                                                    
+                                                    let catRange = self.iconsCategoriesOffsetsReverese
+                                                        .filter { (k, v) -> Bool in v == category }
+                                                        .map { (k, v) -> MyRange in k }[0].range
+                                                    print(catRange!.lowerBound, catRange!.upperBound)
+                                                    
+                                                    print(category, "----", iconsCategoriesOffsets[category]![0])
                                                 }
                                         }
                                     }
                                     .frame(height: 220.00)
+                                    
                                 }
-                                
                                 .id(category)
                                 .padding(10)
                                 .background(selectedThemeColors.bgSecondaryColour)
                                 .cornerRadius(10)
-                                .onAppear {
-                                    print(category)
+                                .fixedSize()
+                                .readSize { size in
+                                    // the horizontal available space is size.width
+                                    if self.iconsCategoriesSizes[category] == nil {
+                                        self.iconsCategoriesSizes[category] = size.width
+                                        
+                                    }
+                                    self.setCategoriesSizesAndOffsets()
+                                    
                                 }
                             }
                         }
-                        
                         .onChange(of: scrolledToCategoryName, perform: { value in
                             withAnimation{
                                 scrollView.scrollTo(scrolledToCategoryName, anchor: .leading)
-                               
                             }
                         })
                         .background(GeometryReader {
-                                        Color.clear.preference(key: ViewOffsetKey.self,
-                                            value: -$0.frame(in: .named("scroll")).origin.x)
-                                    })
-    //                                .onPreferenceChange(ViewOffsetKey.self) { print("offset >> \($0)") }
-                                    }
+                            Color.clear.preference(key: ViewOffsetKey.self,
+                                                   value: -$0.frame(in: .named("scroll")).origin.x)
+                        })
+                        .onPreferenceChange(ViewOffsetKey.self) {
+                            self.scrollOffset = $0
+                            if self.initialScrollOffset == -1000 {
+                                self.initialScrollOffset =  $0
+                            }
+                            setVisibleCategoryNameAsTitle(offsetKey: $0)
+                        }
+                    }
                 }
+                .foregroundColor(selectedThemeColors.listHeaderColour)
                 
                 HStack {
+                    Image(systemName: "pin")
+                        .onTapGesture {
+                            scrolledToCategoryName = "pinned"
+                        }
+                        .foregroundColor(visibleCategoryName == "Pinned" ? selectedThemeColors.listHeaderColour : selectedThemeColors.fontSecondaryColour)
+                        .background(selectedThemeColors.listHeaderColour.opacity(visibleCategoryName == "Pinned" ? 1.0 : 0.0)
+                                        .cornerRadius(10).frame(height: 1).offset(x:0, y: 10))
+                        .scaleEffect(visibleCategoryName == "Pinned" ? 1.5 : 1)
+                        .animation(.easeInOut)
+                        
+                    
                     Image(systemName: "clock")
-                    Image(systemName: "clock")
+                        .onTapGesture {
+                            scrolledToCategoryName = "last24Used"
+                        }
+                        .foregroundColor(visibleCategoryName == "History" ? selectedThemeColors.listHeaderColour : selectedThemeColors.fontSecondaryColour)
+                        .background(selectedThemeColors.listHeaderColour.opacity(visibleCategoryName == "History" ? 1.0 : 0.0)
+                                        .cornerRadius(10).frame(height: 1).offset(x:0, y: 10))
+                        .scaleEffect(visibleCategoryName == "History" ? 1.5 : 1)
+                        .animation(.easeInOut)
                     ScrollView(. horizontal) {
                         HStack{
                             ForEach (Array(symbols.keys).sorted(), id: \.self) {category in
@@ -93,19 +294,22 @@ struct IconPickerView: View {
                                         scrolledToCategoryName = category
                                     }
                                     .padding(5)
-                                    .foregroundColor(scrolledToCategoryName == category ? selectedThemeColors.fontMainColour : selectedThemeColors.fontSecondaryColour)
-                                    .background(selectedThemeColors.bgSecondaryColour.opacity(scrolledToCategoryName == category ? 1.0 : 0.0).cornerRadius(100))
-                                    .scaleEffect(scrolledToCategoryName == category ? 1.5 : 1)
-    //                                .animation(.all)
-                                    
+                                    .foregroundColor(visibleCategoryName == category ? selectedThemeColors.listHeaderColour : selectedThemeColors.fontSecondaryColour)
+                                    .background(selectedThemeColors.listHeaderColour
+                                                    .opacity(visibleCategoryName == category ? 1.0 : 0.0)
+                                                    .cornerRadius(10)
+                                                    .frame(height: 2).offset(x:0, y: 10))
+                                    .scaleEffect(visibleCategoryName == category ? 1.5 : 1)
+                                    .animation(.easeInOut)
+                                //                                .animation(.all)
                             }}
                     }
                 }
-    //            .padding()
+                .animation(.easeInOut)
             }
             .padding(10)
             .background(selectedThemeColors.bgMainColour)
-            .frame(width: 310)
+            .frame(width: 410)
             
             if self.searchIconName.count > 2 {
 //                Text("Search results number: \(self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}).count)")
@@ -150,7 +354,7 @@ struct IconPickerView: View {
 //
                 }
                 .padding()
-                .frame(minWidth: 0, maxWidth: 260, minHeight: 0, maxHeight: self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}).count > 0 ? 260 : 40)
+                .frame(minWidth: 0, maxWidth: 260, minHeight: 0, maxHeight: self.allIconsArray.filter({$0.contains(self.searchIconName.lowercased())}).count > 0 ? 275 : 40)
                 .background(selectedThemeColors.bgSecondaryColour.opacity(0.9))
                 .cornerRadius(15)
 //                .border()
@@ -168,12 +372,30 @@ struct IconPickerView: View {
                 allIconsArray += value
             }
             allIconsArray = Array(Set(allIconsArray))
-            print(self.allIconsArray)
-            let duplicates = Array(Set(allIconsArray.filter({ (i: String) in allIconsArray.filter({ $0 == i }).count > 1})))
-            print("duplicates:", duplicates)
+//            self.last24Icons = []
+//            self.pinnedIcons = []
         }
 
     }
+}
+
+
+
+extension View {
+  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    background(
+      GeometryReader { geometryProxy in
+        Color.clear
+          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+      }
+    )
+    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+  }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
 }
 
 struct ViewOffsetKey: PreferenceKey {

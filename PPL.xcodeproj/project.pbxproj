@@ -11,7 +11,7 @@
 		523E27DE253630D800CDCC7B /* ItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E27DD253630D800CDCC7B /* ItemGridView.swift */; };
 		5247A6482542184B00B229F2 /* BagContentSetsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5247A6472542184B00B229F2 /* BagContentSetsListView.swift */; };
 		525B558F256E8F7300EE1F05 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525B558E256E8F7300EE1F05 /* SearchBarView.swift */; };
-		52820ABD25777A89003D8B1C /* ButtonsStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52820ABC25777A89003D8B1C /* ButtonsStyling.swift */; };
+		52820ABD25777A89003D8B1C /* Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52820ABC25777A89003D8B1C /* Styling.swift */; };
 		52B0C323252F6C46006F441B /* PPLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0C322252F6C46006F441B /* PPLApp.swift */; };
 		52B0C325252F6C46006F441B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B0C324252F6C46006F441B /* ContentView.swift */; };
 		52B0C327252F6C49006F441B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52B0C326252F6C49006F441B /* Assets.xcassets */; };
@@ -75,7 +75,7 @@
 		523E27DD253630D800CDCC7B /* ItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemGridView.swift; sourceTree = "<group>"; };
 		5247A6472542184B00B229F2 /* BagContentSetsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagContentSetsListView.swift; sourceTree = "<group>"; };
 		525B558E256E8F7300EE1F05 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
-		52820ABC25777A89003D8B1C /* ButtonsStyling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsStyling.swift; sourceTree = "<group>"; };
+		52820ABC25777A89003D8B1C /* Styling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styling.swift; sourceTree = "<group>"; };
 		52B0C31F252F6C46006F441B /* PPL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PPL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B0C322252F6C46006F441B /* PPLApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPLApp.swift; sourceTree = "<group>"; };
 		52B0C324252F6C46006F441B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -257,7 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				C782825A2661182800BE10FF /* IconPicker */,
-				52820ABC25777A89003D8B1C /* ButtonsStyling.swift */,
+				52820ABC25777A89003D8B1C /* Styling.swift */,
 				52F52A9325345E9C00541E8A /* DataFacade.swift */,
 				52B0C33C252F6E95006F441B /* Model */,
 			);
@@ -418,7 +418,7 @@
 				52F52A8A2534576E00541E8A /* ItemsListView.swift in Sources */,
 				C76E835F25E67FD400FD4124 /* Icon+PreviewHelpers.swift in Sources */,
 				C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */,
-				52820ABD25777A89003D8B1C /* ButtonsStyling.swift in Sources */,
+				52820ABD25777A89003D8B1C /* Styling.swift in Sources */,
 				C710332025CB2FA900A068C9 /* Preferences.swift in Sources */,
 				52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */,
 				52DC9E8825308F7C007BA478 /* Item+CoreDataClass.swift in Sources */,

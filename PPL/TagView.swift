@@ -15,6 +15,9 @@ struct TagView: View {
     @State var tagIconPickerVisible: Bool = false
     @State private var icon = ""
     @State private var isPresented = true
+    @State var scaleImage : CGFloat = 1
+    @State var iconName: String = ""
+    
     
     
     @FetchRequest(
@@ -36,38 +39,52 @@ struct TagView: View {
     
     var body: some View {
         HStack{
-            Image(systemName: tag.icon != nil ? tag.icon! : "number")
-                .foregroundColor(selectedThemeColors.fontMainColour)
-                .popover(
-                    isPresented: $tagIconPickerVisible,
-                    attachmentAnchor: .point(.trailing),
-                    arrowEdge: .leading,
-                    content: {
-                        IconPickerView(iconTapAction: self.setNewIcon)
-                })
-                .onTapGesture {
-                    print(tag.wrappedIcon, self.tagIconPickerVisible)
-//                    print(tag.wrappedIcon)
-                    if self.tagIconPickerVisible == true {
-                        self.tagIconPickerVisible = false
+            VStack {
+                Image(systemName: tag.icon != nil ? self.iconName : "number")
+                    .foregroundColor(selectedThemeColors.fontMainColour)
+                    .popover(
+                        isPresented: $tagIconPickerVisible,
+                        attachmentAnchor: .point(.trailing),
+                        arrowEdge: .leading,
+                        content: {
+                            IconPickerView(iconTapAction: self.setNewIcon)
+                            .environmentObject(SelectedThemeColors())
+                    })
+                    .scaleEffect(self.scaleImage)
+                    .animation(.easeInOut)
+                    .onTapGesture {
+                        print(tag.wrappedIcon, self.tagIconPickerVisible)
+    //                    print(tag.wrappedIcon)
+                        if self.tagIconPickerVisible == true {
+                            self.tagIconPickerVisible = false
+                        }
+                        self.tagIconPickerVisible = true
+                        
                     }
-                    self.tagIconPickerVisible = true
-                    
-                }
+                    .onChange(of: tag.icon, perform: { value in
+                        
+                        
+                        self.scaleImage = 0.01
+                        
+                        withAnimation(Animation.spring().delay(0.5)) {
+                            self.iconName = value!
+                            self.scaleImage = 1
+                            }
+                        
+                        
+                })
+            }
+            .frame(width: 20)
             
             Text(tag.wrappedName.replacingOccurrences(of: "#", with: ""))
                 .foregroundColor(selectedThemeColors.fontMainColour)
                 .offset(x: -5, y: 0)
         }
+        .onAppear(perform: {
+            self.iconName = self.tag.icon ?? ""
+        })
     }
 }
-
-//let dict = [
-//    "first": 0...4,
-//    "second": 5...10
-//]
-
-
 
 struct TagView_Previews: PreviewProvider {
     static var previews: some View {
