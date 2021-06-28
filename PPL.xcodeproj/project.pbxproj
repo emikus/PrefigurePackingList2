@@ -58,6 +58,7 @@
 		C72CC87425DC75A00072D573 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = C72CC7ED25DC4A350072D573 /* Icon */; };
 		C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */; };
 		C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */; };
+		C76042232689EDC00093A9D5 /* IconPickerIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76042222689EDC00093A9D5 /* IconPickerIcons.swift */; };
 		C761464B25BC9A3F00FC71AE /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464A25BC9A3F00FC71AE /* PreferencesView.swift */; };
 		C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761464E25BF482F00FC71AE /* ThemesView.swift */; };
 		C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761465225BF85A300FC71AE /* ThemesColours.swift */; };
@@ -123,6 +124,7 @@
 		C72CC7ED25DC4A350072D573 /* Icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Icon; sourceTree = "<group>"; };
 		C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsView.swift; sourceTree = "<group>"; };
 		C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcut.swift; sourceTree = "<group>"; };
+		C76042222689EDC00093A9D5 /* IconPickerIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerIcons.swift; sourceTree = "<group>"; };
 		C761464A25BC9A3F00FC71AE /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		C761464E25BF482F00FC71AE /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
 		C761465225BF85A300FC71AE /* ThemesColours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesColours.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 			isa = PBXGroup;
 			children = (
 				C782825B2661184400BE10FF /* IconPickerView.swift */,
+				C76042222689EDC00093A9D5 /* IconPickerIcons.swift */,
 			);
 			path = IconPicker;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				52DC9E992530C191007BA478 /* ActivitiesListView.swift in Sources */,
 				52F11499253EFCE1009220A9 /* ModulesSet+CoreDataClass.swift in Sources */,
 				C761464B25BC9A3F00FC71AE /* PreferencesView.swift in Sources */,
+				C76042232689EDC00093A9D5 /* IconPickerIcons.swift in Sources */,
 				C728D58D263B4BD100A8E444 /* TagView.swift in Sources */,
 				52DC9E9C2530C217007BA478 /* ModelHardCoded.swift in Sources */,
 				52F52A90253459CD00541E8A /* AddEditItem.swift in Sources */,

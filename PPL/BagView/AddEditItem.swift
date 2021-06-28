@@ -105,9 +105,9 @@ struct AddEditItem: View {
         }
     }
     
-    func addTagsToItem() -> Void {
+    func addTagsToItem(item: Item) -> Void {
         for tag in tempItemTagsArray {
-            tag.addToItem(item!)
+            tag.addToItem(item)
         }
     }
     
@@ -347,6 +347,7 @@ struct AddEditItem: View {
                         dataFacade.updateItemActivities(item: self.item!, itemActivities: self.itemActivities)
                         
                         deleteTagsFromItem(item: self.item!)
+                        addTagsToItem(item: self.item!)
                     } else {
                         let newItem = Item(context: viewContext)
                         newItem.id = UUID()
@@ -364,9 +365,11 @@ struct AddEditItem: View {
 
                         dataFacade.addNewItemToActivities(newItem: newItem, itemActivities: self.itemActivities)
                         
+                        addTagsToItem(item: newItem)
+                        try? viewContext.save()
                     }
                     
-                    addTagsToItem()
+                    
                     
                     try? viewContext.save()
 

@@ -10,12 +10,14 @@ import SwiftUI
 struct SearchBar: View {
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @Binding var text: String
+    var searchFieldTitle: String?
     @State private var isEditing = false
+    
  
     var body: some View {
         HStack {
  
-            TextField("Search ...", text: $text)
+            TextField(searchFieldTitle != nil ? searchFieldTitle! : "Search ...", text: $text)
                 .padding(7)
                 .padding(.horizontal, 25)
                 .background(Color(.systemGray6))
@@ -62,6 +64,10 @@ struct SearchBar: View {
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(text: .constant(""))
+        SearchBar(
+            text: .constant(""),
+            searchFieldTitle: "dupa"
+        )
+            .environmentObject(SelectedThemeColors())
     }
 }

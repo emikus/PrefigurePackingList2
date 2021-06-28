@@ -36,92 +36,92 @@ struct ItemsListView: View {
         
         
 
-            VStack {
+        VStack {
+            
+            List {
+                HStack {
+                    if self.isSearchBarVisible == true {
+                        SearchBar(text: $searchText)
+                    }
+                    Spacer()
+                    
+                    Button(action: {
+                        self.itemsViewType = "grid"
+                    }) {
+                        Text("Grid view")
+                    }
+                    .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])
+                    
+                    
+                }
+                .listRowBackground(selectedThemeColors.bgMainColour)
+                .padding(.leading, -15)
                 
-                List {
-                    HStack {
-                        if self.isSearchBarVisible == true {
-                            SearchBar(text: $searchText)
-                        }
-                        Spacer()
+                if self.searchText.count < 3 {
+                    Section(header: HStack{
+                        Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
+                            .foregroundColor(selectedThemeColors.listHeaderColour)
+                            .padding()
                         
-                        Button(action: {
-                            self.itemsViewType = "grid"
-                        }) {
-                            Text("Grid view")
-                        }
-                        .keyboardShortcut(KeyEquivalent("l"), modifiers: [.command, .option])
-                     
-                        
-                    }
-                    .listRowBackground(selectedThemeColors.bgMainColour)
-                    .padding(.leading, -15)
-                    
-                    if self.searchText.count < 3 {
-                        Section(header: HStack{
-                                    Text(self.items.filter({$0.isPinned == true}).count == 0 ? "Long press the item to add it here" : "Your favourite items")
-                                .foregroundColor(selectedThemeColors.listHeaderColour)
-                                .padding()
-
-                                Spacer()
-                        }
-                        .background(selectedThemeColors.bgMainColour)
-                        .listRowInsets(EdgeInsets(
-                                top: 0,
-                                leading: 0,
-                                bottom: 0,
-                                trailing: 0))) {
-                            ForEach(self.items.filter({$0.isPinned == true}).sorted(by: {$0.isInBag && !$1.isInBag})) { item in
-                                        ItemListView(item: item)
-                                    }
-                                    .listRowBackground(selectedThemeColors.bgSecondaryColour)
-                        }
-                    }
-                    
-                    Section(header: HStack {
-                        Text("All your items")
-                        .foregroundColor(selectedThemeColors.listHeaderColour)
-                        .padding()
-
                         Spacer()
                     }
                     .background(selectedThemeColors.bgMainColour)
                     .listRowInsets(EdgeInsets(
-                            top: 0,
-                            leading: 0,
-                            bottom: 0,
-                            trailing: 0))
-                    
-                    ) {
-                        ForEach(self.items.sorted(by: {$0.isInBag && !$1.isInBag}).filter({searchFilter(item: $0)})) { item in
-                                    ItemListView(item: item)
-
-                                }
-                        .onDelete(perform: { indexSet in
-                            print(indexSet)
-                        })
-                                .onInsert(of: ["ppl.item"], perform: onInsert)
+                                    top: 0,
+                                    leading: 0,
+                                    bottom: 0,
+                                    trailing: 0))) {
+                        ForEach(self.items.filter({$0.isPinned == true}).sorted(by: {$0.isInBag && !$1.isInBag})) { item in
+                            ItemListView(item: item)
+                        }
                         .listRowBackground(selectedThemeColors.bgSecondaryColour)
-
-
                     }
-
                 }
-//                .preferredColorScheme(.light)
-                .padding(.top, -47)
-                .simultaneousGesture(DragGesture()
-                                        .onChanged { gesture in
-                                           // onChange code
-                                            withAnimation() {
-                                                self.isSearchBarVisible = true
-                                            }
-                                        }
-                                        .onEnded {_ in 
-                                            print("ended")
-                                        }
-                                     )
-                .background(Color.yellow)
+                
+                Section(header: HStack {
+                    Text("All your items")
+                        .foregroundColor(selectedThemeColors.listHeaderColour)
+                        .padding()
+                    
+                    Spacer()
+                }
+                .background(selectedThemeColors.bgMainColour)
+                .listRowInsets(EdgeInsets(
+                                top: 0,
+                                leading: 0,
+                                bottom: 0,
+                                trailing: 0))
+                
+                ) {
+                    ForEach(self.items.sorted(by: {$0.isInBag && !$1.isInBag}).filter({searchFilter(item: $0)})) { item in
+                        ItemListView(item: item)
+                        
+                    }
+                    .onDelete(perform: { indexSet in
+                        print(indexSet)
+                    })
+                    .onInsert(of: ["ppl.item"], perform: onInsert)
+                    .listRowBackground(selectedThemeColors.bgSecondaryColour)
+                    
+                    
+                }
+                
             }
+            //                .preferredColorScheme(.light)
+            .padding(.top, -47)
+            .simultaneousGesture(DragGesture()
+                                    .onChanged { gesture in
+                                        // onChange code
+                                        withAnimation() {
+                                            self.isSearchBarVisible = true
+                                        }
+                                    }
+                                    .onEnded {_ in
+                                        print("ended")
+                                    }
+            )
+            .background(Color.yellow)
+        }
             .listStyle(GroupedListStyle())
             .background(Color.yellow)
     }

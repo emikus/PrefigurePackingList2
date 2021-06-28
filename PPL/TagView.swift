@@ -39,7 +39,7 @@ struct TagView: View {
     
     var body: some View {
         HStack{
-            VStack {
+            VStack {                
                 Image(systemName: tag.icon != nil ? self.iconName : "number")
                     .foregroundColor(selectedThemeColors.fontMainColour)
                     .popover(
@@ -47,34 +47,51 @@ struct TagView: View {
                         attachmentAnchor: .point(.trailing),
                         arrowEdge: .leading,
                         content: {
-                            IconPickerView(iconTapAction: self.setNewIcon)
-                            .environmentObject(SelectedThemeColors())
-                    })
+                            IconPickerView(
+                                iconTapAction: self.setNewIcon,
+                                searchFieldTitle: "Search Tagicons",
+                                headerView: AnyView(
+                                    HStack {
+                                        Image(systemName: tag.icon != nil ? self.iconName : "number")
+                                            .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
+                                    }
+//                                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                                    
+                                )
+                            )
+                                .environmentObject(SelectedThemeColors())
+                        })
                     .scaleEffect(self.scaleImage)
                     .animation(.easeInOut)
                     .onTapGesture {
                         print(tag.wrappedIcon, self.tagIconPickerVisible)
-    //                    print(tag.wrappedIcon)
+                        //                    print(tag.wrappedIcon)
                         if self.tagIconPickerVisible == true {
                             self.tagIconPickerVisible = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.tagIconPickerVisible = true
+                                    }
+                        } else {
+                            self.tagIconPickerVisible = true
                         }
-                        self.tagIconPickerVisible = true
+                        
                         
                     }
                     .onChange(of: tag.icon, perform: { value in
-                        
-                        
                         self.scaleImage = 0.01
                         
                         withAnimation(Animation.spring().delay(0.5)) {
                             self.iconName = value!
                             self.scaleImage = 1
-                            }
+                        }
                         
                         
-                })
+                    })
             }
             .frame(width: 20)
+            .padding(3)
+            .background(Color.orange.opacity(0.9))
+            .cornerRadius(3)
             
             Text(tag.wrappedName.replacingOccurrences(of: "#", with: ""))
                 .foregroundColor(selectedThemeColors.fontMainColour)
