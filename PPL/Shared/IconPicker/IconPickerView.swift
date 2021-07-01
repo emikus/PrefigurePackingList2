@@ -7,11 +7,13 @@
 
 import SwiftUI
 import SFSymbolsPicker
+import DYPopoverView
 
 struct IconPickerView: View {
     var iconTapAction: (_ iconName: String) -> Void
     var searchFieldTitle: String?
     var headerView: AnyView?
+    var triggerSizeAndCoordinates: CGRect?
     @EnvironmentObject var selectedThemeColors: SelectedThemeColors
     @State private var searchIconName:String = ""
     @State private var scrolledToCategoryName:String = ""
@@ -26,8 +28,9 @@ struct IconPickerView: View {
     @State private var scrollOffset: ViewOffsetKey.Value = -64
     @State private var initialScrollOffset: ViewOffsetKey.Value = -1000
     @State private var popoverVisible: Bool = true
+    @State private var headerViewSizeAndGlobalCoordinates: CGRect? = nil
     
-    
+    @State private var showFirstPopover  = true
     
     
     @AppStorage("pinnedIcons") var pinnedIcons: [String] = []
@@ -41,6 +44,7 @@ struct IconPickerView: View {
     private let gridSpacing = 10
     private let iconWidth = 24
     private let smartCategoriesNumber = 3
+    private let headerLocalY: CGFloat = 80
     
     let rows = [
         GridItem(.fixed(40.00), spacing: 0),
@@ -130,18 +134,19 @@ struct IconPickerView: View {
     var body: some View {
         ZStack {
             
+            if self.headerViewSizeAndGlobalCoordinates != nil {
+                Path { path in
+                    path.move(to: CGPoint(x: 5, y: headerLocalY))
+                    path.addLine(to: CGPoint(x: 5, y: headerLocalY + self.triggerSizeAndCoordinates!.midY - self.headerViewSizeAndGlobalCoordinates!.midY))
+                    //                    path.addLine(to: CGPoint(x: 800, y: 300))
+                    //                    path.addLine(to: CGPoint(x: 800, y: 100))
+                }
+                //            .fill(/*@START_MENU_TOKEN@*/Color.blue/*@END_MENU_TOKEN@*/)
+                .stroke(Color.blue, lineWidth: 10)
+                .zIndex(5)
+            }
+            
             VStack(alignment: .leading) {
-                
-                
-                
-                
-                
-                
-                
-                
-//                Text("Hovered is: \(hoveredCategoryName)")
-//                                                .help("dupa")
-                
                 
                 
                 SearchBar(
@@ -155,12 +160,23 @@ struct IconPickerView: View {
                 .environmentObject(SelectedThemeColors())
                 
                 if headerView != nil {
-                    HStack {
-                        Text("You're changing:")
+                    GeometryReader {geo in
+                        HStack {
                             
-                        headerView
+                            Text("You're changing:")
+                                .onAppear {
+                                    print(geo.frame(in: .global))
+                                    print(geo.frame(in: .local))
+                                    self.headerViewSizeAndGlobalCoordinates = geo.frame(in: .global)
+                                }
+                            headerView
+                        }
+                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
+                        .onHover { hover in
+                            print(hover ? "tak" : "nie")
+                            
+                        }
                     }
-                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
                 }
                 
                 //                Text(visibleCategoryName)
@@ -173,7 +189,7 @@ struct IconPickerView: View {
                             
                             VStack(alignment: .leading) {
                                 Text("Pinned")
-                                    .iconsSectionHeaderStyle()
+                                    .smartIconsSectionHeaderStyle()
                                     .offset(x: self.scrollOffset + 69)
                                 
                                 if (pinnedIcons.count == 0) {
@@ -219,12 +235,12 @@ struct IconPickerView: View {
                             
                             VStack(alignment: .leading) {
                                 Text("History")
-                                    .iconsSectionHeaderStyle()
+                                    .smartIconsSectionHeaderStyle()
                                     .offset(x: self.visibleCategoryName == "History" ? (CGFloat(Int(self.scrollOffset)) - 40) : 0)
                                 
                                 if (last24Icons.count == 0) {
                                     Spacer()
-                                    Text("Soon will be full :)")
+                                    Text("Make history!")
                                         .font(.footnote)
                                         .frame(width: 70)
                                     Spacer()
@@ -267,14 +283,18 @@ struct IconPickerView: View {
                             
                             VStack(alignment: .leading) {
                                 Text("Suggestions")
-                                    .iconsSectionHeaderStyle()
+                                    .smartIconsSectionHeaderStyle()
                                     .offset(x: self.visibleCategoryName == "Suggestions" ? (CGFloat(Int(self.scrollOffset)) - 210) : 0)
-                                
-                                
-                                Text("Soon will be full :)")
-                                    .font(.footnote)
-                                    .frame(width: 70)
-                                Spacer()
+                                if self.visibleCategoryName == "Suggestions" {
+                                    Text("Wait till iOS 15 and Xcode 13!!!")
+                                } else {
+                                    
+                                    Text("Soon will be full :)")
+                                        .font(.footnote)
+                                        .frame(width: 70)
+                                    
+                                    Spacer()
+                                }
                             }
                             .id("Suggestions")
                             .frame(width: 90, height: 255.00)
@@ -289,6 +309,7 @@ struct IconPickerView: View {
                                 self.setCategoriesSizesAndOffsets()
                             }
                             
+                            
                             Divider()
                             
                             
@@ -298,11 +319,15 @@ struct IconPickerView: View {
                                 VStack(alignment: .leading) {
                                     HStack {
                                         Image(systemName: symbols[category]![0])
+                                            .padding(0)
+                                            .background(Color.white.opacity(0.6))
                                             .foregroundColor(categoriesRainbowColors[category])
+                                            .cornerRadius(3)
                                         Text(category)
                                     }
-                                    .help("Dupa blada")
                                     .iconsSectionHeaderStyle()
+                                    .background(categoriesRainbowColors[category])
+                                    .cornerRadius(5)
                                     .offset(x: self.visibleCategoryName == category ? (self.iconsCategoriesOffsets[category] != nil ? CGFloat(Int(self.scrollOffset) - self.iconsCategoriesOffsets[category]![0]) : 0) : 0, y: 0)
                                     
                                     LazyHGrid(rows: rows, spacing: CGFloat(gridSpacing)) {
@@ -368,6 +393,9 @@ struct IconPickerView: View {
                             .animation(.easeInOut)
                     }
                     .hoverEffect(.lift)
+                    .onHover { hover in
+                        self.PHSAndAllCategoriesToolTipsVisibilityArray[0] = hover
+                    }
                     .popover(
                         isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[0],
                         attachmentAnchor: .point(.trailing),
@@ -389,7 +417,22 @@ struct IconPickerView: View {
                             .scaleEffect(visibleCategoryName == "History" ? 1.5 : 1)
                             .animation(.easeInOut)
                     }
-                    .hoverEffect(.lift)
+//                    .hoverEffect(.lift)
+                    .onHover { hover in
+                        self.PHSAndAllCategoriesToolTipsVisibilityArray[1] = hover
+                        
+                        print(self.PHSAndAllCategoriesToolTipsVisibilityArray[1])
+                        
+                    }
+                    .popoverView(content: {Text("History").onTapGesture{self.showFirstPopover = false}}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[1], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 50)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: "firstPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
+//                    .popover(
+//                        isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[1],
+//                        attachmentAnchor: .point(.trailing),
+//                        arrowEdge: .leading,
+//                        content: {
+//                            Text("History")
+//                        }
+//                    )
                     
                     Button(action: {
                         scrolledToCategoryName = "Suggestions"
@@ -403,6 +446,20 @@ struct IconPickerView: View {
                         
                     }
                     .hoverEffect(.lift)
+                    .onHover { hover in
+                        self.PHSAndAllCategoriesToolTipsVisibilityArray[2] = hover
+                        
+                    }
+                    .popover(
+                        isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[2],
+                        attachmentAnchor: .point(.trailing),
+                        arrowEdge: .leading,
+                        content: {
+                            Text("Suggestions")
+                        }
+                    )
+
+                    
                     
                     ScrollView(. horizontal) {
                         HStack(spacing: 3){
@@ -422,25 +479,38 @@ struct IconPickerView: View {
                                         .help("dupa")
                                     
                                 }
-                                .hoverEffect(.lift)
-//                                .popover(
-//                                    isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[category],
-//                                    attachmentAnchor: .point(.trailing),
-//                                    arrowEdge: .leading,
-//                                    content: {
-//                                        Text("dupa")
-//                                    })
-                                
-                            }
+//                                .frame(width: 40)
+//                                .border(Color.red)
+//                                .background(Color.green)
+//                                .hoverEffect(.lift)
+                                .onHover { hover in
+                                    
+                                    
+                                    self.PHSAndAllCategoriesToolTipsVisibilityArray[index + 3] = hover
+                                print(self.PHSAndAllCategoriesToolTipsVisibilityArray[index + 3])
+                                }
+                                .popover(
+                                    isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[index + 3],
+                                    attachmentAnchor: .rect(.bounds),
+                                    arrowEdge: .top,
+                                    content: {
+                                        Text(category)
+                                            .foregroundColor(categoriesRainbowColors[category])
+                                            .padding([.leading, .trailing], 10)
+                                    }
+                                )
+
+                                    
+                                }
                             
                             //Hidden buttons to add shortcuts to shortcuts menu, buttons with only imgs are not included :(
                             VStack {
                                 Button(action: {
-                                    scrolledToCategoryName = "Pinned"
+                                    scrolledToCategoryName = "pinned"
                                 }) {
                                     Text("Pinned")
                                 }
-                                .keyboardShortcut(KeyboardShortcut(KeyEquivalent("p"), modifiers: [.command, .shift, .option]))
+                                .keyboardShortcut(KeyboardShortcut(KeyEquivalent("p"), modifiers: [.command, .shift]))
                                 
                                 Button(action: {
                                     scrolledToCategoryName = "History"
@@ -459,7 +529,6 @@ struct IconPickerView: View {
                                 ForEach (Array(allCategoriesArray.enumerated()), id: \.offset) {index, category in
                                     Button(action: {
                                         scrolledToCategoryName = category
-                                        //                                    print(type(of: Character(String((index + 4))))
                                     }) {
                                         Text(category)
                                         

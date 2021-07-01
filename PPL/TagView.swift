@@ -39,7 +39,8 @@ struct TagView: View {
     
     var body: some View {
         HStack{
-            VStack {                
+            VStack {
+                GeometryReader { geo in
                 Image(systemName: tag.icon != nil ? self.iconName : "number")
                     .foregroundColor(selectedThemeColors.fontMainColour)
                     .popover(
@@ -55,9 +56,8 @@ struct TagView: View {
                                         Image(systemName: tag.icon != nil ? self.iconName : "number")
                                             .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
                                     }
-//                                    .foregroundColor(selectedThemeColors.fontSecondaryColour)
-                                    
-                                )
+                                ),
+                                triggerSizeAndCoordinates: geo.frame(in: .global)
                             )
                                 .environmentObject(SelectedThemeColors())
                         })
@@ -87,8 +87,9 @@ struct TagView: View {
                         
                         
                     })
+                }
             }
-            .frame(width: 20)
+            .frame(width: 20, height: 20)
             .padding(3)
             .background(Color.orange.opacity(0.9))
             .cornerRadius(3)

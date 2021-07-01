@@ -56,6 +56,7 @@
 		C71F3B202652B26800B38C2E /* SFSymbolsPicker in Frameworks */ = {isa = PBXBuildFile; productRef = C71F3B1F2652B26800B38C2E /* SFSymbolsPicker */; };
 		C728D58D263B4BD100A8E444 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C728D58C263B4BD100A8E444 /* TagView.swift */; };
 		C72CC87425DC75A00072D573 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = C72CC7ED25DC4A350072D573 /* Icon */; };
+		C73AA2DF268B7AAB005CBAE3 /* DYPopoverView in Frameworks */ = {isa = PBXBuildFile; productRef = C73AA2DE268B7AAB005CBAE3 /* DYPopoverView */; };
 		C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518F725AB638E00A9DB03 /* KeyboardShortcutsView.swift */; };
 		C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74518FB25AC618C00A9DB03 /* KeyboardShortcut.swift */; };
 		C76042232689EDC00093A9D5 /* IconPickerIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76042222689EDC00093A9D5 /* IconPickerIcons.swift */; };
@@ -142,6 +143,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73AA2DF268B7AAB005CBAE3 /* DYPopoverView in Frameworks */,
 				C71F3B202652B26800B38C2E /* SFSymbolsPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +327,7 @@
 			name = PPL;
 			packageProductDependencies = (
 				C71F3B1F2652B26800B38C2E /* SFSymbolsPicker */,
+				C73AA2DE268B7AAB005CBAE3 /* DYPopoverView */,
 			);
 			productName = PPL;
 			productReference = 52B0C31F252F6C46006F441B /* PPL.app */;
@@ -355,6 +358,7 @@
 			mainGroup = 52B0C316252F6C46006F441B;
 			packageReferences = (
 				C71F3B1E2652B26800B38C2E /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */,
+				C73AA2DD268B7AAB005CBAE3 /* XCRemoteSwiftPackageReference "DYPopoverView" */,
 			);
 			productRefGroup = 52B0C320252F6C46006F441B /* Products */;
 			projectDirPath = "";
@@ -661,6 +665,14 @@
 				kind = branch;
 			};
 		};
+		C73AA2DD268B7AAB005CBAE3 /* XCRemoteSwiftPackageReference "DYPopoverView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DominikButz/DYPopoverView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -668,6 +680,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C71F3B1E2652B26800B38C2E /* XCRemoteSwiftPackageReference "SFSymbolsPicker" */;
 			productName = SFSymbolsPicker;
+		};
+		C73AA2DE268B7AAB005CBAE3 /* DYPopoverView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C73AA2DD268B7AAB005CBAE3 /* XCRemoteSwiftPackageReference "DYPopoverView" */;
+			productName = DYPopoverView;
 		};
 /* End XCSwiftPackageProductDependency section */
 

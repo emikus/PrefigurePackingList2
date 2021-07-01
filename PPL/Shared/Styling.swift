@@ -85,8 +85,6 @@ struct IconsSectionHeader: ViewModifier {
             .font(.footnote)
             .foregroundColor(selectedThemeColors.bgMainColour)
             .padding(5)
-            .background(selectedThemeColors.listHeaderColour.opacity(0.9))
-            .cornerRadius(5)
     }
 }
 
@@ -95,3 +93,24 @@ extension View {
         self.modifier(IconsSectionHeader())
     }
 }
+
+struct SmartIconsSectionHeader: ViewModifier {
+    @EnvironmentObject var selectedThemeColors: SelectedThemeColors
+    
+    func body(content: Content) -> some View {
+        content
+            .font(.footnote)
+            .foregroundColor(selectedThemeColors.bgMainColour)
+            .padding(5)
+            .background(selectedThemeColors.listHeaderColour.opacity(0.9))
+            .cornerRadius(5)
+    }
+}
+
+extension View {
+    func smartIconsSectionHeaderStyle() -> some View {
+        self.modifier(SmartIconsSectionHeader())
+    }
+}
+
+
