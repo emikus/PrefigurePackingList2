@@ -396,13 +396,7 @@ struct IconPickerView: View {
                     .onHover { hover in
                         self.PHSAndAllCategoriesToolTipsVisibilityArray[0] = hover
                     }
-                    .popover(
-                        isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[0],
-                        attachmentAnchor: .point(.trailing),
-                        arrowEdge: .leading,
-                        content: {
-                            Text("Pinned")
-                        })
+                    .popoverView(content: {Text("Pinned")}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[0], frame: .constant(CGRect(x: 200, y: 0, width: 150, height: 30)), anchorFrame: nil, popoverType: .popout, position: .top, viewId: "thirdPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
                     
                     Button(action: {
                         scrolledToCategoryName = "History"
@@ -424,15 +418,7 @@ struct IconPickerView: View {
                         print(self.PHSAndAllCategoriesToolTipsVisibilityArray[1])
                         
                     }
-                    .popoverView(content: {Text("History").onTapGesture{self.showFirstPopover = false}}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[1], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 50)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: "firstPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
-//                    .popover(
-//                        isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[1],
-//                        attachmentAnchor: .point(.trailing),
-//                        arrowEdge: .leading,
-//                        content: {
-//                            Text("History")
-//                        }
-//                    )
+                    .popoverView(content: {Text("History")}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[1], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 40)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: "secondPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
                     
                     Button(action: {
                         scrolledToCategoryName = "Suggestions"
@@ -450,19 +436,12 @@ struct IconPickerView: View {
                         self.PHSAndAllCategoriesToolTipsVisibilityArray[2] = hover
                         
                     }
-                    .popover(
-                        isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[2],
-                        attachmentAnchor: .point(.trailing),
-                        arrowEdge: .leading,
-                        content: {
-                            Text("Suggestions")
-                        }
-                    )
+                    .popoverView(content: {Text("Suggestions")}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[2], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 40)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: "thirdPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
 
                     
                     
-                    ScrollView(. horizontal) {
-                        HStack(spacing: 3){
+//                    ScrollView(. horizontal) {
+//                        HStack(spacing: 3){
                             ForEach (Array(allCategoriesArray.enumerated()), id: \.offset) {index, category in
                                 Button(action: {
                                     scrolledToCategoryName = category
@@ -489,16 +468,7 @@ struct IconPickerView: View {
                                     self.PHSAndAllCategoriesToolTipsVisibilityArray[index + 3] = hover
                                 print(self.PHSAndAllCategoriesToolTipsVisibilityArray[index + 3])
                                 }
-                                .popover(
-                                    isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[index + 3],
-                                    attachmentAnchor: .rect(.bounds),
-                                    arrowEdge: .top,
-                                    content: {
-                                        Text(category)
-                                            .foregroundColor(categoriesRainbowColors[category])
-                                            .padding([.leading, .trailing], 10)
-                                    }
-                                )
+                                .popoverView(content: {Text(category).foregroundColor(Color.white)}, background: {categoriesRainbowColors[category].opacity(0.6)}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[index + 3], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 40)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: String(index + 3) + "Popover", settings: DYPopoverViewSettings(shadowRadius: 20))
 
                                     
                                 }
@@ -561,8 +531,8 @@ struct IconPickerView: View {
                             
                             
                             
-                        }
-                    }
+//                        }
+//                    }
                     Spacer()
                     Image(systemName: "gearshape.fill")
                         .font(.title)
@@ -571,7 +541,7 @@ struct IconPickerView: View {
                 .animation(.easeInOut)
             }
             .padding(10)
-            .background(selectedThemeColors.bgMainColour)
+//            .background(selectedThemeColors.bgMainColour)
             .frame(width: 410)
             
             if self.searchIconName.count > 2 {
