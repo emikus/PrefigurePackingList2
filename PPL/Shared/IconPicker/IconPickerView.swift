@@ -18,12 +18,11 @@ struct IconPickerView: View {
     @State private var searchIconName:String = ""
     @State private var scrolledToCategoryName:String = ""
     @State private var allIconsArray: [String] = []
-    @State private var allCategoriesArray: [String] = []
+//    @State private var allCategoriesArray: [String] = []
     @State private var iconsCategoriesOffsetsReverese = Dictionary<MyRange, String>()
     @State private var iconsCategoriesOffsets: [String: [Int]] = [:]
     @State private var iconsCategoriesSizes: [String: CGFloat] = [:]
     @State private var visibleCategoryName: String = "Pinned"
-    @State private var hoveredCategoryName: String = ""
     @State private var visibleCategoryRangeLowerBound: Int = -64
     @State private var scrollOffset: ViewOffsetKey.Value = -64
     @State private var initialScrollOffset: ViewOffsetKey.Value = -1000
@@ -36,8 +35,8 @@ struct IconPickerView: View {
     @AppStorage("pinnedIcons") var pinnedIcons: [String] = []
     @AppStorage("last24Icons") var last24Icons: [String] = []
     @Namespace private var animation
-    @State var PHSAndAllCategoriesArray: [String] = []
-    @State var PHSAndAllCategoriesToolTipsVisibilityArray: Array<Bool> = Array(repeating: false, count: 10)
+    
+    
     
     @State var aaaArray: [String: Bool] = ["Pinned": true
     ]
@@ -109,31 +108,12 @@ struct IconPickerView: View {
         return String(number + 3)
     }
     
-    func getNextCategoryName() -> String {
-        let visibleCategoryIndex = PHSAndAllCategoriesArray.firstIndex(of: self.visibleCategoryName)
-        let PHSAndAllCategoriesNumber = PHSAndAllCategoriesArray.count
-        
-        if visibleCategoryIndex! == PHSAndAllCategoriesNumber - 1 {
-            return PHSAndAllCategoriesArray[0]
-        } else {
-            return PHSAndAllCategoriesArray[visibleCategoryIndex! + 1]
-        }
-    }
     
-    func getPreviousCategoryName() -> String {
-        let visibleCategoryIndex = PHSAndAllCategoriesArray.firstIndex(of: self.visibleCategoryName)
-        let PHSAndAllCategoriesNumber = PHSAndAllCategoriesArray.count
-        
-        if visibleCategoryIndex! == 0 {
-            return PHSAndAllCategoriesArray[PHSAndAllCategoriesNumber - 1]
-        } else {
-            return PHSAndAllCategoriesArray[visibleCategoryIndex! - 1]
-        }
-    }
     
     var body: some View {
         ZStack {
             
+            // triggering view to headerView
             if self.headerViewSizeAndGlobalCoordinates != nil {
                 Path { path in
                     path.move(to: CGPoint(x: 5, y: headerLocalY))
@@ -172,15 +152,9 @@ struct IconPickerView: View {
                             headerView
                         }
                         .foregroundColor(selectedThemeColors.fontSecondaryColour)
-                        .onHover { hover in
-                            print(hover ? "tak" : "nie")
-                            
-                        }
                     }
                 }
                 
-                //                Text(visibleCategoryName)
-                //                    .foregroundColor(selectedThemeColors.fontMainColour)
                 
                 ScrollView(. horizontal) {
                     ScrollViewReader { scrollView in
@@ -378,167 +352,7 @@ struct IconPickerView: View {
                 }
                 .foregroundColor(selectedThemeColors.listHeaderColour)
                 
-                HStack {
-                    Button(action: {
-                        scrolledToCategoryName = "Pinned"
-                    }) {
-                        Image(systemName: "pin")
-                            .onTapGesture {
-                                scrolledToCategoryName = "pinned"
-                            }
-                            .foregroundColor(visibleCategoryName == "Pinned" ? selectedThemeColors.fontMainColour.opacity(0.9) : selectedThemeColors.fontMainColour.opacity(0.6))
-                            .background(selectedThemeColors.listHeaderColour.opacity(visibleCategoryName == "Pinned" ? 1.0 : 0.0)
-                                            .cornerRadius(10).frame(height: 1).offset(x:0, y: 10))
-                            .scaleEffect(visibleCategoryName == "Pinned" ? 1.5 : 1)
-                            .animation(.easeInOut)
-                    }
-                    .hoverEffect(.lift)
-                    .onHover { hover in
-                        self.PHSAndAllCategoriesToolTipsVisibilityArray[0] = hover
-                    }
-                    .popoverView(content: {Text("Pinned")}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[0], frame: .constant(CGRect(x: 200, y: 0, width: 150, height: 30)), anchorFrame: nil, popoverType: .popout, position: .top, viewId: "thirdPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
-                    
-                    Button(action: {
-                        scrolledToCategoryName = "History"
-                    }) {
-                        Image(systemName: "clock")
-                            .onTapGesture {
-                                scrolledToCategoryName = "History"
-                            }
-                            .foregroundColor(visibleCategoryName == "History" ? selectedThemeColors.fontMainColour.opacity(0.9) : selectedThemeColors.fontMainColour.opacity(0.6))
-                            .background(selectedThemeColors.listHeaderColour.opacity(visibleCategoryName == "History" ? 1.0 : 0.0)
-                                            .cornerRadius(10).frame(height: 1).offset(x:0, y: 10))
-                            .scaleEffect(visibleCategoryName == "History" ? 1.5 : 1)
-                            .animation(.easeInOut)
-                    }
-//                    .hoverEffect(.lift)
-                    .onHover { hover in
-                        self.PHSAndAllCategoriesToolTipsVisibilityArray[1] = hover
-                        
-                        print(self.PHSAndAllCategoriesToolTipsVisibilityArray[1])
-                        
-                    }
-                    .popoverView(content: {Text("History")}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[1], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 40)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: "secondPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
-                    
-                    Button(action: {
-                        scrolledToCategoryName = "Suggestions"
-                    }) {
-                        Image(systemName: "lasso.sparkles")
-                            .foregroundColor(visibleCategoryName == "Suggestions" ? selectedThemeColors.fontMainColour.opacity(0.9) : selectedThemeColors.fontMainColour.opacity(0.6))
-                            .background(selectedThemeColors.listHeaderColour.opacity(visibleCategoryName == "Suggestions" ? 1.0 : 0.0)
-                                            .cornerRadius(10).frame(height: 1).offset(x:0, y: 10))
-                            .scaleEffect((visibleCategoryName == "Suggestions" || hoveredCategoryName == "Suggestions") ? 1.5 : 1)
-                            .animation(.easeInOut)
-                        
-                    }
-                    .hoverEffect(.lift)
-                    .onHover { hover in
-                        self.PHSAndAllCategoriesToolTipsVisibilityArray[2] = hover
-                        
-                    }
-                    .popoverView(content: {Text("Suggestions")}, background: {Color.red}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[2], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 40)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: "thirdPopover", settings: DYPopoverViewSettings(shadowRadius: 20))
-
-                    
-                    
-//                    ScrollView(. horizontal) {
-//                        HStack(spacing: 3){
-                            ForEach (Array(allCategoriesArray.enumerated()), id: \.offset) {index, category in
-                                Button(action: {
-                                    scrolledToCategoryName = category
-                                }) {
-                                    Image(systemName: symbols[category]![0])
-                                        .padding(5)
-                                        .foregroundColor(visibleCategoryName == category ? selectedThemeColors.listHeaderColour : categoriesRainbowColors[category])
-                                        .background(selectedThemeColors.listHeaderColour
-                                                        .opacity(visibleCategoryName == category ? 1.0 : 0.0)
-                                                        .cornerRadius(10)
-                                                        .frame(height: 2).offset(x:0, y: 10))
-                                        .scaleEffect((visibleCategoryName == category || hoveredCategoryName == category) ? 1.5 : 1)
-                                        .animation(.easeInOut)
-                                        .help("dupa")
-                                    
-                                }
-//                                .frame(width: 40)
-//                                .border(Color.red)
-//                                .background(Color.green)
-//                                .hoverEffect(.lift)
-                                .onHover { hover in
-                                    
-                                    
-                                    self.PHSAndAllCategoriesToolTipsVisibilityArray[index + 3] = hover
-                                print(self.PHSAndAllCategoriesToolTipsVisibilityArray[index + 3])
-                                }
-                                .popoverView(content: {Text(category).foregroundColor(Color.white)}, background: {categoriesRainbowColors[category].opacity(0.6)}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[index + 3], frame: .constant(CGRect(x: 0, y: 0, width: 150, height: 40)),  anchorFrame: nil, popoverType: .popout, position: .top, viewId: String(index + 3) + "Popover", settings: DYPopoverViewSettings(shadowRadius: 20))
-
-                                    
-                                }
-                            
-                            //Hidden buttons to add shortcuts to shortcuts menu, buttons with only imgs are not included :(
-                            VStack {
-                                Button(action: {
-                                    scrolledToCategoryName = "pinned"
-                                }) {
-                                    Text("Pinned")
-                                }
-                                .keyboardShortcut(KeyboardShortcut(KeyEquivalent("p"), modifiers: [.command, .shift]))
-                                
-                                Button(action: {
-                                    scrolledToCategoryName = "History"
-                                }) {
-                                    Text("History")
-                                }
-                                .keyboardShortcut(KeyboardShortcut(KeyEquivalent("h"), modifiers: [.command, .shift]))
-                                
-                                Button(action: {
-                                    scrolledToCategoryName = "Suggestions"
-                                }) {
-                                    Text("Suggestions")
-                                }
-                                .keyboardShortcut(KeyboardShortcut(KeyEquivalent("s"), modifiers: [.command, .shift]))
-                                
-                                ForEach (Array(allCategoriesArray.enumerated()), id: \.offset) {index, category in
-                                    Button(action: {
-                                        scrolledToCategoryName = category
-                                    }) {
-                                        Text(category)
-                                        
-                                        
-                                    }
-                                    .hoverEffect(.lift)
-                                    .keyboardShortcut(KeyboardShortcut(KeyEquivalent(Character(String(index + 1))), modifiers: [.command]))
-                                    
-                                    
-                                    Button(action: {
-                                        scrolledToCategoryName = getNextCategoryName()
-                                    }) {
-                                        Text("Next category ->")
-                                    }
-                                    .keyboardShortcut(KeyboardShortcut(KeyEquivalent.tab, modifiers: [.command, .shift, .option]))
-                                    
-                                    
-                                    
-                                    Button(action: {
-                                        scrolledToCategoryName = getPreviousCategoryName()
-                                    }) {
-                                        Text("Previous category <-")
-                                    }
-                                    .keyboardShortcut(KeyboardShortcut(KeyEquivalent.tab, modifiers: [.command, .shift, .option, .control]))
-                                    
-                                }
-                            }
-                            .font(.system(size: 0.1))
-                            
-                            
-                            
-                            
-//                        }
-//                    }
-                    Spacer()
-                    Image(systemName: "gearshape.fill")
-                        .font(.title)
-                        .foregroundColor(selectedThemeColors.fontSecondaryColour)
-                }
-                .animation(.easeInOut)
+                IconCategoriesMenuView(scrolledToCategoryName: $scrolledToCategoryName, visibleCategoryName: self.visibleCategoryName)
             }
             .padding(10)
 //            .background(selectedThemeColors.bgMainColour)
@@ -605,12 +419,6 @@ struct IconPickerView: View {
                 allIconsArray += value
             }
             allIconsArray = Array(Set(allIconsArray))
-            allCategoriesArray = Array(symbols.keys).sorted()
-            PHSAndAllCategoriesArray = ["Pinned", "History", "Suggestions"] + allCategoriesArray
-            
-//            PHSAndAllCategoriesToolTipsVisibilityArray =
-            
-            
 //            self.last24Icons = []
 //            self.pinnedIcons = []
         }
@@ -628,7 +436,8 @@ struct IconPickerView_Previews: PreviewProvider {
         
         return IconPickerView(
             iconTapAction: printString,
-            headerView: AnyView(Text("dupa:)")))
+            headerView: AnyView(Text("dupa:)")),
+            triggerSizeAndCoordinates: CGRect(x: 27.0, y: 181.0, width: 100.0, height: 20.0))
             .environmentObject(SelectedThemeColors())
     }
 }
@@ -636,15 +445,7 @@ struct IconPickerView_Previews: PreviewProvider {
 
 
 
-let categoriesRainbowColors: [String: Color] = [
-    "Connectivity": Color(hex: "#D82735"),
-    "Devices": Color(hex: "#FF9135"),
-    "Health": Color(hex: "#FFEF00"),
-    "Multimedia": Color(hex: "#00CC00"),
-    "Nature": Color(hex: "#06BBFC"),
-    "People": Color(hex: "#0052A5"),
-    "Time": Color(hex: "#69107D"),
-]
+
 
 
 

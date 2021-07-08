@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 @objc(Tag)
 public class Tag: NSManagedObject {
@@ -36,6 +37,16 @@ extension Tag {
         
         return set.sorted {
             $0.wrappedName < $1.wrappedName
+        }
+    }
+    
+    public var iconCategoryColor: Color {
+        if name == nil || wrappedIcon == "number" {
+            return Color.orange
+        } else {
+            
+            let iconCategory = symbols.first(where: { $0.value.contains(wrappedIcon) })?.key
+            return categoriesRainbowColors[iconCategory!]!
         }
     }
 }

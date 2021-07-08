@@ -81,6 +81,7 @@ struct TagView: View {
                         self.scaleImage = 0.01
                         
                         withAnimation(Animation.spring().delay(0.5)) {
+                            print(value!)
                             self.iconName = value!
                             self.scaleImage = 1
                         }
@@ -91,7 +92,7 @@ struct TagView: View {
             }
             .frame(width: 20, height: 20)
             .padding(3)
-            .background(Color.orange.opacity(0.9))
+            .background(tag.iconCategoryColor.opacity(0.9))
             .cornerRadius(3)
             
             Text(tag.wrappedName.replacingOccurrences(of: "#", with: ""))

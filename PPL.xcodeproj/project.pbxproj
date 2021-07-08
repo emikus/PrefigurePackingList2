@@ -70,6 +70,7 @@
 		C782825C2661184400BE10FF /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782825B2661184400BE10FF /* IconPickerView.swift */; };
 		C7921D5F25F977BD00A923B0 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */; };
 		C7921D6025F977BD00A923B0 /* Tag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */; };
+		C7C7DFF82697499600F18A93 /* IconCategoriesMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +137,7 @@
 		C782825B2661184400BE10FF /* IconPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerView.swift; sourceTree = "<group>"; };
 		C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCategoriesMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +294,7 @@
 			children = (
 				C782825B2661184400BE10FF /* IconPickerView.swift */,
 				C76042222689EDC00093A9D5 /* IconPickerIcons.swift */,
+				C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */,
 			);
 			path = IconPicker;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				52B0C323252F6C46006F441B /* PPLApp.swift in Sources */,
 				C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */,
 				52F52A8625344D8000541E8A /* ItemsView.swift in Sources */,
+				C7C7DFF82697499600F18A93 /* IconCategoriesMenuView.swift in Sources */,
 				C7921D6025F977BD00A923B0 /* Tag+CoreDataProperties.swift in Sources */,
 				523E27DE253630D800CDCC7B /* ItemGridView.swift in Sources */,
 				52F11497253EFCE1009220A9 /* Module+CoreDataClass.swift in Sources */,
