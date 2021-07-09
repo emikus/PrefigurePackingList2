@@ -71,6 +71,8 @@
 		C7921D5F25F977BD00A923B0 /* Tag+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */; };
 		C7921D6025F977BD00A923B0 /* Tag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */; };
 		C7C7DFF82697499600F18A93 /* IconCategoriesMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */; };
+		C7C7DFFA26985C3000F18A93 /* IconCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C7DFF926985C3000F18A93 /* IconCategoriesView.swift */; };
+		C7C7DFFC26986E5D00F18A93 /* IconPickerSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C7DFFB26986E5D00F18A93 /* IconPickerSearchResults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -138,6 +140,8 @@
 		C7921D5D25F977BD00A923B0 /* Tag+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C7921D5E25F977BD00A923B0 /* Tag+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCategoriesMenuView.swift; sourceTree = "<group>"; };
+		C7C7DFF926985C3000F18A93 /* IconCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCategoriesView.swift; sourceTree = "<group>"; };
+		C7C7DFFB26986E5D00F18A93 /* IconPickerSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerSearchResults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,9 +296,11 @@
 		C782825A2661182800BE10FF /* IconPicker */ = {
 			isa = PBXGroup;
 			children = (
+				C7C7DFFB26986E5D00F18A93 /* IconPickerSearchResults.swift */,
 				C782825B2661184400BE10FF /* IconPickerView.swift */,
 				C76042222689EDC00093A9D5 /* IconPickerIcons.swift */,
 				C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */,
+				C7C7DFF926985C3000F18A93 /* IconCategoriesView.swift */,
 			);
 			path = IconPicker;
 			sourceTree = "<group>";
@@ -415,6 +421,7 @@
 				52F52A6E2533474700541E8A /* PopupItemsList.swift in Sources */,
 				52F52A7125334EF800541E8A /* Extensions.swift in Sources */,
 				52DC9E962530B002007BA478 /* ActivityView.swift in Sources */,
+				C7C7DFFC26986E5D00F18A93 /* IconPickerSearchResults.swift in Sources */,
 				52F52A792533574700541E8A /* ModulesAndShelvesView.swift in Sources */,
 				C7921D5F25F977BD00A923B0 /* Tag+CoreDataClass.swift in Sources */,
 				52DC9E9F2530C5F5007BA478 /* AddEditActivityView.swift in Sources */,
@@ -425,6 +432,7 @@
 				52F52A752533556500541E8A /* BagView.swift in Sources */,
 				C761464F25BF482F00FC71AE /* ThemesView.swift in Sources */,
 				5247A6482542184B00B229F2 /* BagContentSetsListView.swift in Sources */,
+				C7C7DFFA26985C3000F18A93 /* IconCategoriesView.swift in Sources */,
 				52F52A8A2534576E00541E8A /* ItemsListView.swift in Sources */,
 				C76E835F25E67FD400FD4124 /* Icon+PreviewHelpers.swift in Sources */,
 				C761465325BF85A300FC71AE /* ThemesColours.swift in Sources */,

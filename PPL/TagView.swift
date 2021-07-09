@@ -38,66 +38,66 @@ struct TagView: View {
 //    var sfSymbolsCategories: [Category] = [.devices, .nature]
     
     var body: some View {
-        HStack{
-            VStack {
-                GeometryReader { geo in
-                Image(systemName: tag.icon != nil ? self.iconName : "number")
-                    .foregroundColor(selectedThemeColors.fontMainColour)
-                    .popover(
-                        isPresented: $tagIconPickerVisible,
-                        attachmentAnchor: .point(.trailing),
-                        arrowEdge: .leading,
-                        content: {
-                            IconPickerView(
-                                iconTapAction: self.setNewIcon,
-                                searchFieldTitle: "Search Tagicons",
-                                headerView: AnyView(
-                                    HStack {
-                                        Image(systemName: tag.icon != nil ? self.iconName : "number")
-                                            .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
-                                    }
-                                ),
-                                triggerSizeAndCoordinates: geo.frame(in: .global)
-                            )
+        GeometryReader { geo in
+            HStack(alignment: .center){
+                VStack(alignment: .center) {
+                    Image(systemName: tag.icon != nil ? self.iconName : "person.3")
+                        .foregroundColor(selectedThemeColors.fontMainColour)
+                        .popover(
+                            isPresented: $tagIconPickerVisible,
+                            attachmentAnchor: .point(.trailing),
+                            arrowEdge: .leading,
+                            content: {
+                                IconPickerView(
+                                    iconTapAction: self.setNewIcon,
+                                    searchFieldTitle: "Search Tagicons",
+                                    headerView: AnyView(
+                                        HStack {
+                                            Image(systemName: tag.icon != nil ? self.iconName : "number")
+                                                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
+                                        }
+                                    ),
+                                    triggerSizeAndCoordinates: geo.frame(in: .global)
+                                )
                                 .environmentObject(SelectedThemeColors())
-                        })
-                    .scaleEffect(self.scaleImage)
-                    .animation(.easeInOut)
-                    .onTapGesture {
-                        print(tag.wrappedIcon, self.tagIconPickerVisible)
-                        //                    print(tag.wrappedIcon)
-                        if self.tagIconPickerVisible == true {
-                            self.tagIconPickerVisible = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            })
+                        .scaleEffect(self.scaleImage)
+                        .animation(.easeInOut)
+                        .onTapGesture {
+                            print(tag.wrappedIcon, self.tagIconPickerVisible)
+                            //                    print(tag.wrappedIcon)
+                            if self.tagIconPickerVisible == true {
+                                self.tagIconPickerVisible = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.tagIconPickerVisible = true
+                                }
+                            } else {
                                 self.tagIconPickerVisible = true
-                                    }
-                        } else {
-                            self.tagIconPickerVisible = true
+                            }
+                            
+                            
                         }
-                        
-                        
-                    }
-                    .onChange(of: tag.icon, perform: { value in
-                        self.scaleImage = 0.01
-                        
-                        withAnimation(Animation.spring().delay(0.5)) {
-                            print(value!)
-                            self.iconName = value!
-                            self.scaleImage = 1
-                        }
-                        
-                        
-                    })
+                        .onChange(of: tag.icon, perform: { value in
+                            self.scaleImage = 0.01
+                            
+                            withAnimation(Animation.spring().delay(0.5)) {
+                                print(value!)
+                                self.iconName = value!
+                                self.scaleImage = 1
+                            }
+                            
+                            
+                        })
                 }
             }
-            .frame(width: 20, height: 20)
+            .frame(width: 25, height: 20)
             .padding(3)
             .background(tag.iconCategoryColor.opacity(0.9))
             .cornerRadius(3)
             
             Text(tag.wrappedName.replacingOccurrences(of: "#", with: ""))
                 .foregroundColor(selectedThemeColors.fontMainColour)
-                .offset(x: -5, y: 0)
+                .offset(x: 40, y: 3)
         }
         .onAppear(perform: {
             self.iconName = self.tag.icon ?? ""
@@ -107,7 +107,8 @@ struct TagView: View {
 
 struct TagView_Previews: PreviewProvider {
     static var previews: some View {
-        let tag = Tag(context: PersistenceController.preview.container.viewContext)
+        var tag = Tag(context: PersistenceController.preview.container.viewContext)
+//        tag.icon = "person.3"
         TagView(tag: tag)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         .environmentObject(SelectedThemeColors())
