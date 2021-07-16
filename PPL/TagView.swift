@@ -38,10 +38,10 @@ struct TagView: View {
 //    var sfSymbolsCategories: [Category] = [.devices, .nature]
     
     var body: some View {
-        GeometryReader { geo in
             HStack(alignment: .center){
-                VStack(alignment: .center) {
+                GeometryReader { geo in
                     Image(systemName: tag.icon != nil ? self.iconName : "person.3")
+                        .frame(width: 30, height: 30)
                         .foregroundColor(selectedThemeColors.fontMainColour)
                         .popover(
                             isPresented: $tagIconPickerVisible,
@@ -51,20 +51,17 @@ struct TagView: View {
                                 IconPickerView(
                                     iconTapAction: self.setNewIcon,
                                     searchFieldTitle: "Search Tagicons",
-                                    headerView: AnyView(
-                                        HStack {
-                                            Image(systemName: tag.icon != nil ? self.iconName : "number")
-                                                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
-                                        }
-                                    ),
-                                    triggerSizeAndCoordinates: geo.frame(in: .global)
+                                    headerView: AnyView(IconPickerTagPreview(tag: tag)),
+                                    triggerSizeAndCoordinates: geo.frame(in: .global),
+                                    connectorColor: tag.iconCategoryColor
                                 )
                                 .environmentObject(SelectedThemeColors())
                             })
+                        
                         .scaleEffect(self.scaleImage)
                         .animation(.easeInOut)
+                        
                         .onTapGesture {
-                            print(tag.wrappedIcon, self.tagIconPickerVisible)
                             //                    print(tag.wrappedIcon)
                             if self.tagIconPickerVisible == true {
                                 self.tagIconPickerVisible = false
@@ -74,6 +71,8 @@ struct TagView: View {
                             } else {
                                 self.tagIconPickerVisible = true
                             }
+                            
+//                            self.tagIconPickerVisible = true
                             
                             
                         }
@@ -88,17 +87,24 @@ struct TagView: View {
                             
                             
                         })
+                        .background(tag.iconCategoryColor.opacity(0.9))
+                        .cornerRadius(5)
+//                        .clipShape(Cap5sule())
                 }
-            }
-            .frame(width: 25, height: 20)
+                .frame(width: 30)
+                Text(tag.wrappedName.replacingOccurrences(of: "#", with: ""))
+                    .foregroundColor(selectedThemeColors.fontMainColour)
+//                    .offset(x: 40, y: 3)
+            
+
             .padding(3)
-            .background(tag.iconCategoryColor.opacity(0.9))
+            
             .cornerRadius(3)
             
-            Text(tag.wrappedName.replacingOccurrences(of: "#", with: ""))
-                .foregroundColor(selectedThemeColors.fontMainColour)
-                .offset(x: 40, y: 3)
+            
         }
+            .frame(height: 30, alignment: .center)
+//        .fixedSize()
         .onAppear(perform: {
             self.iconName = self.tag.icon ?? ""
         })
@@ -107,7 +113,7 @@ struct TagView: View {
 
 struct TagView_Previews: PreviewProvider {
     static var previews: some View {
-        var tag = Tag(context: PersistenceController.preview.container.viewContext)
+        let tag = Tag(context: PersistenceController.preview.container.viewContext)
 //        tag.icon = "person.3"
         TagView(tag: tag)
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)

@@ -49,6 +49,7 @@
 		52F52A90253459CD00541E8A /* AddEditItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F52A8F253459CD00541E8A /* AddEditItem.swift */; };
 		52F52A9425345E9C00541E8A /* DataFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F52A9325345E9C00541E8A /* DataFacade.swift */; };
 		52FFC4B82539AB2000164B06 /* GridItemWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FFC4B72539AB2000164B06 /* GridItemWrapper.swift */; };
+		C70E747E269E3D220079479D /* IconPickerTagPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70E747D269E3D220079479D /* IconPickerTagPreview.swift */; };
 		C710332025CB2FA900A068C9 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710331F25CB2FA900A068C9 /* Preferences.swift */; };
 		C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710C3DE25F575BB004DA52C /* TestingPlayground.swift */; };
 		C71EE2AD257AF8D40013926F /* BuyItemsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */; };
@@ -120,6 +121,7 @@
 		52F52A8F253459CD00541E8A /* AddEditItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditItem.swift; sourceTree = "<group>"; };
 		52F52A9325345E9C00541E8A /* DataFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFacade.swift; sourceTree = "<group>"; };
 		52FFC4B72539AB2000164B06 /* GridItemWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridItemWrapper.swift; sourceTree = "<group>"; };
+		C70E747D269E3D220079479D /* IconPickerTagPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerTagPreview.swift; sourceTree = "<group>"; };
 		C710331F25CB2FA900A068C9 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		C710C3DE25F575BB004DA52C /* TestingPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestingPlayground.swift; path = PPL/TestingPlayground.swift; sourceTree = SOURCE_ROOT; };
 		C71EE2AB257AF8D40013926F /* BuyItemsGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemsGridView.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 				C76042222689EDC00093A9D5 /* IconPickerIcons.swift */,
 				C7C7DFF72697499600F18A93 /* IconCategoriesMenuView.swift */,
 				C7C7DFF926985C3000F18A93 /* IconCategoriesView.swift */,
+				C70E747D269E3D220079479D /* IconPickerTagPreview.swift */,
 			);
 			path = IconPicker;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				C74518F825AB638E00A9DB03 /* KeyboardShortcutsView.swift in Sources */,
 				52F1149E253F0021009220A9 /* BagContentSet+CoreDataClass.swift in Sources */,
 				C71EE2AE257AF8D40013926F /* ItemToBuyGridView.swift in Sources */,
+				C70E747E269E3D220079479D /* IconPickerTagPreview.swift in Sources */,
 				C74518FC25AC618C00A9DB03 /* KeyboardShortcut.swift in Sources */,
 				52B0C323252F6C46006F441B /* PPLApp.swift in Sources */,
 				C710C3DF25F575BB004DA52C /* TestingPlayground.swift in Sources */,

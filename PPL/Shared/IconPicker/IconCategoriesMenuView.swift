@@ -99,13 +99,15 @@ struct IconCategoriesMenuView: View {
             }
             .popoverView(content: {Text("Suggestions").foregroundColor(.white)}, background: {selectedThemeColors.listHeaderColour.opacity(0.6)}, isPresented: self.$PHSAndAllCategoriesToolTipsVisibilityArray[2], frame: .constant(CGRect(x: 0, y: 0, width: 120, height: 30)), anchorFrame: nil, popoverType: .popout, position: .top, viewId: "thirdPopover", settings: DYPopoverViewSettings(arrowLength: 10, offset: CGSize(width: 10, height: 0)))
             
+            Divider()
+            
             ForEach (Array(allCategoriesArray.enumerated()), id: \.offset) {index, category in
                 Button(action: {
                     scrolledToCategoryName = category
                 }) {
                     Image(systemName: symbols[category]![0])
                         .padding(5)
-                        .foregroundColor(visibleCategoryName == category ? selectedThemeColors.listHeaderColour : categoriesRainbowColors[category])
+                        .foregroundColor(categoriesRainbowColors[category])
                         .background(selectedThemeColors.listHeaderColour
                                         .opacity(visibleCategoryName == category ? 1.0 : 0.0)
                                         .cornerRadius(10)
@@ -182,6 +184,7 @@ struct IconCategoriesMenuView: View {
             }
             //                    }
             Spacer()
+            Divider()
             Image(systemName: "gearshape.fill")
                 .font(.title)
                 .foregroundColor(selectedThemeColors.fontSecondaryColour)
